@@ -56,7 +56,24 @@ export interface DiskEntity {
      * @memberof DiskEntity
      */
     path?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DiskEntity
+     */
+    diskType?: DiskEntityDiskTypeEnum;
 }
+
+
+/**
+ * @export
+ */
+export const DiskEntityDiskTypeEnum = {
+    Library: 'LIBRARY',
+    Cache: 'CACHE'
+} as const;
+export type DiskEntityDiskTypeEnum = typeof DiskEntityDiskTypeEnum[keyof typeof DiskEntityDiskTypeEnum];
+
 
 /**
  * Check if a given object implements the DiskEntity interface.
@@ -81,6 +98,7 @@ export function DiskEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'nodeEntity': !exists(json, 'nodeEntity') ? undefined : NodeEntityFromJSON(json['nodeEntity']),
         'categorieEntity': !exists(json, 'categorieEntity') ? undefined : CategorieEntityFromJSON(json['categorieEntity']),
         'path': !exists(json, 'path') ? undefined : json['path'],
+        'diskType': !exists(json, 'diskType') ? undefined : json['diskType'],
     };
 }
 
@@ -97,6 +115,7 @@ export function DiskEntityToJSON(value?: DiskEntity | null): any {
         'nodeEntity': NodeEntityToJSON(value.nodeEntity),
         'categorieEntity': CategorieEntityToJSON(value.categorieEntity),
         'path': value.path,
+        'diskType': value.diskType,
     };
 }
 

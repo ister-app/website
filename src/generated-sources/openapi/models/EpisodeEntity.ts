@@ -13,6 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { ImageEntity } from './ImageEntity';
+import {
+    ImageEntityFromJSON,
+    ImageEntityFromJSONTyped,
+    ImageEntityToJSON,
+} from './ImageEntity';
 import type { MediaFileEntity } from './MediaFileEntity';
 import {
     MediaFileEntityFromJSON,
@@ -76,6 +82,12 @@ export interface EpisodeEntity {
     mediaFileEntities?: Array<MediaFileEntity>;
     /**
      * 
+     * @type {Array<ImageEntity>}
+     * @memberof EpisodeEntity
+     */
+    imagesEntities?: Array<ImageEntity>;
+    /**
+     * 
      * @type {number}
      * @memberof EpisodeEntity
      */
@@ -107,6 +119,7 @@ export function EpisodeEntityFromJSONTyped(json: any, ignoreDiscriminator: boole
         'showEntity': !exists(json, 'showEntity') ? undefined : ShowEntityFromJSON(json['showEntity']),
         'seasonEntity': !exists(json, 'seasonEntity') ? undefined : SeasonEntityFromJSON(json['seasonEntity']),
         'mediaFileEntities': !exists(json, 'mediaFileEntities') ? undefined : ((json['mediaFileEntities'] as Array<any>).map(MediaFileEntityFromJSON)),
+        'imagesEntities': !exists(json, 'imagesEntities') ? undefined : ((json['imagesEntities'] as Array<any>).map(ImageEntityFromJSON)),
         'number': !exists(json, 'number') ? undefined : json['number'],
     };
 }
@@ -126,6 +139,7 @@ export function EpisodeEntityToJSON(value?: EpisodeEntity | null): any {
         'showEntity': ShowEntityToJSON(value.showEntity),
         'seasonEntity': SeasonEntityToJSON(value.seasonEntity),
         'mediaFileEntities': value.mediaFileEntities === undefined ? undefined : ((value.mediaFileEntities as Array<any>).map(MediaFileEntityToJSON)),
+        'imagesEntities': value.imagesEntities === undefined ? undefined : ((value.imagesEntities as Array<any>).map(ImageEntityToJSON)),
         'number': value.number,
     };
 }

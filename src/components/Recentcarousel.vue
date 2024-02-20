@@ -4,8 +4,8 @@
             <v-window v-model="window" show-arrows class="fillcontent">
                 <v-window-item v-for="episodeEntity in episodes" :key="episodeEntity">
                     <v-card>
-                        <v-img src="" class="align-end"
-                            gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.8)" height="450px" cover>
+                        <v-img :src="episodeEntity.imagesEntities?.length !== 0 ? 'http://localhost:8080/images/' + episodeEntity.imagesEntities[0].id + '/download' : ''" class="align-end"
+                            gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.8)" height="450px">
                             <v-card-text class="text-white">
                                 <p class="text-h5">{{ episodeEntity.showEntity?.name }}</p>
                                 Episode description
