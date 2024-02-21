@@ -82,12 +82,6 @@ export interface PageEpisodeEntity {
     sort?: SortObject;
     /**
      * 
-     * @type {number}
-     * @memberof PageEpisodeEntity
-     */
-    numberOfElements?: number;
-    /**
-     * 
      * @type {boolean}
      * @memberof PageEpisodeEntity
      */
@@ -98,6 +92,12 @@ export interface PageEpisodeEntity {
      * @memberof PageEpisodeEntity
      */
     last?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof PageEpisodeEntity
+     */
+    numberOfElements?: number;
     /**
      * 
      * @type {boolean}
@@ -132,9 +132,9 @@ export function PageEpisodeEntityFromJSONTyped(json: any, ignoreDiscriminator: b
         'content': !exists(json, 'content') ? undefined : ((json['content'] as Array<any>).map(EpisodeEntityFromJSON)),
         'number': !exists(json, 'number') ? undefined : json['number'],
         'sort': !exists(json, 'sort') ? undefined : SortObjectFromJSON(json['sort']),
-        'numberOfElements': !exists(json, 'numberOfElements') ? undefined : json['numberOfElements'],
         'first': !exists(json, 'first') ? undefined : json['first'],
         'last': !exists(json, 'last') ? undefined : json['last'],
+        'numberOfElements': !exists(json, 'numberOfElements') ? undefined : json['numberOfElements'],
         'empty': !exists(json, 'empty') ? undefined : json['empty'],
     };
 }
@@ -155,9 +155,9 @@ export function PageEpisodeEntityToJSON(value?: PageEpisodeEntity | null): any {
         'content': value.content === undefined ? undefined : ((value.content as Array<any>).map(EpisodeEntityToJSON)),
         'number': value.number,
         'sort': SortObjectToJSON(value.sort),
-        'numberOfElements': value.numberOfElements,
         'first': value.first,
         'last': value.last,
+        'numberOfElements': value.numberOfElements,
         'empty': value.empty,
     };
 }

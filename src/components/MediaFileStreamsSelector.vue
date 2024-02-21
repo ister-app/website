@@ -46,7 +46,7 @@ function selectProps(item: MediaFileStreamEntity) {
     return {
         title: item.language,
         subtitle: item.title,
-        value: item.index
+        value: item.streamIndex
     }
 }
 

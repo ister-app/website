@@ -43,7 +43,7 @@ export interface MediaFileStreamEntity {
      * @type {number}
      * @memberof MediaFileStreamEntity
      */
-    index?: number;
+    streamIndex?: number;
     /**
      * 
      * @type {string}
@@ -103,7 +103,7 @@ export function MediaFileStreamEntityFromJSONTyped(json: any, ignoreDiscriminato
         
         'id': !exists(json, 'id') ? undefined : json['id'],
         'mediaFileEntity': !exists(json, 'mediaFileEntity') ? undefined : MediaFileEntityFromJSON(json['mediaFileEntity']),
-        'index': !exists(json, 'index') ? undefined : json['index'],
+        'streamIndex': !exists(json, 'streamIndex') ? undefined : json['streamIndex'],
         'codecName': !exists(json, 'codecName') ? undefined : json['codecName'],
         'codecType': !exists(json, 'codecType') ? undefined : json['codecType'],
         'width': !exists(json, 'width') ? undefined : json['width'],
@@ -124,7 +124,7 @@ export function MediaFileStreamEntityToJSON(value?: MediaFileStreamEntity | null
         
         'id': value.id,
         'mediaFileEntity': MediaFileEntityToJSON(value.mediaFileEntity),
-        'index': value.index,
+        'streamIndex': value.streamIndex,
         'codecName': value.codecName,
         'codecType': value.codecType,
         'width': value.width,
