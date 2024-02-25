@@ -25,6 +25,12 @@ import {
     MediaFileEntityFromJSONTyped,
     MediaFileEntityToJSON,
 } from './MediaFileEntity';
+import type { MetadataEntity } from './MetadataEntity';
+import {
+    MetadataEntityFromJSON,
+    MetadataEntityFromJSONTyped,
+    MetadataEntityToJSON,
+} from './MetadataEntity';
 import type { SeasonEntity } from './SeasonEntity';
 import {
     SeasonEntityFromJSON,
@@ -88,6 +94,12 @@ export interface EpisodeEntity {
     imagesEntities?: Array<ImageEntity>;
     /**
      * 
+     * @type {Array<MetadataEntity>}
+     * @memberof EpisodeEntity
+     */
+    metadataEntities?: Array<MetadataEntity>;
+    /**
+     * 
      * @type {number}
      * @memberof EpisodeEntity
      */
@@ -120,6 +132,7 @@ export function EpisodeEntityFromJSONTyped(json: any, ignoreDiscriminator: boole
         'seasonEntity': !exists(json, 'seasonEntity') ? undefined : SeasonEntityFromJSON(json['seasonEntity']),
         'mediaFileEntities': !exists(json, 'mediaFileEntities') ? undefined : ((json['mediaFileEntities'] as Array<any>).map(MediaFileEntityFromJSON)),
         'imagesEntities': !exists(json, 'imagesEntities') ? undefined : ((json['imagesEntities'] as Array<any>).map(ImageEntityFromJSON)),
+        'metadataEntities': !exists(json, 'metadataEntities') ? undefined : ((json['metadataEntities'] as Array<any>).map(MetadataEntityFromJSON)),
         'number': !exists(json, 'number') ? undefined : json['number'],
     };
 }
@@ -140,6 +153,7 @@ export function EpisodeEntityToJSON(value?: EpisodeEntity | null): any {
         'seasonEntity': SeasonEntityToJSON(value.seasonEntity),
         'mediaFileEntities': value.mediaFileEntities === undefined ? undefined : ((value.mediaFileEntities as Array<any>).map(MediaFileEntityToJSON)),
         'imagesEntities': value.imagesEntities === undefined ? undefined : ((value.imagesEntities as Array<any>).map(ImageEntityToJSON)),
+        'metadataEntities': value.metadataEntities === undefined ? undefined : ((value.metadataEntities as Array<any>).map(MetadataEntityToJSON)),
         'number': value.number,
     };
 }

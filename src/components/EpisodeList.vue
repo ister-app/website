@@ -8,7 +8,7 @@
                 </v-img>
                 <v-container></v-container>
             </template>
-            <v-list-item-title v-text="episodeEntity.number"></v-list-item-title>
+            <v-list-item-title>{{ episodeEntity.number }} {{ episodeEntity.metadataEntities?.length !== 0 ? episodeEntity.metadataEntities[0].title : '' }}</v-list-item-title>
             <v-list-item-subtitle v-text="'episodeEntity 9 * Mrt 2022 * 41m'"></v-list-item-subtitle>
         </v-list-item>
         <v-skeleton-loader v-if="!loaded" v-for="i in 9" type="list-item-avatar" height="100px"

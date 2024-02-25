@@ -8,7 +8,7 @@
                             gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.8)" height="450px">
                             <v-card-text class="text-white">
                                 <p class="text-h5">{{ episodeEntity.showEntity?.name }}</p>
-                                Episode description
+                                s{{ episodeEntity.seasonEntity?.number }}e{{ episodeEntity.number }} {{ episodeEntity.metadataEntities?.length !== 0 ? episodeEntity.metadataEntities[0].title : '' }}
                             </v-card-text>
                         </v-img>
                     </v-card>
@@ -29,7 +29,7 @@
                                         <v-row class="flex-nowrap">
                                             <v-col class="flex-grow-1 flex-shrink-1 text-truncate">
                                                 <v-card-title class="text-h5" v-text="episodeEntity.showEntity?.name"></v-card-title>
-                                                <v-card-subtitle>s{{ episodeEntity.seasonEntity?.number }}e{{ episodeEntity.number }} episode title</v-card-subtitle>
+                                                <v-card-subtitle>s{{ episodeEntity.seasonEntity?.number }}e{{ episodeEntity.number }} {{ episodeEntity.metadataEntities?.length !== 0 ? episodeEntity.metadataEntities[0].title : '' }}</v-card-subtitle>
                                             </v-col>
                                             <v-col class="flex-grow-0 flex-shrink-0">
                                                 <v-img width="100px" height="100%"

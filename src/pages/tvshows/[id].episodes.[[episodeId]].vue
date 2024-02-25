@@ -6,10 +6,6 @@
             <h1 class="text-h4 font-weight-thin mb-4">
                 {{ showEntity?.name }}
             </h1>
-            <h4 class="text-body-2 mb-4">
-                Episode description.
-                {{ backgroundImageUrl }}
-            </h4>
         </div>
     </v-img>
     <v-container style="max-width: 1720px;">
@@ -19,7 +15,7 @@
             </v-col>
             <v-col md="7" lg="8" xl="9" cols="12">
                 <EpisodePlayer v-if="episodeEntity" :episodeEntity="episodeEntity"></EpisodePlayer>
-                <v-container v-else>No episode selected.</v-container>
+                <v-container v-else-if="showEntity?.metadataEntities?.length !== 0">{{ showEntity?.metadataEntities[0].description }}</v-container>
             </v-col>
         </v-row>
     </v-container>

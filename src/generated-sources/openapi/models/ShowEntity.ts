@@ -25,6 +25,12 @@ import {
     ImageEntityFromJSONTyped,
     ImageEntityToJSON,
 } from './ImageEntity';
+import type { MetadataEntity } from './MetadataEntity';
+import {
+    MetadataEntityFromJSON,
+    MetadataEntityFromJSONTyped,
+    MetadataEntityToJSON,
+} from './MetadataEntity';
 
 /**
  * 
@@ -62,6 +68,12 @@ export interface ShowEntity {
      * @memberof ShowEntity
      */
     imageEntities?: Array<ImageEntity>;
+    /**
+     * 
+     * @type {Array<MetadataEntity>}
+     * @memberof ShowEntity
+     */
+    metadataEntities?: Array<MetadataEntity>;
 }
 
 /**
@@ -88,6 +100,7 @@ export function ShowEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'name': !exists(json, 'name') ? undefined : json['name'],
         'releaseYear': !exists(json, 'releaseYear') ? undefined : json['releaseYear'],
         'imageEntities': !exists(json, 'imageEntities') ? undefined : ((json['imageEntities'] as Array<any>).map(ImageEntityFromJSON)),
+        'metadataEntities': !exists(json, 'metadataEntities') ? undefined : ((json['metadataEntities'] as Array<any>).map(MetadataEntityFromJSON)),
     };
 }
 
@@ -105,6 +118,7 @@ export function ShowEntityToJSON(value?: ShowEntity | null): any {
         'name': value.name,
         'releaseYear': value.releaseYear,
         'imageEntities': value.imageEntities === undefined ? undefined : ((value.imageEntities as Array<any>).map(ImageEntityToJSON)),
+        'metadataEntities': value.metadataEntities === undefined ? undefined : ((value.metadataEntities as Array<any>).map(MetadataEntityToJSON)),
     };
 }
 

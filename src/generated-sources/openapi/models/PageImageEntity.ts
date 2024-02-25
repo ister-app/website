@@ -82,6 +82,12 @@ export interface PageImageEntity {
     sort?: SortObject;
     /**
      * 
+     * @type {number}
+     * @memberof PageImageEntity
+     */
+    numberOfElements?: number;
+    /**
+     * 
      * @type {boolean}
      * @memberof PageImageEntity
      */
@@ -92,12 +98,6 @@ export interface PageImageEntity {
      * @memberof PageImageEntity
      */
     last?: boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof PageImageEntity
-     */
-    numberOfElements?: number;
     /**
      * 
      * @type {boolean}
@@ -132,9 +132,9 @@ export function PageImageEntityFromJSONTyped(json: any, ignoreDiscriminator: boo
         'content': !exists(json, 'content') ? undefined : ((json['content'] as Array<any>).map(ImageEntityFromJSON)),
         'number': !exists(json, 'number') ? undefined : json['number'],
         'sort': !exists(json, 'sort') ? undefined : SortObjectFromJSON(json['sort']),
+        'numberOfElements': !exists(json, 'numberOfElements') ? undefined : json['numberOfElements'],
         'first': !exists(json, 'first') ? undefined : json['first'],
         'last': !exists(json, 'last') ? undefined : json['last'],
-        'numberOfElements': !exists(json, 'numberOfElements') ? undefined : json['numberOfElements'],
         'empty': !exists(json, 'empty') ? undefined : json['empty'],
     };
 }
@@ -155,9 +155,9 @@ export function PageImageEntityToJSON(value?: PageImageEntity | null): any {
         'content': value.content === undefined ? undefined : ((value.content as Array<any>).map(ImageEntityToJSON)),
         'number': value.number,
         'sort': SortObjectToJSON(value.sort),
+        'numberOfElements': value.numberOfElements,
         'first': value.first,
         'last': value.last,
-        'numberOfElements': value.numberOfElements,
         'empty': value.empty,
     };
 }

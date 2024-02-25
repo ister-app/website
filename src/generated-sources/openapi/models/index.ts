@@ -6,6 +6,7 @@ export * from './EpisodeEntity';
 export * from './ImageEntity';
 export * from './MediaFileEntity';
 export * from './MediaFileStreamEntity';
+export * from './MetadataEntity';
 export * from './NodeEntity';
 export * from './PageEpisodeEntity';
 export * from './PageImageEntity';

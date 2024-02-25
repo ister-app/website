@@ -12,6 +12,7 @@ models/EpisodeEntity.ts
 models/ImageEntity.ts
 models/MediaFileEntity.ts
 models/MediaFileStreamEntity.ts
+models/MetadataEntity.ts
 models/NodeEntity.ts
 models/PageEpisodeEntity.ts
 models/PageImageEntity.ts

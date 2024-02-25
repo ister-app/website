@@ -1,13 +1,10 @@
 <template>
-    <Player :mediaFileEntity="episodeEntity.mediaFileEntities![0]"></Player>
-    <p class="text-h6 mt-4">Episode title</p>
-    <p class="text-subtitle-2">episodeEntity {{ episodeEntity.number }} * Mrt 2022 * 41m</p>
-    <p class="mt-4 text-body-2">Episode description</p>
-    {{ episodeEntity.mediaFileEntities![0].path }} -
-    {{ episodeEntity.mediaFileEntities![0].id }}
-
-    <!-- <v-btn @click="loaded = !loaded">test</v-btn> -->
-    {{ props.episodeEntity.mediaFileEntities }}
+    <Player v-if="episodeEntity.mediaFileEntities?.length !== 0" :mediaFileEntity="episodeEntity.mediaFileEntities![0]"></Player>
+    <template v-if="episodeEntity.metadataEntities?.length !== 0">
+        <p class="text-h6 mt-4">{{ episodeEntity.metadataEntities[0].title }}</p>
+        <p class="text-subtitle-2">{{ episodeEntity.metadataEntities[0].released }}</p>
+        <p class="mt-4 text-body-2">{{ episodeEntity.metadataEntities[0].description }}</p>
+    </template>
 </template>
 
 <script lang="ts" setup>
