@@ -117,19 +117,23 @@ function goToTime() {
   startPlaying();
 }
 
-function handleEvent(event) {
+function handleEvent(event: any) {
   if (video.value) {
     progres.value = (offsetTime.value + video.value.currentTime) * 100 / durationTime.value;
     currentTime.value = video.value.currentTime;
   }
 }
 
-function handleVolumeEvent(event) {
-  volume.value = video.value.volume * 100;
+function handleVolumeEvent(event: any) {
+  if (video.value !== undefined) {
+    volume.value = video.value.volume * 100;
+  } 
 }
 
-function handlePlayingEvent(event) {
-  paused.value = video.value.paused;
+function handlePlayingEvent(event: any) {
+  if (video.value !== undefined) {
+    paused.value = video.value.paused;
+  } 
 }
 
 const startPlaying = async () => {
@@ -141,7 +145,9 @@ const startPlaying = async () => {
   if (Hls.isSupported()) {
     console.log(transcodeService.getStreamUrl());
     hls.loadSource(transcodeService.getStreamUrl());
-    hls.attachMedia(video.value);
+    if (video.value !== undefined) {
+      hls.attachMedia(video.value);
+    }
     video.value?.play();
   }
   video.value?.addEventListener("timeupdate", handleEvent);

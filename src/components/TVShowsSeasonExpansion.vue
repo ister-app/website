@@ -24,7 +24,7 @@ const props = defineProps<{
 }>()
 
 const configuration = new Configuration({
-    basePath: 'http://localhost:8080',
+    basePath: import.meta.env.VITE_BACKEND_URL,
 });
 
 const seasons: Ref<Array<SeasonEntity>> = ref([])

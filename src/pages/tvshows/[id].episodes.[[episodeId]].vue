@@ -1,7 +1,7 @@
 <template>
     <v-skeleton-loader v-if="!loaded" type="image" style="height: 50vh;"></v-skeleton-loader>
-    <v-img v-else gradient="rgba(0,0,0,0), rgba(0,0,0,1)" cover style="height: 50vh;"
-        :src="backgroundImageUrl" position="top">
+    <v-img v-else gradient="rgba(0,0,0,0), rgba(0,0,0,1)" cover style="height: 50vh;" :src="backgroundImageUrl"
+        position="top">
         <div class="d-flex flex-column fill-height justify-end ml-5 text-white">
             <h1 class="text-h4 font-weight-thin mb-4">
                 {{ showEntity?.name }}
@@ -11,29 +11,32 @@
     <v-container style="max-width: 1720px;">
         <v-row class="mt-2">
             <v-col md="5" lg="4" xl="3" cols="12">
-                <TVShowsSeasonExpansion v-if="showEntity" :tvShowId="showEntity.id" :selectedEpisode="episodeEntity"></TVShowsSeasonExpansion>
+                <TVShowsSeasonExpansion v-if="showEntity" :tvShowId="showEntity.id" :selectedEpisode="episodeEntity">
+                </TVShowsSeasonExpansion>
             </v-col>
             <v-col md="7" lg="8" xl="9" cols="12">
                 <EpisodePlayer v-if="episodeEntity" :episodeEntity="episodeEntity"></EpisodePlayer>
-                <v-container v-else-if="showEntity?.metadataEntities?.length !== 0">{{ showEntity?.metadataEntities[0].description }}</v-container>
+                <v-container v-else-if="showEntity?.metadataEntities?.length !== 0">{{
+                    showEntity?.metadataEntities![0].description }}</v-container>
             </v-col>
         </v-row>
     </v-container>
 </template>
 
 <script lang="ts" setup>
-import { useRoute } from 'vue-router';
+// import { useRoute } from 'vue-router/auto';
 
 import { computed, ref, watch } from 'vue'
 import type { Ref } from 'vue'
 import { Configuration, EpisodeEntity, EpisodeControllerApi, ShowEntity, ShowControllerApi, ImageEntityTypeEnum } from "@/generated-sources/openapi";
 import EpisodePlayer from '@/components/EpisodePlayer.vue';
+import { useRoute } from 'vue-router/auto';
 
-const route = useRoute();
-const id = route.params.id;
+const route = useRoute("/tvshows/[id].episodes.[[episodeId]]");
+const id: string = route.params.id;
 
 const configuration = new Configuration({
-    basePath: 'http://localhost:8080',
+    basePath: import.meta.env.VITE_BACKEND_URL,
 });
 
 const showEntity: Ref<ShowEntity | undefined> = ref()
@@ -48,7 +51,7 @@ const backgroundImageUrl = computed(() => {
     let url = '';
     showEntity.value?.imageEntities?.forEach(imageEntities => {
         if (imageEntities.type === ImageEntityTypeEnum.Background) {
-            url = 'http://localhost:8080/images/' + imageEntities.id + '/download'
+            url = import.meta.env.VITE_BACKEND_URL + '/images/' + imageEntities.id + '/download'
         }
     });
     return url;
@@ -64,12 +67,14 @@ function refresh() {
 }
 
 function refreshEpisode() {
-    const postsApi = new EpisodeControllerApi(configuration);
-    const posts: Promise<EpisodeEntity> = postsApi.getEpisode({ id: route.params.episodeId.toString() });
-    posts.then((response: EpisodeEntity) => {
-        episodeEntity.value = response;
-        loaded.value = true;
-    })
+    if (route.params.episodeId !== undefined) {
+        const postsApi = new EpisodeControllerApi(configuration);
+        const posts: Promise<EpisodeEntity> = postsApi.getEpisode({ id: route.params.episodeId.toString() });
+        posts.then((response: EpisodeEntity) => {
+            episodeEntity.value = response;
+            loaded.value = true;
+        })
+    }
 }
 
 refresh();

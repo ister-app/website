@@ -17,7 +17,7 @@
 import { Configuration, ScannerControllerApi } from '@/generated-sources/openapi';
 
 const configuration = new Configuration({
-  basePath: 'http://localhost:8080',
+  basePath: import.meta.env.VITE_BACKEND_URL,
 });
 
 function refresh() {

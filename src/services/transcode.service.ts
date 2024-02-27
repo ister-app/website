@@ -1,7 +1,8 @@
 
 import { ref } from 'vue'
 import type { Ref } from 'vue'
-import { Configuration, Episode, MediaFile, TranscoderControllerApi } from '@/generated-sources/openapi';
+import { Configuration, TranscoderControllerApi } from '@/generated-sources/openapi';
+import { MediaFile } from '@/generated-sources/openapi/models/MediaFile';
 
 
 export default class TranscodeService {
@@ -13,7 +14,7 @@ export default class TranscodeService {
 
 
     private configuration = new Configuration({
-        basePath: 'http://localhost:8080',
+        basePath: import.meta.env.VITE_BACKEND_URL,
     });
 
     private postsApi = new TranscoderControllerApi(this.configuration);
@@ -45,7 +46,7 @@ export default class TranscodeService {
     }
 
     public getStreamUrl(): string {
-        return 'http://localhost:8080/transcode/download/' + this.transcodeSesionId.value + '/index.m3u8';
+        return import.meta.env.VITE_BACKEND_URL + '/transcode/download/' + this.transcodeSesionId.value + '/index.m3u8';
     }
 
     private async waitReady(): Promise<void> {
