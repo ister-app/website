@@ -61,30 +61,6 @@ export interface PageEpisodeEntity {
      * @type {number}
      * @memberof PageEpisodeEntity
      */
-    size?: number;
-    /**
-     * 
-     * @type {Array<EpisodeEntity>}
-     * @memberof PageEpisodeEntity
-     */
-    content?: Array<EpisodeEntity>;
-    /**
-     * 
-     * @type {number}
-     * @memberof PageEpisodeEntity
-     */
-    number?: number;
-    /**
-     * 
-     * @type {SortObject}
-     * @memberof PageEpisodeEntity
-     */
-    sort?: SortObject;
-    /**
-     * 
-     * @type {number}
-     * @memberof PageEpisodeEntity
-     */
     numberOfElements?: number;
     /**
      * 
@@ -98,6 +74,30 @@ export interface PageEpisodeEntity {
      * @memberof PageEpisodeEntity
      */
     last?: boolean;
+    /**
+     * 
+     * @type {SortObject}
+     * @memberof PageEpisodeEntity
+     */
+    sort?: SortObject;
+    /**
+     * 
+     * @type {number}
+     * @memberof PageEpisodeEntity
+     */
+    number?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PageEpisodeEntity
+     */
+    size?: number;
+    /**
+     * 
+     * @type {Array<EpisodeEntity>}
+     * @memberof PageEpisodeEntity
+     */
+    content?: Array<EpisodeEntity>;
     /**
      * 
      * @type {boolean}
@@ -128,13 +128,13 @@ export function PageEpisodeEntityFromJSONTyped(json: any, ignoreDiscriminator: b
         'totalPages': !exists(json, 'totalPages') ? undefined : json['totalPages'],
         'totalElements': !exists(json, 'totalElements') ? undefined : json['totalElements'],
         'pageable': !exists(json, 'pageable') ? undefined : PageableObjectFromJSON(json['pageable']),
-        'size': !exists(json, 'size') ? undefined : json['size'],
-        'content': !exists(json, 'content') ? undefined : ((json['content'] as Array<any>).map(EpisodeEntityFromJSON)),
-        'number': !exists(json, 'number') ? undefined : json['number'],
-        'sort': !exists(json, 'sort') ? undefined : SortObjectFromJSON(json['sort']),
         'numberOfElements': !exists(json, 'numberOfElements') ? undefined : json['numberOfElements'],
         'first': !exists(json, 'first') ? undefined : json['first'],
         'last': !exists(json, 'last') ? undefined : json['last'],
+        'sort': !exists(json, 'sort') ? undefined : SortObjectFromJSON(json['sort']),
+        'number': !exists(json, 'number') ? undefined : json['number'],
+        'size': !exists(json, 'size') ? undefined : json['size'],
+        'content': !exists(json, 'content') ? undefined : ((json['content'] as Array<any>).map(EpisodeEntityFromJSON)),
         'empty': !exists(json, 'empty') ? undefined : json['empty'],
     };
 }
@@ -151,13 +151,13 @@ export function PageEpisodeEntityToJSON(value?: PageEpisodeEntity | null): any {
         'totalPages': value.totalPages,
         'totalElements': value.totalElements,
         'pageable': PageableObjectToJSON(value.pageable),
-        'size': value.size,
-        'content': value.content === undefined ? undefined : ((value.content as Array<any>).map(EpisodeEntityToJSON)),
-        'number': value.number,
-        'sort': SortObjectToJSON(value.sort),
         'numberOfElements': value.numberOfElements,
         'first': value.first,
         'last': value.last,
+        'sort': SortObjectToJSON(value.sort),
+        'number': value.number,
+        'size': value.size,
+        'content': value.content === undefined ? undefined : ((value.content as Array<any>).map(EpisodeEntityToJSON)),
         'empty': value.empty,
     };
 }

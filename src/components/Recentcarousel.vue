@@ -5,7 +5,7 @@
                 <v-window-item v-for="episodeEntity in episodes" :key="episodeEntity.id">
                     <v-card>
                         <v-img :src="episodeEntity.imagesEntities?.length !== 0 ? backendUrl + '/images/' + episodeEntity.imagesEntities![0].id + '/download' : ''" class="align-end"
-                            gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.8)" height="450px">
+                            gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.8)" height="450px" cover>
                             <v-card-text class="text-white">
                                 <p class="text-h5">{{ episodeEntity.showEntity?.name }}</p>
                                 s{{ episodeEntity.seasonEntity?.number }}e{{ episodeEntity.number }} {{ episodeEntity.metadataEntities?.length !== 0 ? episodeEntity.metadataEntities![0].title : '' }}
@@ -33,7 +33,7 @@
                                             </v-col>
                                             <v-col class="flex-grow-0 flex-shrink-0">
                                                 <v-img width="100px" height="100%"
-                                                    :src="episodeEntity.showEntity?.imageEntities?.length !== 0 ? backendUrl + '/images/' + episodeEntity.showEntity?.imageEntities![0].id + '/download' : ''"></v-img>
+                                                    :src="ImageUtilService.getCoverImageUrl(episodeEntity.showEntity?.imageEntities!)"></v-img>
                                             </v-col>
                                         </v-row>
                                     </v-container>
@@ -51,6 +51,7 @@
 import { ref } from 'vue'
 import type { Ref } from 'vue'
 import { Configuration, PageEpisodeEntity, EpisodeEntity, EpisodeControllerApi } from "@/generated-sources/openapi";
+import ImageUtilService from '@/services/imageUtil.service';
 
 const configuration = new Configuration({
     basePath: import.meta.env.VITE_BACKEND_URL,

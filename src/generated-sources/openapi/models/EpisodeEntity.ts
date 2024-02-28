@@ -73,13 +73,13 @@ export interface EpisodeEntity {
      * @type {ShowEntity}
      * @memberof EpisodeEntity
      */
-    showEntity?: ShowEntity;
+    showEntity: ShowEntity;
     /**
      * 
      * @type {SeasonEntity}
      * @memberof EpisodeEntity
      */
-    seasonEntity?: SeasonEntity;
+    seasonEntity: SeasonEntity;
     /**
      * 
      * @type {Array<MediaFileEntity>}
@@ -103,7 +103,7 @@ export interface EpisodeEntity {
      * @type {number}
      * @memberof EpisodeEntity
      */
-    number?: number;
+    number: number;
 }
 
 /**
@@ -111,6 +111,9 @@ export interface EpisodeEntity {
  */
 export function instanceOfEpisodeEntity(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "showEntity" in value;
+    isInstance = isInstance && "seasonEntity" in value;
+    isInstance = isInstance && "number" in value;
 
     return isInstance;
 }
@@ -128,12 +131,12 @@ export function EpisodeEntityFromJSONTyped(json: any, ignoreDiscriminator: boole
         'id': !exists(json, 'id') ? undefined : json['id'],
         'dateCreated': !exists(json, 'dateCreated') ? undefined : (new Date(json['dateCreated'])),
         'dateUpdated': !exists(json, 'dateUpdated') ? undefined : (new Date(json['dateUpdated'])),
-        'showEntity': !exists(json, 'showEntity') ? undefined : ShowEntityFromJSON(json['showEntity']),
-        'seasonEntity': !exists(json, 'seasonEntity') ? undefined : SeasonEntityFromJSON(json['seasonEntity']),
+        'showEntity': ShowEntityFromJSON(json['showEntity']),
+        'seasonEntity': SeasonEntityFromJSON(json['seasonEntity']),
         'mediaFileEntities': !exists(json, 'mediaFileEntities') ? undefined : ((json['mediaFileEntities'] as Array<any>).map(MediaFileEntityFromJSON)),
         'imagesEntities': !exists(json, 'imagesEntities') ? undefined : ((json['imagesEntities'] as Array<any>).map(ImageEntityFromJSON)),
         'metadataEntities': !exists(json, 'metadataEntities') ? undefined : ((json['metadataEntities'] as Array<any>).map(MetadataEntityFromJSON)),
-        'number': !exists(json, 'number') ? undefined : json['number'],
+        'number': json['number'],
     };
 }
 

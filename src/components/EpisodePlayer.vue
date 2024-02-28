@@ -8,34 +8,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onUnmounted, onUpdated } from 'vue'
-import type { Ref } from 'vue'
-import { Configuration, EpisodeEntity, TranscoderControllerApi, MediaFileEntity } from "@/generated-sources/openapi";
-
-import TranscodeService from "@/services/transcode.service";
+import { EpisodeEntity } from "@/generated-sources/openapi";
 
 const props = defineProps<{
     episodeEntity: EpisodeEntity
 }>()
-
-// const transcodeService = new TranscodeService();
-
-
-
-// transcodeService.start(props.episodeEntity, 0)
-
-
-// onUpdated(() => {
-//     var id: string | undefined;
-//     props.episodeEntity.mediaFiles?.forEach((file: MediaFile) => id = file.id);
-    // if (id !== loadedId) {
-    //     stop();
-    //     setTimeout(refresh, 4000);
-    // }
-// })
-
-onUnmounted(() => {
-    // transcodeService.stop();
-})
 
 </script>

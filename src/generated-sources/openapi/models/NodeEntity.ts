@@ -30,7 +30,7 @@ export interface NodeEntity {
      * @type {string}
      * @memberof NodeEntity
      */
-    name?: string;
+    name: string;
 }
 
 /**
@@ -38,6 +38,7 @@ export interface NodeEntity {
  */
 export function instanceOfNodeEntity(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "name" in value;
 
     return isInstance;
 }
@@ -53,7 +54,7 @@ export function NodeEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
+        'name': json['name'],
     };
 }
 

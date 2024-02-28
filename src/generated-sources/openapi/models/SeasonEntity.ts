@@ -37,13 +37,13 @@ export interface SeasonEntity {
      * @type {ShowEntity}
      * @memberof SeasonEntity
      */
-    showEntity?: ShowEntity;
+    showEntity: ShowEntity;
     /**
      * 
      * @type {number}
      * @memberof SeasonEntity
      */
-    number?: number;
+    number: number;
 }
 
 /**
@@ -51,6 +51,8 @@ export interface SeasonEntity {
  */
 export function instanceOfSeasonEntity(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "showEntity" in value;
+    isInstance = isInstance && "number" in value;
 
     return isInstance;
 }
@@ -66,8 +68,8 @@ export function SeasonEntityFromJSONTyped(json: any, ignoreDiscriminator: boolea
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'showEntity': !exists(json, 'showEntity') ? undefined : ShowEntityFromJSON(json['showEntity']),
-        'number': !exists(json, 'number') ? undefined : json['number'],
+        'showEntity': ShowEntityFromJSON(json['showEntity']),
+        'number': json['number'],
     };
 }
 

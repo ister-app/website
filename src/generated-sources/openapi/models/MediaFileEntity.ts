@@ -49,13 +49,13 @@ export interface MediaFileEntity {
      * @type {DiskEntity}
      * @memberof MediaFileEntity
      */
-    diskEntity?: DiskEntity;
+    diskEntity: DiskEntity;
     /**
      * 
      * @type {EpisodeEntity}
      * @memberof MediaFileEntity
      */
-    episodeEntity?: EpisodeEntity;
+    episodeEntity: EpisodeEntity;
     /**
      * 
      * @type {Array<MediaFileStreamEntity>}
@@ -67,13 +67,13 @@ export interface MediaFileEntity {
      * @type {string}
      * @memberof MediaFileEntity
      */
-    path?: string;
+    path: string;
     /**
      * 
      * @type {number}
      * @memberof MediaFileEntity
      */
-    size?: number;
+    size: number;
 }
 
 /**
@@ -81,6 +81,10 @@ export interface MediaFileEntity {
  */
 export function instanceOfMediaFileEntity(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "diskEntity" in value;
+    isInstance = isInstance && "episodeEntity" in value;
+    isInstance = isInstance && "path" in value;
+    isInstance = isInstance && "size" in value;
 
     return isInstance;
 }
@@ -96,11 +100,11 @@ export function MediaFileEntityFromJSONTyped(json: any, ignoreDiscriminator: boo
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'diskEntity': !exists(json, 'diskEntity') ? undefined : DiskEntityFromJSON(json['diskEntity']),
-        'episodeEntity': !exists(json, 'episodeEntity') ? undefined : EpisodeEntityFromJSON(json['episodeEntity']),
+        'diskEntity': DiskEntityFromJSON(json['diskEntity']),
+        'episodeEntity': EpisodeEntityFromJSON(json['episodeEntity']),
         'mediaFileStreamEntity': !exists(json, 'mediaFileStreamEntity') ? undefined : ((json['mediaFileStreamEntity'] as Array<any>).map(MediaFileStreamEntityFromJSON)),
-        'path': !exists(json, 'path') ? undefined : json['path'],
-        'size': !exists(json, 'size') ? undefined : json['size'],
+        'path': json['path'],
+        'size': json['size'],
     };
 }
 

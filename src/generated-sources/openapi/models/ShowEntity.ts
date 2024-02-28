@@ -49,19 +49,19 @@ export interface ShowEntity {
      * @type {CategorieEntity}
      * @memberof ShowEntity
      */
-    categorieEntity?: CategorieEntity;
+    categorieEntity: CategorieEntity;
     /**
      * 
      * @type {string}
      * @memberof ShowEntity
      */
-    name?: string;
+    name: string;
     /**
      * 
      * @type {number}
      * @memberof ShowEntity
      */
-    releaseYear?: number;
+    releaseYear: number;
     /**
      * 
      * @type {Array<ImageEntity>}
@@ -81,6 +81,9 @@ export interface ShowEntity {
  */
 export function instanceOfShowEntity(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "categorieEntity" in value;
+    isInstance = isInstance && "name" in value;
+    isInstance = isInstance && "releaseYear" in value;
 
     return isInstance;
 }
@@ -96,9 +99,9 @@ export function ShowEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'categorieEntity': !exists(json, 'categorieEntity') ? undefined : CategorieEntityFromJSON(json['categorieEntity']),
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'releaseYear': !exists(json, 'releaseYear') ? undefined : json['releaseYear'],
+        'categorieEntity': CategorieEntityFromJSON(json['categorieEntity']),
+        'name': json['name'],
+        'releaseYear': json['releaseYear'],
         'imageEntities': !exists(json, 'imageEntities') ? undefined : ((json['imageEntities'] as Array<any>).map(ImageEntityFromJSON)),
         'metadataEntities': !exists(json, 'metadataEntities') ? undefined : ((json['metadataEntities'] as Array<any>).map(MetadataEntityFromJSON)),
     };

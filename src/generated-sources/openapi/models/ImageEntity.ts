@@ -55,19 +55,19 @@ export interface ImageEntity {
      * @type {DiskEntity}
      * @memberof ImageEntity
      */
-    diskEntity?: DiskEntity;
+    diskEntity: DiskEntity;
     /**
      * 
      * @type {string}
      * @memberof ImageEntity
      */
-    path?: string;
+    path: string;
     /**
      * 
      * @type {string}
      * @memberof ImageEntity
      */
-    type?: ImageEntityTypeEnum;
+    type: ImageEntityTypeEnum;
     /**
      * 
      * @type {ShowEntity}
@@ -105,6 +105,9 @@ export type ImageEntityTypeEnum = typeof ImageEntityTypeEnum[keyof typeof ImageE
  */
 export function instanceOfImageEntity(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "diskEntity" in value;
+    isInstance = isInstance && "path" in value;
+    isInstance = isInstance && "type" in value;
 
     return isInstance;
 }
@@ -120,9 +123,9 @@ export function ImageEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'diskEntity': !exists(json, 'diskEntity') ? undefined : DiskEntityFromJSON(json['diskEntity']),
-        'path': !exists(json, 'path') ? undefined : json['path'],
-        'type': !exists(json, 'type') ? undefined : json['type'],
+        'diskEntity': DiskEntityFromJSON(json['diskEntity']),
+        'path': json['path'],
+        'type': json['type'],
         'showEntity': !exists(json, 'showEntity') ? undefined : ShowEntityFromJSON(json['showEntity']),
         'seasonEntity': !exists(json, 'seasonEntity') ? undefined : SeasonEntityFromJSON(json['seasonEntity']),
         'episodeEntity': !exists(json, 'episodeEntity') ? undefined : EpisodeEntityFromJSON(json['episodeEntity']),

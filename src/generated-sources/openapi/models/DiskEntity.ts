@@ -43,25 +43,25 @@ export interface DiskEntity {
      * @type {NodeEntity}
      * @memberof DiskEntity
      */
-    nodeEntity?: NodeEntity;
+    nodeEntity: NodeEntity;
     /**
      * 
      * @type {CategorieEntity}
      * @memberof DiskEntity
      */
-    categorieEntity?: CategorieEntity;
+    categorieEntity: CategorieEntity;
     /**
      * 
      * @type {string}
      * @memberof DiskEntity
      */
-    path?: string;
+    path: string;
     /**
      * 
      * @type {string}
      * @memberof DiskEntity
      */
-    diskType?: DiskEntityDiskTypeEnum;
+    diskType: DiskEntityDiskTypeEnum;
 }
 
 
@@ -80,6 +80,10 @@ export type DiskEntityDiskTypeEnum = typeof DiskEntityDiskTypeEnum[keyof typeof 
  */
 export function instanceOfDiskEntity(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "nodeEntity" in value;
+    isInstance = isInstance && "categorieEntity" in value;
+    isInstance = isInstance && "path" in value;
+    isInstance = isInstance && "diskType" in value;
 
     return isInstance;
 }
@@ -95,10 +99,10 @@ export function DiskEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'nodeEntity': !exists(json, 'nodeEntity') ? undefined : NodeEntityFromJSON(json['nodeEntity']),
-        'categorieEntity': !exists(json, 'categorieEntity') ? undefined : CategorieEntityFromJSON(json['categorieEntity']),
-        'path': !exists(json, 'path') ? undefined : json['path'],
-        'diskType': !exists(json, 'diskType') ? undefined : json['diskType'],
+        'nodeEntity': NodeEntityFromJSON(json['nodeEntity']),
+        'categorieEntity': CategorieEntityFromJSON(json['categorieEntity']),
+        'path': json['path'],
+        'diskType': json['diskType'],
     };
 }
 

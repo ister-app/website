@@ -1,34 +1,41 @@
 <template>
-  <div ref="root">
-    <div class="fullscreen-wrapper">
-      <div class="video-container">
-        <video class="video" ref="video" width="100%" poster="">
-        </video>
-        <div class="loader" v-if="buffering"><v-progress-circular indeterminate></v-progress-circular></div>
-        <div class="controlls">
-          <div class="d-flex text-white">
-            <p class="control-item">{{ new Date((offsetTime + currentTime) * 1000).toISOString().slice(11, 19) }}
-            </p>
-            <v-slider class="flex-grow-1 flex-shrink-1 control-item" color="primary" thumb-color="white" v-model="progres"
-              @click="goToTime()"></v-slider>
-            <p class="control-item">{{ new Date(durationTime * 1000).toISOString().slice(11, 19) }}</p>
+  <v-theme-provider theme="dark">
+    <div ref="root">
+      <div class="fullscreen-wrapper" :class="controllsVisable ? '' : 'hide-mouse'" @mousemove="onHover()">
+        <div class="video-container">
+          <video class="video" ref="video" width="100%" poster="" @click="onVideoClick()" :disable-picture-in-picture="true"></video>
+          <div class="loader" v-if="buffering"><v-progress-circular indeterminate></v-progress-circular></div>
+          <div class="loader" v-else-if="paused">
+            <v-btn :disabled="buffering" class="control-item me-auto" density="compact"
+              :icon="paused ? 'mdi-play' : 'mdi-pause'" @click="playPause()"></v-btn>
           </div>
 
-          <div class="d-flex text-white">
-            <v-btn :disabled="buffering" class="control-item me-auto" density="compact" :icon="paused ? 'mdi-play' : 'mdi-pause'"
-              @click="playPause()"></v-btn>
+          <div v-if="controllsVisable" class="controlls">
+            <div class="d-flex text-white">
+              <p class="control-item">{{ new Date((offsetTime + currentTime) * 1000).toISOString().slice(11, 19) }}</p>
+              <v-slider class="flex-grow-1 flex-shrink-1 control-item" color="primary" thumb-color="white"
+                v-model="progres" @click="goToTime()"></v-slider>
+              <p class="control-item">{{ new Date(durationTime * 1000).toISOString().slice(11, 19) }}</p>
+            </div>
 
-            <v-icon class="control-item" icon="mdi-volume-high"></v-icon>
-            <v-slider class="flex-grow-0 flex-shrink-1 control-item" color="primary" thumb-color="white"
-              style="width: 50px;" v-model="volume" @click="changeVolume()"></v-slider>
-            <div class="flex-grow-1 flex-shrink-1"></div>
-            <MediaFileStreamsSelector :mediaFileStreams="mediaFileEntity.mediaFileStreamEntity" v-model:selectedAudioStream="selectedAudioStream" v-model:selectedSubtitleStream="selectedSubtitleStream"></MediaFileStreamsSelector>
-            <v-btn class="control-item" density="compact" icon="mdi-fullscreen" @click="toggle()"></v-btn>
+            <div class="d-flex text-white">
+              <v-btn :disabled="buffering" class="control-item me-auto" density="compact"
+                :icon="paused ? 'mdi-play' : 'mdi-pause'" @click="playPause()"></v-btn>
+
+              <v-icon class="control-item" icon="mdi-volume-high"></v-icon>
+              <v-slider class="flex-grow-0 flex-shrink-1 control-item" color="primary" thumb-color="white"
+                style="width: 50px;" v-model="volume" @click="changeVolume()"></v-slider>
+              <div class="flex-grow-1 flex-shrink-1"></div>
+              <MediaFileStreamsSelector :mediaFileStreams="mediaFileEntity.mediaFileStreamEntity"
+                v-model:selectedAudioStream="selectedAudioStream" v-model:selectedSubtitleStream="selectedSubtitleStream">
+              </MediaFileStreamsSelector>
+              <v-btn class="control-item" density="compact" icon="mdi-fullscreen" @click="toggle()"></v-btn>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </v-theme-provider>
 </template>
 
 <script lang="ts" setup>
@@ -50,6 +57,9 @@ const state = reactive({
 
 const root = ref()
 
+const controllsVisable: Ref<Boolean> = ref(true);
+var showControllsTimeout: number | undefined;
+
 const video: Ref<HTMLVideoElement | undefined> = ref();
 const startedPlaying = ref(false);
 const paused = ref(false);
@@ -70,7 +80,6 @@ const transcodeService = new TranscodeService();
 onMounted(() => startPlaying())
 
 watch(props, () => {
-  console.log("mediafile");
   stop();
   offsetTime.value = 0;
   selectedAudioStream.value = undefined;
@@ -117,6 +126,26 @@ function goToTime() {
   startPlaying();
 }
 
+function onVideoClick() {
+  playPause();
+}
+
+function onHover() {
+  showControlls();
+}
+
+function showControlls() {
+  controllsVisable.value = true;
+  if (showControllsTimeout) {
+    clearTimeout(showControllsTimeout);
+  }
+  showControllsTimeout = window.setTimeout(hideControls, 3000);
+}
+
+function hideControls() {
+  controllsVisable.value = false;
+}
+
 function handleEvent(event: any) {
   if (video.value) {
     progres.value = (offsetTime.value + video.value.currentTime) * 100 / durationTime.value;
@@ -127,13 +156,13 @@ function handleEvent(event: any) {
 function handleVolumeEvent(event: any) {
   if (video.value !== undefined) {
     volume.value = video.value.volume * 100;
-  } 
+  }
 }
 
 function handlePlayingEvent(event: any) {
   if (video.value !== undefined) {
     paused.value = video.value.paused;
-  } 
+  }
 }
 
 const startPlaying = async () => {
@@ -178,6 +207,10 @@ onUnmounted(() => {
 
 .video {
   height: 100%;
+}
+
+.hide-mouse {
+  cursor: none;
 }
 
 .control-item {

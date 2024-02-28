@@ -37,37 +37,37 @@ export interface MediaFileStreamEntity {
      * @type {MediaFileEntity}
      * @memberof MediaFileStreamEntity
      */
-    mediaFileEntity?: MediaFileEntity;
+    mediaFileEntity: MediaFileEntity;
     /**
      * 
      * @type {number}
      * @memberof MediaFileStreamEntity
      */
-    streamIndex?: number;
+    streamIndex: number;
     /**
      * 
      * @type {string}
      * @memberof MediaFileStreamEntity
      */
-    codecName?: string;
+    codecName: string;
     /**
      * 
      * @type {string}
      * @memberof MediaFileStreamEntity
      */
-    codecType?: string;
+    codecType: string;
     /**
      * 
      * @type {number}
      * @memberof MediaFileStreamEntity
      */
-    width?: number;
+    width: number;
     /**
      * 
      * @type {number}
      * @memberof MediaFileStreamEntity
      */
-    height?: number;
+    height: number;
     /**
      * 
      * @type {string}
@@ -87,6 +87,12 @@ export interface MediaFileStreamEntity {
  */
 export function instanceOfMediaFileStreamEntity(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "mediaFileEntity" in value;
+    isInstance = isInstance && "streamIndex" in value;
+    isInstance = isInstance && "codecName" in value;
+    isInstance = isInstance && "codecType" in value;
+    isInstance = isInstance && "width" in value;
+    isInstance = isInstance && "height" in value;
 
     return isInstance;
 }
@@ -102,12 +108,12 @@ export function MediaFileStreamEntityFromJSONTyped(json: any, ignoreDiscriminato
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'mediaFileEntity': !exists(json, 'mediaFileEntity') ? undefined : MediaFileEntityFromJSON(json['mediaFileEntity']),
-        'streamIndex': !exists(json, 'streamIndex') ? undefined : json['streamIndex'],
-        'codecName': !exists(json, 'codecName') ? undefined : json['codecName'],
-        'codecType': !exists(json, 'codecType') ? undefined : json['codecType'],
-        'width': !exists(json, 'width') ? undefined : json['width'],
-        'height': !exists(json, 'height') ? undefined : json['height'],
+        'mediaFileEntity': MediaFileEntityFromJSON(json['mediaFileEntity']),
+        'streamIndex': json['streamIndex'],
+        'codecName': json['codecName'],
+        'codecType': json['codecType'],
+        'width': json['width'],
+        'height': json['height'],
         'language': !exists(json, 'language') ? undefined : json['language'],
         'title': !exists(json, 'title') ? undefined : json['title'],
     };

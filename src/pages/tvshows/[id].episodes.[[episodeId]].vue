@@ -10,21 +10,19 @@
     </v-img>
     <v-container style="max-width: 1720px;">
         <v-row class="mt-2">
-            <v-col md="5" lg="4" xl="3" cols="12">
-                <TVShowsSeasonExpansion v-if="showEntity" :tvShowId="showEntity.id" :selectedEpisode="episodeEntity">
-                </TVShowsSeasonExpansion>
-            </v-col>
             <v-col md="7" lg="8" xl="9" cols="12">
                 <EpisodePlayer v-if="episodeEntity" :episodeEntity="episodeEntity"></EpisodePlayer>
                 <v-container v-else-if="showEntity?.metadataEntities?.length !== 0">{{
                     showEntity?.metadataEntities![0].description }}</v-container>
+            </v-col>
+            <v-col md="5" lg="4" xl="3" cols="12">
+                <TVShowsSeasonExpansion v-if="showEntity" :tvShowId="showEntity.id" :selectedEpisode="episodeEntity"></TVShowsSeasonExpansion>
             </v-col>
         </v-row>
     </v-container>
 </template>
 
 <script lang="ts" setup>
-// import { useRoute } from 'vue-router/auto';
 
 import { computed, ref, watch } from 'vue'
 import type { Ref } from 'vue'

@@ -1,7 +1,7 @@
 <template>
   <v-app-bar flat>
     <v-app-bar-title>
-      <v-icon icon="mdi-circle-slice-6" />
+      <v-btn icon="mdi-sofa-single" :to="{ name: '/'}" variant="plain"></v-btn>
       Ister
     </v-app-bar-title>
 
