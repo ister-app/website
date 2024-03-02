@@ -39,14 +39,14 @@ const audioStreams = computed(() => {
 });
 
 const subtitlesStreams = computed(() => {
-    return props.mediaFileStreams.filter((stream) => stream.codecType === "SUBTITLE");
+    return props.mediaFileStreams.filter((stream) => ["SUBTITLE", "EXTERNAL_SUBTITLE"].includes(stream.codecType));
 });
 
 function selectProps(item: MediaFileStreamEntity) {
     return {
         title: item.language,
         subtitle: item.title,
-        value: item.streamIndex
+        value: item.id
     }
 }
 

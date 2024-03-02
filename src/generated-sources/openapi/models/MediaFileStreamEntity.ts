@@ -43,7 +43,7 @@ export interface MediaFileStreamEntity {
      * @type {number}
      * @memberof MediaFileStreamEntity
      */
-    streamIndex: number;
+    streamIndex?: number;
     /**
      * 
      * @type {string}
@@ -55,7 +55,7 @@ export interface MediaFileStreamEntity {
      * @type {string}
      * @memberof MediaFileStreamEntity
      */
-    codecType: string;
+    codecType: MediaFileStreamEntityCodecTypeEnum;
     /**
      * 
      * @type {number}
@@ -82,13 +82,29 @@ export interface MediaFileStreamEntity {
     title?: string;
 }
 
+
+/**
+ * @export
+ */
+export const MediaFileStreamEntityCodecTypeEnum = {
+    Video: 'VIDEO',
+    Audio: 'AUDIO',
+    Subtitle: 'SUBTITLE',
+    ExternalSubtitle: 'EXTERNAL_SUBTITLE',
+    VideoNotPicture: 'VIDEO_NOT_PICTURE',
+    Data: 'DATA',
+    Attachment: 'ATTACHMENT',
+    Unknown: 'UNKNOWN'
+} as const;
+export type MediaFileStreamEntityCodecTypeEnum = typeof MediaFileStreamEntityCodecTypeEnum[keyof typeof MediaFileStreamEntityCodecTypeEnum];
+
+
 /**
  * Check if a given object implements the MediaFileStreamEntity interface.
  */
 export function instanceOfMediaFileStreamEntity(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "mediaFileEntity" in value;
-    isInstance = isInstance && "streamIndex" in value;
     isInstance = isInstance && "codecName" in value;
     isInstance = isInstance && "codecType" in value;
     isInstance = isInstance && "width" in value;
@@ -109,7 +125,7 @@ export function MediaFileStreamEntityFromJSONTyped(json: any, ignoreDiscriminato
         
         'id': !exists(json, 'id') ? undefined : json['id'],
         'mediaFileEntity': MediaFileEntityFromJSON(json['mediaFileEntity']),
-        'streamIndex': json['streamIndex'],
+        'streamIndex': !exists(json, 'streamIndex') ? undefined : json['streamIndex'],
         'codecName': json['codecName'],
         'codecType': json['codecType'],
         'width': json['width'],

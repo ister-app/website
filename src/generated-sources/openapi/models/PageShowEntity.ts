@@ -61,7 +61,25 @@ export interface PageShowEntity {
      * @type {number}
      * @memberof PageShowEntity
      */
-    numberOfElements?: number;
+    size?: number;
+    /**
+     * 
+     * @type {Array<ShowEntity>}
+     * @memberof PageShowEntity
+     */
+    content?: Array<ShowEntity>;
+    /**
+     * 
+     * @type {number}
+     * @memberof PageShowEntity
+     */
+    number?: number;
+    /**
+     * 
+     * @type {SortObject}
+     * @memberof PageShowEntity
+     */
+    sort?: SortObject;
     /**
      * 
      * @type {boolean}
@@ -76,28 +94,10 @@ export interface PageShowEntity {
     last?: boolean;
     /**
      * 
-     * @type {SortObject}
-     * @memberof PageShowEntity
-     */
-    sort?: SortObject;
-    /**
-     * 
      * @type {number}
      * @memberof PageShowEntity
      */
-    number?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PageShowEntity
-     */
-    size?: number;
-    /**
-     * 
-     * @type {Array<ShowEntity>}
-     * @memberof PageShowEntity
-     */
-    content?: Array<ShowEntity>;
+    numberOfElements?: number;
     /**
      * 
      * @type {boolean}
@@ -128,13 +128,13 @@ export function PageShowEntityFromJSONTyped(json: any, ignoreDiscriminator: bool
         'totalPages': !exists(json, 'totalPages') ? undefined : json['totalPages'],
         'totalElements': !exists(json, 'totalElements') ? undefined : json['totalElements'],
         'pageable': !exists(json, 'pageable') ? undefined : PageableObjectFromJSON(json['pageable']),
-        'numberOfElements': !exists(json, 'numberOfElements') ? undefined : json['numberOfElements'],
-        'first': !exists(json, 'first') ? undefined : json['first'],
-        'last': !exists(json, 'last') ? undefined : json['last'],
-        'sort': !exists(json, 'sort') ? undefined : SortObjectFromJSON(json['sort']),
-        'number': !exists(json, 'number') ? undefined : json['number'],
         'size': !exists(json, 'size') ? undefined : json['size'],
         'content': !exists(json, 'content') ? undefined : ((json['content'] as Array<any>).map(ShowEntityFromJSON)),
+        'number': !exists(json, 'number') ? undefined : json['number'],
+        'sort': !exists(json, 'sort') ? undefined : SortObjectFromJSON(json['sort']),
+        'first': !exists(json, 'first') ? undefined : json['first'],
+        'last': !exists(json, 'last') ? undefined : json['last'],
+        'numberOfElements': !exists(json, 'numberOfElements') ? undefined : json['numberOfElements'],
         'empty': !exists(json, 'empty') ? undefined : json['empty'],
     };
 }
@@ -151,13 +151,13 @@ export function PageShowEntityToJSON(value?: PageShowEntity | null): any {
         'totalPages': value.totalPages,
         'totalElements': value.totalElements,
         'pageable': PageableObjectToJSON(value.pageable),
-        'numberOfElements': value.numberOfElements,
-        'first': value.first,
-        'last': value.last,
-        'sort': SortObjectToJSON(value.sort),
-        'number': value.number,
         'size': value.size,
         'content': value.content === undefined ? undefined : ((value.content as Array<any>).map(ShowEntityToJSON)),
+        'number': value.number,
+        'sort': SortObjectToJSON(value.sort),
+        'first': value.first,
+        'last': value.last,
+        'numberOfElements': value.numberOfElements,
         'empty': value.empty,
     };
 }

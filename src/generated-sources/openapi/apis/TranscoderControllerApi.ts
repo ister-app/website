@@ -27,8 +27,8 @@ export interface ReadyRequest {
 export interface StartRequest {
     mediaFileId: string;
     startTimeInSeconds: number;
-    audioIndex?: number;
-    subtitleIndex?: number;
+    audioId?: string;
+    subtitleId?: string;
 }
 
 export interface StopRequest {
@@ -125,12 +125,12 @@ export class TranscoderControllerApi extends runtime.BaseAPI {
             queryParameters['startTimeInSeconds'] = requestParameters.startTimeInSeconds;
         }
 
-        if (requestParameters.audioIndex !== undefined) {
-            queryParameters['audioIndex'] = requestParameters.audioIndex;
+        if (requestParameters.audioId !== undefined) {
+            queryParameters['audioId'] = requestParameters.audioId;
         }
 
-        if (requestParameters.subtitleIndex !== undefined) {
-            queryParameters['subtitleIndex'] = requestParameters.subtitleIndex;
+        if (requestParameters.subtitleId !== undefined) {
+            queryParameters['subtitleId'] = requestParameters.subtitleId;
         }
 
         const headerParameters: runtime.HTTPHeaders = {};

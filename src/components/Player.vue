@@ -66,8 +66,8 @@ const paused = ref(false);
 const progres: Ref<number> = ref(0);
 const currentTime: Ref<number> = ref(0);
 const volume: Ref<number> = ref(100);
-const selectedAudioStream: Ref<number | undefined> = ref();
-const selectedSubtitleStream: Ref<number | undefined> = ref();
+const selectedAudioStream: Ref<string | undefined> = ref();
+const selectedSubtitleStream: Ref<string | undefined> = ref();
 
 const durationTime: Ref<number> = ref(1222);
 const offsetTime: Ref<number> = ref(0);

@@ -21,7 +21,7 @@ export default class TranscodeService {
 
 
 
-    public async start(mediaFileEntity: MediaFile, startTimeInSeconds: number, audioIndex: number | undefined, subtitleIndex: number | undefined | null): Promise<string> {
+    public async start(mediaFileEntity: MediaFile, startTimeInSeconds: number, audioIndex: string | undefined, subtitleIndex: string | undefined | null): Promise<string> {
         this.loaded.value = false;
         this.stopped.value = false;
         if (subtitleIndex === null) {
@@ -31,7 +31,7 @@ export default class TranscodeService {
         var id: string = mediaFileEntity.id!;
         // episodeEntity.mediaFiles?.forEach((file: MediaFile) => { if (file.path?.endsWith("mkv")) { id = file.id } });
 
-        const posts: Promise<string> = this.postsApi.start({ mediaFileId: id, startTimeInSeconds: startTimeInSeconds, audioIndex: audioIndex, subtitleIndex: subtitleIndex });
+        const posts: Promise<string> = this.postsApi.start({ mediaFileId: id, startTimeInSeconds: startTimeInSeconds, audioId: audioIndex, subtitleId: subtitleIndex });
         return await posts.then(async (response: string) => {
             this.currentMediaFileId.value = id;
             this.transcodeSesionId.value = response;
