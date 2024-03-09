@@ -69,7 +69,7 @@ const volume: Ref<number> = ref(100);
 const selectedAudioStream: Ref<string | undefined> = ref();
 const selectedSubtitleStream: Ref<string | undefined> = ref();
 
-const durationTime: Ref<number> = ref(1222);
+const durationTime: Ref<number> = ref(3600);
 const offsetTime: Ref<number> = ref(0);
 const transcodeSesionId: Ref<String | undefined> = ref();
 const buffering = ref(false);
@@ -168,6 +168,7 @@ function handlePlayingEvent(event: any) {
 const startPlaying = async () => {
   console.log("start")
   buffering.value = true;
+  durationTime.value = props.mediaFileEntity.durationInMilliseconds ? props.mediaFileEntity.durationInMilliseconds / 1000 : 3600;
   transcodeSesionId.value = await transcodeService.start(props.mediaFileEntity, offsetTime.value, selectedAudioStream.value, selectedSubtitleStream.value);
   buffering.value = false;
   startedPlaying.value = true;

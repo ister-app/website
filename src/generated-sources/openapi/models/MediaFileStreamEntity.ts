@@ -73,6 +73,12 @@ export interface MediaFileStreamEntity {
      * @type {string}
      * @memberof MediaFileStreamEntity
      */
+    path: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MediaFileStreamEntity
+     */
     language?: string;
     /**
      * 
@@ -109,6 +115,7 @@ export function instanceOfMediaFileStreamEntity(value: object): boolean {
     isInstance = isInstance && "codecType" in value;
     isInstance = isInstance && "width" in value;
     isInstance = isInstance && "height" in value;
+    isInstance = isInstance && "path" in value;
 
     return isInstance;
 }
@@ -130,6 +137,7 @@ export function MediaFileStreamEntityFromJSONTyped(json: any, ignoreDiscriminato
         'codecType': json['codecType'],
         'width': json['width'],
         'height': json['height'],
+        'path': json['path'],
         'language': !exists(json, 'language') ? undefined : json['language'],
         'title': !exists(json, 'title') ? undefined : json['title'],
     };
@@ -151,6 +159,7 @@ export function MediaFileStreamEntityToJSON(value?: MediaFileStreamEntity | null
         'codecType': value.codecType,
         'width': value.width,
         'height': value.height,
+        'path': value.path,
         'language': value.language,
         'title': value.title,
     };

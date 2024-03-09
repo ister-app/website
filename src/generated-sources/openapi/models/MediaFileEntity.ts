@@ -74,6 +74,12 @@ export interface MediaFileEntity {
      * @memberof MediaFileEntity
      */
     size: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof MediaFileEntity
+     */
+    durationInMilliseconds?: number;
 }
 
 /**
@@ -105,6 +111,7 @@ export function MediaFileEntityFromJSONTyped(json: any, ignoreDiscriminator: boo
         'mediaFileStreamEntity': !exists(json, 'mediaFileStreamEntity') ? undefined : ((json['mediaFileStreamEntity'] as Array<any>).map(MediaFileStreamEntityFromJSON)),
         'path': json['path'],
         'size': json['size'],
+        'durationInMilliseconds': !exists(json, 'durationInMilliseconds') ? undefined : json['durationInMilliseconds'],
     };
 }
 
@@ -123,6 +130,7 @@ export function MediaFileEntityToJSON(value?: MediaFileEntity | null): any {
         'mediaFileStreamEntity': value.mediaFileStreamEntity === undefined ? undefined : ((value.mediaFileStreamEntity as Array<any>).map(MediaFileStreamEntityToJSON)),
         'path': value.path,
         'size': value.size,
+        'durationInMilliseconds': value.durationInMilliseconds,
     };
 }
 
