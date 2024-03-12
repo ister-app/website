@@ -120,9 +120,9 @@ function playPause() {
 }
 
 function goToTime() {
+  stop();
   // video.value.currentTime = (progres.value * durationTime.value / 100) - offsetTime.value;
   offsetTime.value = Math.round(progres.value * durationTime.value / 100);
-  stop();
   startPlaying();
 }
 
@@ -177,19 +177,19 @@ const startPlaying = async () => {
     hls.loadSource(transcodeService.getStreamUrl());
     if (video.value !== undefined) {
       hls.attachMedia(video.value);
+      video.value.play();
+      video.value.addEventListener("timeupdate", handleEvent);
+      video.value.addEventListener("volumechange", handleVolumeEvent);
+      video.value.addEventListener("play", handlePlayingEvent);
+      video.value.addEventListener("pause", handlePlayingEvent);
     }
-    video.value?.play();
-  }
-  video.value?.addEventListener("timeupdate", handleEvent);
-  video.value?.addEventListener("volumechange", handleVolumeEvent);
-  video.value?.addEventListener("play", handlePlayingEvent);
-  video.value?.addEventListener("pause", handlePlayingEvent);
-};
+  }};
 
 async function stop() {
   console.log("stop")
   startedPlaying.value = false;
   video.value?.pause();
+  video.value!.currentTime = 0;
   hls.stopLoad();
   return await transcodeService.stop();
 }
