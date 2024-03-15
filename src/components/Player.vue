@@ -183,13 +183,19 @@ const startPlaying = async () => {
       video.value.addEventListener("play", handlePlayingEvent);
       video.value.addEventListener("pause", handlePlayingEvent);
     }
-  }};
+  }
+};
 
 async function stop() {
   console.log("stop")
   startedPlaying.value = false;
+  if (video.value !== undefined) {
+    video.value.removeEventListener("timeupdate", handleEvent);
+    video.value.removeEventListener("volumechange", handleVolumeEvent);
+    video.value.removeEventListener("play", handlePlayingEvent);
+    video.value.removeEventListener("pause", handlePlayingEvent);
+  }
   video.value?.pause();
-  video.value!.currentTime = 0;
   hls.stopLoad();
   return await transcodeService.stop();
 }
