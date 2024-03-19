@@ -14,13 +14,11 @@
 </template>
 
 <script lang="ts" setup>
-import { Configuration, ScannerControllerApi } from '@/generated-sources/openapi';
+import { useApiService } from '@/plugins/api';
 
-const configuration = new Configuration({
-  basePath: import.meta.env.VITE_BACKEND_URL,
-});
+const apiService = useApiService();
 
-function refresh() {
-  new ScannerControllerApi(configuration).scan();
+async function refresh() {
+  (await apiService?.getScannerControllerApi())!.scan();
 }
 </script>

@@ -1,13 +1,13 @@
 <template>
     <v-skeleton-loader v-if="!loaded" type="image" style="height: 50vh;"></v-skeleton-loader>
-    <v-img v-else gradient="rgba(0,0,0,0), rgba(0,0,0,1)" cover style="height: 50vh;" :src="backgroundImageUrl"
+    <Image v-else gradient="rgba(0,0,0,0), rgba(0,0,0,1)" cover :style="'height: 50vh;'" :imageId="ImageUtilService.getBackgroundImageId(showEntity!.imageEntities!)"
         position="top">
         <div class="d-flex flex-column fill-height justify-end ml-5 text-white">
             <h1 class="text-h4 font-weight-thin mb-4">
                 {{ showEntity?.name }}
             </h1>
         </div>
-    </v-img>
+    </Image>
     <v-container style="max-width: 1720px;">
         <v-row class="mt-2">
             <v-col md="7" lg="8" xl="9" cols="12">
@@ -24,18 +24,18 @@
 
 <script lang="ts" setup>
 
-import { computed, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import type { Ref } from 'vue'
-import { Configuration, EpisodeEntity, EpisodeControllerApi, ShowEntity, ShowControllerApi, ImageEntityTypeEnum } from "@/generated-sources/openapi";
+import { EpisodeEntity, ShowEntity } from "@/generated-sources/openapi";
 import EpisodePlayer from '@/components/EpisodePlayer.vue';
 import { useRoute } from 'vue-router/auto';
+import { useApiService } from '@/plugins/api';
+import ImageUtilService from '@/services/imageUtil.service';
 
 const route = useRoute("/tvshows/[id].episodes.[[episodeId]]");
 const id: string = route.params.id;
 
-const configuration = new Configuration({
-    basePath: import.meta.env.VITE_BACKEND_URL,
-});
+const apiService = useApiService();
 
 const showEntity: Ref<ShowEntity | undefined> = ref()
 const episodeEntity: Ref<EpisodeEntity | undefined> = ref()
@@ -45,29 +45,19 @@ watch(() => route.params, () => {
     refreshEpisode();
 });
 
-const backgroundImageUrl = computed(() => {
-    let url = '';
-    showEntity.value?.imageEntities?.forEach(imageEntities => {
-        if (imageEntities.type === ImageEntityTypeEnum.Background) {
-            url = import.meta.env.VITE_BACKEND_URL + '/images/' + imageEntities.id + '/download'
-        }
-    });
-    return url;
-});
-
-function refresh() {
-    const postsApi = new ShowControllerApi(configuration);
-    const posts: Promise<ShowEntity> = postsApi.getTVShow({ id: route.params.id.toString() });
+async function refresh() {
+    const postsApi = await apiService?.getShowControllerApi();
+    const posts: Promise<ShowEntity> = postsApi!.getTVShow({ id: route.params.id.toString() });
     posts.then((response: ShowEntity) => {
         showEntity.value = response;
         loaded.value = true;
     })
 }
 
-function refreshEpisode() {
+async function refreshEpisode() {
     if (route.params.episodeId !== undefined) {
-        const postsApi = new EpisodeControllerApi(configuration);
-        const posts: Promise<EpisodeEntity> = postsApi.getEpisode({ id: route.params.episodeId.toString() });
+        const postsApi = await apiService?.getEpisodeControllerApi();
+        const posts: Promise<EpisodeEntity> = postsApi!.getEpisode({ id: route.params.episodeId.toString() });
         posts.then((response: EpisodeEntity) => {
             episodeEntity.value = response;
             loaded.value = true;

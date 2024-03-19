@@ -4,13 +4,13 @@
             <v-window v-model="window" show-arrows class="fillcontent">
                 <v-window-item v-for="episodeEntity in episodes" :key="episodeEntity.id">
                     <v-card>
-                        <v-img :src="episodeEntity.imagesEntities?.length !== 0 ? backendUrl + '/images/' + episodeEntity.imagesEntities![0].id + '/download' : ''" class="align-end"
+                        <Image :imageId="ImageUtilService.getBackgroundImageId(episodeEntity.imagesEntities!)" class="align-end"
                             gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.8)" height="450px" cover>
                             <v-card-text class="text-white">
                                 <p class="text-h5">{{ episodeEntity.showEntity?.name }}</p>
                                 s{{ episodeEntity.seasonEntity?.number }}e{{ episodeEntity.number }} {{ episodeEntity.metadataEntities?.length !== 0 ? episodeEntity.metadataEntities![0].title : '' }}
                             </v-card-text>
-                        </v-img>
+                        </Image>
                     </v-card>
                 </v-window-item>
             </v-window>
@@ -32,8 +32,7 @@
                                                 <v-card-subtitle>s{{ episodeEntity.seasonEntity?.number }}e{{ episodeEntity.number }} {{ episodeEntity.metadataEntities?.length !== 0 ? episodeEntity.metadataEntities![0].title : '' }}</v-card-subtitle>
                                             </v-col>
                                             <v-col class="flex-grow-0 flex-shrink-0">
-                                                <v-img width="100px" height="100%"
-                                                    :src="ImageUtilService.getCoverImageUrl(episodeEntity.showEntity?.imageEntities!)"></v-img>
+                                                <Image :imageId="ImageUtilService.getCoverImageId(episodeEntity.showEntity?.imageEntities!)" width="100px" height="100%"></Image>
                                             </v-col>
                                         </v-row>
                                     </v-container>
@@ -50,24 +49,20 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { Ref } from 'vue'
-import { Configuration, PageEpisodeEntity, EpisodeEntity, EpisodeControllerApi } from "@/generated-sources/openapi";
+import { PageEpisodeEntity, EpisodeEntity } from "@/generated-sources/openapi";
 import ImageUtilService from '@/services/imageUtil.service';
-
-const configuration = new Configuration({
-    basePath: import.meta.env.VITE_BACKEND_URL,
-});
-
-const backendUrl: string = import.meta.env.VITE_BACKEND_URL;
+import { useApiService } from '@/plugins/api';
 
 const episodes: Ref<EpisodeEntity[]> = ref([])
 const loaded: Ref<boolean> = ref(false);
 
-const length = ref(3)
 const window = ref(0)
 
-function refresh() {
-    const postsApi = new EpisodeControllerApi(configuration);
-    const posts: Promise<PageEpisodeEntity> = postsApi.getRecent2();
+const apiService = useApiService();
+
+async function refresh() {
+    const postsApi = await apiService?.getEpisodeControllerApi();
+    const posts: Promise<PageEpisodeEntity> = postsApi!.getRecent2();
     console.log(posts);
     posts.then((response: PageEpisodeEntity) => {
         response.content?.forEach((episodeEntity: EpisodeEntity) => episodes.value.push(episodeEntity));

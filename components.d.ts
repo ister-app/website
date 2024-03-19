@@ -10,6 +10,7 @@ declare module 'vue' {
     EpisodeList: typeof import('./src/components/EpisodeList.vue')['default']
     EpisodePlayer: typeof import('./src/components/EpisodePlayer.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
+    Image: typeof import('./src/components/Image.vue')['default']
     MediaFileStreamsSelector: typeof import('./src/components/MediaFileStreamsSelector.vue')['default']
     Player: typeof import('./src/components/Player.vue')['default']
     Recentcarousel: typeof import('./src/components/Recentcarousel.vue')['default']

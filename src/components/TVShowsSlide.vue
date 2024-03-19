@@ -2,9 +2,10 @@
     <v-slide-group>
         <v-slide-group-item v-if="loaded" v-for="showEntity in tvShows" :key="showEntity.id">
             <v-card class="ma-3" width="200" :to="{ name: '/tvshows/[id].episodes.[[episodeId]]', params: { id: showEntity.id } }">
-                <v-img
-                :src="ImageUtilService.getCoverImageUrl(showEntity.imageEntities!)"
-                    height="300px" cover></v-img>
+                <Image :imageId="ImageUtilService.getCoverImageId(showEntity.imageEntities!)" height="300px"></Image>
+                <!-- <v-img
+                :src="downloadImage(ImageUtilService.getCoverImageId(showEntity.imageEntities!))"
+                    height="300px" cover></v-img> -->
                 <v-card-title v-text="showEntity.name"></v-card-title>
                 <v-card-subtitle>
                     Episode title
@@ -21,19 +22,18 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { Ref } from 'vue'
-import { Configuration, PageShowEntity, ShowEntity, ShowControllerApi } from "@/generated-sources/openapi";
+import { PageShowEntity, ShowEntity } from "@/generated-sources/openapi";
 import ImageUtilService from '@/services/imageUtil.service';
-
-const configuration = new Configuration({
-    basePath: import.meta.env.VITE_BACKEND_URL,
-});
+import { useApiService } from '@/plugins/api';
 
 const tvShows: Ref<ShowEntity[]> = ref([])
 const loaded: Ref<boolean> = ref(false);
 
-function refresh() {
-    const postsApi = new ShowControllerApi(configuration);
-    const posts: Promise<PageShowEntity> = postsApi.getRecent();
+const apiService = useApiService();
+
+async function refresh() {
+    const postsApi = await apiService?.getShowControllerApi();
+    const posts: Promise<PageShowEntity> = postsApi!.getRecent();
     console.log(posts);
     posts.then((response: PageShowEntity) => {
         response.content?.forEach((showEntity: ShowEntity) => tvShows.value.push(showEntity));

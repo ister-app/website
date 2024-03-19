@@ -3,9 +3,9 @@
         <v-list-item v-if="loaded" v-for="episodeEntity in episodes" :key="episodeEntity.id" :value="episodeEntity.id" :id="'list-item-' + episodeEntity.id" color="primary"
             class="pa-0 ma-0" :to="{ name: '/tvshows/[id].episodes.[[episodeId]]', params: { id: episodeEntity.showEntity?.id, episodeId: episodeEntity.id } }">
             <template v-slot:prepend>
-                <v-img :src="episodeEntity.imagesEntities?.length !== 0 ? backendUrl + '/images/' + episodeEntity.imagesEntities![0].id + '/download' : ''" rounded="rounded"
+                <Image :imageId="ImageUtilService.getBackgroundImageId(episodeEntity.imagesEntities!)" rounded="rounded"
                     gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.8)" width="160px" height="100px">
-                </v-img>
+                </Image>
                 <v-container></v-container>
             </template>
             <v-list-item-title>{{ episodeEntity.number }} {{ episodeEntity.metadataEntities?.length !== 0 ? episodeEntity.metadataEntities![0].title : '' }}</v-list-item-title>
@@ -20,8 +20,10 @@
 
 import { ref } from 'vue'
 import type { Ref } from 'vue'
-import { Configuration, EpisodeEntity, SeasonControllerApi } from "@/generated-sources/openapi";
+import { EpisodeEntity } from "@/generated-sources/openapi";
 import { useGoTo } from 'vuetify'
+import { useApiService } from '@/plugins/api';
+import ImageUtilService from '@/services/imageUtil.service';
 
 const props = defineProps<{
     seasonId: string,
@@ -29,22 +31,17 @@ const props = defineProps<{
 }>()
 
 
-const configuration = new Configuration({
-    basePath: import.meta.env.VITE_BACKEND_URL,
-});
-
-const backendUrl: string = import.meta.env.VITE_BACKEND_URL;
+const apiService = useApiService();
 
 const goTo = useGoTo()
-const list = ref()
 const episodes: Ref<Array<EpisodeEntity>> = ref([])
 const loaded: Ref<boolean> = ref(false);
 const selected: Ref<Array<String>> = ref([]);
 
 
-function refresh() {
-    const postsApi = new SeasonControllerApi(configuration);
-    const posts: Promise<EpisodeEntity[]> = postsApi.getEpisodes({ id: props.seasonId });
+async function refresh() {
+    const postsApi = await apiService?.getSeasonControllerApi();
+    const posts: Promise<EpisodeEntity[]> = postsApi!.getEpisodes({ id: props.seasonId });
     console.log(posts);
     posts.then((response: EpisodeEntity[]) => {
         episodes.value = response;
@@ -60,7 +57,6 @@ function scrollTo() {
     if (props.selectedEpisode) {
         goTo("#list-item-" + props.selectedEpisode.id, { container: "#list-" + props.seasonId })
     }
-    // document.getElementById(props.selectedEpisode.id!)?.scrollIntoView();
 }
 
 refresh();

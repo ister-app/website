@@ -16,25 +16,23 @@
 
 import { ref } from 'vue'
 import type { Ref } from 'vue'
-import { Configuration, EpisodeEntity, SeasonEntity, ShowControllerApi } from "@/generated-sources/openapi";
+import { EpisodeEntity, SeasonEntity } from "@/generated-sources/openapi";
+import { useApiService } from '@/plugins/api';
 
 const props = defineProps<{
     tvShowId: string,
     selectedEpisode?: EpisodeEntity
 }>()
 
-const configuration = new Configuration({
-    basePath: import.meta.env.VITE_BACKEND_URL,
-});
-
 const seasons: Ref<Array<SeasonEntity>> = ref([])
 const loaded: Ref<boolean> = ref(false);
 const selected: Ref<String | undefined> = ref();
 
+const apiService = useApiService();
 
-function refresh() {
-    const postsApi = new ShowControllerApi(configuration);
-    const posts: Promise<SeasonEntity[]> = postsApi.getSeasons({ id: props.tvShowId });
+async function refresh() {
+    const postsApi = await apiService?.getShowControllerApi();
+    const posts: Promise<SeasonEntity[]> = postsApi!.getSeasons({ id: props.tvShowId });
     console.log(posts);
     posts.then((response: SeasonEntity[]) => {
         seasons.value = response;

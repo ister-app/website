@@ -13,6 +13,7 @@ import VueFullscreen from 'vue-fullscreen'
 
 // Types
 import type { App } from 'vue'
+import { ApiPlugin } from './api'
 
 export function registerPlugins(app: App) {
   app
@@ -20,4 +21,5 @@ export function registerPlugins(app: App) {
     .use(router)
     .use(pinia)
     .use(VueFullscreen)
+    .use(ApiPlugin)
 }

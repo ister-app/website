@@ -1,8 +1,8 @@
 
 import { ref } from 'vue'
 import type { Ref } from 'vue'
-import { Configuration, TranscoderControllerApi } from '@/generated-sources/openapi';
 import { MediaFile } from '@/generated-sources/openapi/models/MediaFile';
+import ApiService from './api.service';
 
 
 export default class TranscodeService {
@@ -11,13 +11,11 @@ export default class TranscodeService {
     public transcodeSesionId: Ref<string | undefined> = ref();
     public stopped: Ref<boolean> = ref(false);
 
+    private apiService: ApiService;
 
-
-    private configuration = new Configuration({
-        basePath: import.meta.env.VITE_BACKEND_URL,
-    });
-
-    private postsApi = new TranscoderControllerApi(this.configuration);
+    constructor(apiService: ApiService) {
+        this.apiService = apiService;
+    }
 
 
 
@@ -31,7 +29,7 @@ export default class TranscodeService {
         var id: string = mediaFileEntity.id!;
         // episodeEntity.mediaFiles?.forEach((file: MediaFile) => { if (file.path?.endsWith("mkv")) { id = file.id } });
 
-        const posts: Promise<string> = this.postsApi.start({ mediaFileId: id, startTimeInSeconds: startTimeInSeconds, audioId: audioIndex, subtitleId: subtitleIndex });
+        const posts: Promise<string> = (await this.apiService.getTranscoderControllerApi()).start({ mediaFileId: id, startTimeInSeconds: startTimeInSeconds, audioId: audioIndex, subtitleId: subtitleIndex });
         return await posts.then(async (response: string) => {
             this.currentMediaFileId.value = id;
             this.transcodeSesionId.value = response;
@@ -39,10 +37,10 @@ export default class TranscodeService {
         })
     }
 
-    public stop(): Promise<void> {
+    public async stop(): Promise<void> {
         this.loaded.value = false;
         this.stopped.value = true;
-        return this.postsApi.stop({id: this.transcodeSesionId.value!});
+        return (await this.apiService.getTranscoderControllerApi()).stop({id: this.transcodeSesionId.value!});
     }
 
     public getStreamUrl(): string {
@@ -65,8 +63,7 @@ export default class TranscodeService {
     }
 
     private async checkReady(): Promise<boolean> {
-        const postsApi = new TranscoderControllerApi(this.configuration);
-        const posts: Promise<boolean> = postsApi.ready({id: this.transcodeSesionId.value!});
+        const posts: Promise<boolean> = (await this.apiService.getTranscoderControllerApi()).ready({id: this.transcodeSesionId.value!});
         return await posts.then(async (response: boolean) => response);
     }
 

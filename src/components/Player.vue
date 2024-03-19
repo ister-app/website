@@ -3,7 +3,8 @@
     <div ref="root">
       <div class="fullscreen-wrapper" :class="controllsVisable ? '' : 'hide-mouse'" @mousemove="onHover()">
         <div class="video-container">
-          <video class="video" ref="video" width="100%" poster="" @click="onVideoClick()" :disable-picture-in-picture="true"></video>
+          <video class="video" ref="video" width="100%" poster="" @click="onVideoClick()"
+            :disable-picture-in-picture="true"></video>
           <div class="loader" v-if="buffering"><v-progress-circular indeterminate></v-progress-circular></div>
           <div class="loader" v-else-if="paused">
             <v-btn :disabled="buffering" class="control-item me-auto" density="compact"
@@ -45,6 +46,7 @@ import Hls from 'hls.js';
 import { api as fullscreen } from 'vue-fullscreen'
 import { MediaFileEntity } from '@/generated-sources/openapi';
 import TranscodeService from '@/services/transcode.service';
+import { useApiService } from '@/plugins/api';
 
 const props = defineProps<{
   mediaFileEntity: MediaFileEntity
@@ -54,6 +56,10 @@ const state = reactive({
   fullscreen: false,
   teleport: false,
 })
+
+const apiService = useApiService();
+
+const transcodeService = new TranscodeService(apiService!);
 
 const root = ref()
 
@@ -74,10 +80,18 @@ const offsetTime: Ref<number> = ref(0);
 const transcodeSesionId: Ref<String | undefined> = ref();
 const buffering = ref(false);
 
-var hls = new Hls({ startPosition: 0 });
-const transcodeService = new TranscodeService();
+var hls: Hls;
 
-onMounted(() => startPlaying())
+onMounted(async () => {
+  // const token = await apiService?.authService?.getToken();
+  hls = new Hls({
+    startPosition: 0,
+    xhrSetup: async function (xhr, url) {
+      xhr.setRequestHeader("Authorization", "Bearer " + await apiService?.authService?.getToken())
+    },
+  });
+  startPlaying()
+})
 
 watch(props, () => {
   stop();
@@ -102,9 +116,6 @@ watch(selectedSubtitleStream, () => {
 async function toggle() {
   await fullscreen.toggle(root.value.querySelector('.fullscreen-wrapper'), {
     teleport: state.teleport,
-    callback: (isFullscreen) => {
-      // state.fullscreen = isFullscreen
-    },
   })
   state.fullscreen = fullscreen.isFullscreen
 }
@@ -229,9 +240,6 @@ onUnmounted(() => {
   position: absolute;
   bottom: 0px;
   padding: 5px;
-  /* font-size: 20px; */
-  /* font-family: Helvetica; */
-  /* color: #FFF; */
   width: 100%;
   background-color: rgba(50, 50, 50, 0.5);
 }
