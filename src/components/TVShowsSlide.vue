@@ -1,7 +1,7 @@
 <template>
     <v-slide-group>
         <v-slide-group-item v-if="loaded" v-for="showEntity in tvShows" :key="showEntity.id">
-            <v-card class="ma-3" width="200" :to="{ name: '/tvshows/[id].episodes.[[episodeId]]', params: { id: showEntity.id } }">
+            <v-card class="ma-3" width="200" :to="{ name: '/tvshows/[id]/', params: { id: showEntity.id } }">
                 <Image :imageId="ImageUtilService.getCoverImageId(showEntity.imageEntities!)" height="300px"></Image>
                 <!-- <v-img
                 :src="downloadImage(ImageUtilService.getCoverImageId(showEntity.imageEntities!))"

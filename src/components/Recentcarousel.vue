@@ -23,7 +23,7 @@
                     <v-col class="pa-0 ma-0">
                         <v-item v-slot="{ isSelected, toggle }">
                             <v-card :color="isSelected ? 'primary' : ''" @mouseover="toggle" height="150px"
-                                :to="{ name: '/tvshows/[id].episodes.[[episodeId]]', params: { id: episodeEntity.showEntity?.id, episodeId: episodeEntity.id } }">
+                                :to="{ name: '/tvshows/[id]/episodes.[episodeId]', params: { id: episodeEntity.showEntity?.id, episodeId: episodeEntity.id } }">
                                 <v-scroll-y-transition>
                                     <v-container class="pa-0 ma-0">
                                         <v-row class="flex-nowrap">

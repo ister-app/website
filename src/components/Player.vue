@@ -201,12 +201,16 @@ async function stop() {
   console.log("stop")
   startedPlaying.value = false;
   if (video.value !== undefined) {
-    video.value.removeEventListener("timeupdate", handleEvent);
-    video.value.removeEventListener("volumechange", handleVolumeEvent);
-    video.value.removeEventListener("play", handlePlayingEvent);
-    video.value.removeEventListener("pause", handlePlayingEvent);
+    try {
+      video.value.removeEventListener("timeupdate", handleEvent);
+      video.value.removeEventListener("volumechange", handleVolumeEvent);
+      video.value.removeEventListener("play", handlePlayingEvent);
+      video.value.removeEventListener("pause", handlePlayingEvent);
+      video.value.pause();
+    } catch (error) {
+      console.log("Video value removed before removing event listeners.")
+    }
   }
-  video.value?.pause();
   hls.stopLoad();
   return await transcodeService.stop();
 }
