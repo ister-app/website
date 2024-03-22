@@ -18,7 +18,7 @@
 
 <script lang="ts" setup>
 
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import type { Ref } from 'vue'
 import { EpisodeEntity } from "@/generated-sources/openapi";
 import { useGoTo } from 'vuetify'
@@ -30,6 +30,11 @@ const props = defineProps<{
     selectedEpisode?: EpisodeEntity
 }>()
 
+watch(props, () => {
+    if (props.selectedEpisode) {
+        selected.value = [props.selectedEpisode.id!];
+    }
+})
 
 const apiService = useApiService();
 
@@ -46,7 +51,7 @@ async function refresh() {
     posts.then((response: EpisodeEntity[]) => {
         episodes.value = response;
         loaded.value = true;
-        if (props.selectedEpisode) {
+        if (props.selectedEpisode && response.findIndex(item => item.id === props.selectedEpisode?.id)) {
             selected.value = [props.selectedEpisode.id!];
             setTimeout(scrollTo, 100);
         }

@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { ShowEntity } from './ShowEntity';
 import {
     ShowEntityFromJSON,
@@ -50,11 +50,9 @@ export interface SeasonEntity {
  * Check if a given object implements the SeasonEntity interface.
  */
 export function instanceOfSeasonEntity(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "showEntity" in value;
-    isInstance = isInstance && "number" in value;
-
-    return isInstance;
+    if (!('showEntity' in value)) return false;
+    if (!('number' in value)) return false;
+    return true;
 }
 
 export function SeasonEntityFromJSON(json: any): SeasonEntity {
@@ -62,29 +60,26 @@ export function SeasonEntityFromJSON(json: any): SeasonEntity {
 }
 
 export function SeasonEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean): SeasonEntity {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
+        'id': json['id'] == null ? undefined : json['id'],
         'showEntity': ShowEntityFromJSON(json['showEntity']),
         'number': json['number'],
     };
 }
 
 export function SeasonEntityToJSON(value?: SeasonEntity | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'id': value.id,
-        'showEntity': ShowEntityToJSON(value.showEntity),
-        'number': value.number,
+        'id': value['id'],
+        'showEntity': ShowEntityToJSON(value['showEntity']),
+        'number': value['number'],
     };
 }
 

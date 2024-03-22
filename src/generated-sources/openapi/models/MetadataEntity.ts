@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { EpisodeEntity } from './EpisodeEntity';
 import {
     EpisodeEntityFromJSON,
@@ -92,9 +92,7 @@ export interface MetadataEntity {
  * Check if a given object implements the MetadataEntity interface.
  */
 export function instanceOfMetadataEntity(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function MetadataEntityFromJSON(json: any): MetadataEntity {
@@ -102,39 +100,36 @@ export function MetadataEntityFromJSON(json: any): MetadataEntity {
 }
 
 export function MetadataEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean): MetadataEntity {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'showEntity': !exists(json, 'showEntity') ? undefined : ShowEntityFromJSON(json['showEntity']),
-        'seasonEntity': !exists(json, 'seasonEntity') ? undefined : SeasonEntityFromJSON(json['seasonEntity']),
-        'episodeEntity': !exists(json, 'episodeEntity') ? undefined : EpisodeEntityFromJSON(json['episodeEntity']),
-        'sourceUri': !exists(json, 'sourceUri') ? undefined : json['sourceUri'],
-        'title': !exists(json, 'title') ? undefined : json['title'],
-        'description': !exists(json, 'description') ? undefined : json['description'],
-        'released': !exists(json, 'released') ? undefined : (new Date(json['released'])),
+        'id': json['id'] == null ? undefined : json['id'],
+        'showEntity': json['showEntity'] == null ? undefined : ShowEntityFromJSON(json['showEntity']),
+        'seasonEntity': json['seasonEntity'] == null ? undefined : SeasonEntityFromJSON(json['seasonEntity']),
+        'episodeEntity': json['episodeEntity'] == null ? undefined : EpisodeEntityFromJSON(json['episodeEntity']),
+        'sourceUri': json['sourceUri'] == null ? undefined : json['sourceUri'],
+        'title': json['title'] == null ? undefined : json['title'],
+        'description': json['description'] == null ? undefined : json['description'],
+        'released': json['released'] == null ? undefined : (new Date(json['released'])),
     };
 }
 
 export function MetadataEntityToJSON(value?: MetadataEntity | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'id': value.id,
-        'showEntity': ShowEntityToJSON(value.showEntity),
-        'seasonEntity': SeasonEntityToJSON(value.seasonEntity),
-        'episodeEntity': EpisodeEntityToJSON(value.episodeEntity),
-        'sourceUri': value.sourceUri,
-        'title': value.title,
-        'description': value.description,
-        'released': value.released === undefined ? undefined : (value.released.toISOString()),
+        'id': value['id'],
+        'showEntity': ShowEntityToJSON(value['showEntity']),
+        'seasonEntity': SeasonEntityToJSON(value['seasonEntity']),
+        'episodeEntity': EpisodeEntityToJSON(value['episodeEntity']),
+        'sourceUri': value['sourceUri'],
+        'title': value['title'],
+        'description': value['description'],
+        'released': value['released'] == null ? undefined : ((value['released']).toISOString()),
     };
 }
 

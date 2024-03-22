@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { MediaFileEntity } from './MediaFileEntity';
 import {
     MediaFileEntityFromJSON,
@@ -109,15 +109,13 @@ export type MediaFileStreamEntityCodecTypeEnum = typeof MediaFileStreamEntityCod
  * Check if a given object implements the MediaFileStreamEntity interface.
  */
 export function instanceOfMediaFileStreamEntity(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "mediaFileEntity" in value;
-    isInstance = isInstance && "codecName" in value;
-    isInstance = isInstance && "codecType" in value;
-    isInstance = isInstance && "width" in value;
-    isInstance = isInstance && "height" in value;
-    isInstance = isInstance && "path" in value;
-
-    return isInstance;
+    if (!('mediaFileEntity' in value)) return false;
+    if (!('codecName' in value)) return false;
+    if (!('codecType' in value)) return false;
+    if (!('width' in value)) return false;
+    if (!('height' in value)) return false;
+    if (!('path' in value)) return false;
+    return true;
 }
 
 export function MediaFileStreamEntityFromJSON(json: any): MediaFileStreamEntity {
@@ -125,43 +123,40 @@ export function MediaFileStreamEntityFromJSON(json: any): MediaFileStreamEntity 
 }
 
 export function MediaFileStreamEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean): MediaFileStreamEntity {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
+        'id': json['id'] == null ? undefined : json['id'],
         'mediaFileEntity': MediaFileEntityFromJSON(json['mediaFileEntity']),
-        'streamIndex': !exists(json, 'streamIndex') ? undefined : json['streamIndex'],
+        'streamIndex': json['streamIndex'] == null ? undefined : json['streamIndex'],
         'codecName': json['codecName'],
         'codecType': json['codecType'],
         'width': json['width'],
         'height': json['height'],
         'path': json['path'],
-        'language': !exists(json, 'language') ? undefined : json['language'],
-        'title': !exists(json, 'title') ? undefined : json['title'],
+        'language': json['language'] == null ? undefined : json['language'],
+        'title': json['title'] == null ? undefined : json['title'],
     };
 }
 
 export function MediaFileStreamEntityToJSON(value?: MediaFileStreamEntity | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'id': value.id,
-        'mediaFileEntity': MediaFileEntityToJSON(value.mediaFileEntity),
-        'streamIndex': value.streamIndex,
-        'codecName': value.codecName,
-        'codecType': value.codecType,
-        'width': value.width,
-        'height': value.height,
-        'path': value.path,
-        'language': value.language,
-        'title': value.title,
+        'id': value['id'],
+        'mediaFileEntity': MediaFileEntityToJSON(value['mediaFileEntity']),
+        'streamIndex': value['streamIndex'],
+        'codecName': value['codecName'],
+        'codecType': value['codecType'],
+        'width': value['width'],
+        'height': value['height'],
+        'path': value['path'],
+        'language': value['language'],
+        'title': value['title'],
     };
 }
 

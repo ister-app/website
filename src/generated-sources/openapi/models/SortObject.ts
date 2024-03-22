@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -43,9 +43,7 @@ export interface SortObject {
  * Check if a given object implements the SortObject interface.
  */
 export function instanceOfSortObject(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function SortObjectFromJSON(json: any): SortObject {
@@ -53,29 +51,26 @@ export function SortObjectFromJSON(json: any): SortObject {
 }
 
 export function SortObjectFromJSONTyped(json: any, ignoreDiscriminator: boolean): SortObject {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'sorted': !exists(json, 'sorted') ? undefined : json['sorted'],
-        'empty': !exists(json, 'empty') ? undefined : json['empty'],
-        'unsorted': !exists(json, 'unsorted') ? undefined : json['unsorted'],
+        'sorted': json['sorted'] == null ? undefined : json['sorted'],
+        'empty': json['empty'] == null ? undefined : json['empty'],
+        'unsorted': json['unsorted'] == null ? undefined : json['unsorted'],
     };
 }
 
 export function SortObjectToJSON(value?: SortObject | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'sorted': value.sorted,
-        'empty': value.empty,
-        'unsorted': value.unsorted,
+        'sorted': value['sorted'],
+        'empty': value['empty'],
+        'unsorted': value['unsorted'],
     };
 }
 

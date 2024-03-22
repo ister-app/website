@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { CategorieEntity } from './CategorieEntity';
 import {
     CategorieEntityFromJSON,
@@ -79,13 +79,11 @@ export type DiskEntityDiskTypeEnum = typeof DiskEntityDiskTypeEnum[keyof typeof 
  * Check if a given object implements the DiskEntity interface.
  */
 export function instanceOfDiskEntity(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "nodeEntity" in value;
-    isInstance = isInstance && "categorieEntity" in value;
-    isInstance = isInstance && "path" in value;
-    isInstance = isInstance && "diskType" in value;
-
-    return isInstance;
+    if (!('nodeEntity' in value)) return false;
+    if (!('categorieEntity' in value)) return false;
+    if (!('path' in value)) return false;
+    if (!('diskType' in value)) return false;
+    return true;
 }
 
 export function DiskEntityFromJSON(json: any): DiskEntity {
@@ -93,12 +91,12 @@ export function DiskEntityFromJSON(json: any): DiskEntity {
 }
 
 export function DiskEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean): DiskEntity {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
+        'id': json['id'] == null ? undefined : json['id'],
         'nodeEntity': NodeEntityFromJSON(json['nodeEntity']),
         'categorieEntity': CategorieEntityFromJSON(json['categorieEntity']),
         'path': json['path'],
@@ -107,19 +105,16 @@ export function DiskEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean)
 }
 
 export function DiskEntityToJSON(value?: DiskEntity | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'id': value.id,
-        'nodeEntity': NodeEntityToJSON(value.nodeEntity),
-        'categorieEntity': CategorieEntityToJSON(value.categorieEntity),
-        'path': value.path,
-        'diskType': value.diskType,
+        'id': value['id'],
+        'nodeEntity': NodeEntityToJSON(value['nodeEntity']),
+        'categorieEntity': CategorieEntityToJSON(value['categorieEntity']),
+        'path': value['path'],
+        'diskType': value['diskType'],
     };
 }
 

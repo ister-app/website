@@ -68,8 +68,11 @@ export class ShowControllerApi extends runtime.BaseAPI {
     /**
      */
     async getSeasonsRaw(requestParameters: GetSeasonsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<SeasonEntity>>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getSeasons.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getSeasons().'
+            );
         }
 
         const queryParameters: any = {};
@@ -77,7 +80,7 @@ export class ShowControllerApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/shows/{id}/seasons`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/shows/{id}/seasons`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -96,8 +99,11 @@ export class ShowControllerApi extends runtime.BaseAPI {
     /**
      */
     async getTVShowRaw(requestParameters: GetTVShowRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShowEntity>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getTVShow.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getTVShow().'
+            );
         }
 
         const queryParameters: any = {};
@@ -105,7 +111,7 @@ export class ShowControllerApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/shows/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/shows/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

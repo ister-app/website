@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { DiskEntity } from './DiskEntity';
 import {
     DiskEntityFromJSON,
@@ -86,13 +86,11 @@ export interface MediaFileEntity {
  * Check if a given object implements the MediaFileEntity interface.
  */
 export function instanceOfMediaFileEntity(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "diskEntity" in value;
-    isInstance = isInstance && "episodeEntity" in value;
-    isInstance = isInstance && "path" in value;
-    isInstance = isInstance && "size" in value;
-
-    return isInstance;
+    if (!('diskEntity' in value)) return false;
+    if (!('episodeEntity' in value)) return false;
+    if (!('path' in value)) return false;
+    if (!('size' in value)) return false;
+    return true;
 }
 
 export function MediaFileEntityFromJSON(json: any): MediaFileEntity {
@@ -100,37 +98,34 @@ export function MediaFileEntityFromJSON(json: any): MediaFileEntity {
 }
 
 export function MediaFileEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean): MediaFileEntity {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
+        'id': json['id'] == null ? undefined : json['id'],
         'diskEntity': DiskEntityFromJSON(json['diskEntity']),
         'episodeEntity': EpisodeEntityFromJSON(json['episodeEntity']),
-        'mediaFileStreamEntity': !exists(json, 'mediaFileStreamEntity') ? undefined : ((json['mediaFileStreamEntity'] as Array<any>).map(MediaFileStreamEntityFromJSON)),
+        'mediaFileStreamEntity': json['mediaFileStreamEntity'] == null ? undefined : ((json['mediaFileStreamEntity'] as Array<any>).map(MediaFileStreamEntityFromJSON)),
         'path': json['path'],
         'size': json['size'],
-        'durationInMilliseconds': !exists(json, 'durationInMilliseconds') ? undefined : json['durationInMilliseconds'],
+        'durationInMilliseconds': json['durationInMilliseconds'] == null ? undefined : json['durationInMilliseconds'],
     };
 }
 
 export function MediaFileEntityToJSON(value?: MediaFileEntity | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'id': value.id,
-        'diskEntity': DiskEntityToJSON(value.diskEntity),
-        'episodeEntity': EpisodeEntityToJSON(value.episodeEntity),
-        'mediaFileStreamEntity': value.mediaFileStreamEntity === undefined ? undefined : ((value.mediaFileStreamEntity as Array<any>).map(MediaFileStreamEntityToJSON)),
-        'path': value.path,
-        'size': value.size,
-        'durationInMilliseconds': value.durationInMilliseconds,
+        'id': value['id'],
+        'diskEntity': DiskEntityToJSON(value['diskEntity']),
+        'episodeEntity': EpisodeEntityToJSON(value['episodeEntity']),
+        'mediaFileStreamEntity': value['mediaFileStreamEntity'] == null ? undefined : ((value['mediaFileStreamEntity'] as Array<any>).map(MediaFileStreamEntityToJSON)),
+        'path': value['path'],
+        'size': value['size'],
+        'durationInMilliseconds': value['durationInMilliseconds'],
     };
 }
 

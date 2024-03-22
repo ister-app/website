@@ -12,6 +12,8 @@ export * from './PageEpisodeEntity';
 export * from './PageImageEntity';
 export * from './PageShowEntity';
 export * from './PageableObject';
+export * from './PlayQueueEntity';
+export * from './PlayQueueItemEntity';
 export * from './SeasonEntity';
 export * from './ShowEntity';
 export * from './SortObject';

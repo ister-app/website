@@ -34,8 +34,11 @@ export class ImageControllerApi extends runtime.BaseAPI {
     /**
      */
     async download1Raw(requestParameters: Download1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Blob>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling download1.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling download1().'
+            );
         }
 
         const queryParameters: any = {};
@@ -43,7 +46,7 @@ export class ImageControllerApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/images/{id}/download`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/images/{id}/download`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

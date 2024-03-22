@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { CategorieEntity } from './CategorieEntity';
 import {
     CategorieEntityFromJSON,
@@ -80,12 +80,10 @@ export interface ShowEntity {
  * Check if a given object implements the ShowEntity interface.
  */
 export function instanceOfShowEntity(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "categorieEntity" in value;
-    isInstance = isInstance && "name" in value;
-    isInstance = isInstance && "releaseYear" in value;
-
-    return isInstance;
+    if (!('categorieEntity' in value)) return false;
+    if (!('name' in value)) return false;
+    if (!('releaseYear' in value)) return false;
+    return true;
 }
 
 export function ShowEntityFromJSON(json: any): ShowEntity {
@@ -93,35 +91,32 @@ export function ShowEntityFromJSON(json: any): ShowEntity {
 }
 
 export function ShowEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShowEntity {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
+        'id': json['id'] == null ? undefined : json['id'],
         'categorieEntity': CategorieEntityFromJSON(json['categorieEntity']),
         'name': json['name'],
         'releaseYear': json['releaseYear'],
-        'imageEntities': !exists(json, 'imageEntities') ? undefined : ((json['imageEntities'] as Array<any>).map(ImageEntityFromJSON)),
-        'metadataEntities': !exists(json, 'metadataEntities') ? undefined : ((json['metadataEntities'] as Array<any>).map(MetadataEntityFromJSON)),
+        'imageEntities': json['imageEntities'] == null ? undefined : ((json['imageEntities'] as Array<any>).map(ImageEntityFromJSON)),
+        'metadataEntities': json['metadataEntities'] == null ? undefined : ((json['metadataEntities'] as Array<any>).map(MetadataEntityFromJSON)),
     };
 }
 
 export function ShowEntityToJSON(value?: ShowEntity | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'id': value.id,
-        'categorieEntity': CategorieEntityToJSON(value.categorieEntity),
-        'name': value.name,
-        'releaseYear': value.releaseYear,
-        'imageEntities': value.imageEntities === undefined ? undefined : ((value.imageEntities as Array<any>).map(ImageEntityToJSON)),
-        'metadataEntities': value.metadataEntities === undefined ? undefined : ((value.metadataEntities as Array<any>).map(MetadataEntityToJSON)),
+        'id': value['id'],
+        'categorieEntity': CategorieEntityToJSON(value['categorieEntity']),
+        'name': value['name'],
+        'releaseYear': value['releaseYear'],
+        'imageEntities': value['imageEntities'] == null ? undefined : ((value['imageEntities'] as Array<any>).map(ImageEntityToJSON)),
+        'metadataEntities': value['metadataEntities'] == null ? undefined : ((value['metadataEntities'] as Array<any>).map(MetadataEntityToJSON)),
     };
 }
 

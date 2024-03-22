@@ -1,5 +1,7 @@
+.openapi-generator-ignore
 apis/EpisodeControllerApi.ts
 apis/ImageControllerApi.ts
+apis/PlayQueueControllerApi.ts
 apis/ScannerControllerApi.ts
 apis/SeasonControllerApi.ts
 apis/ShowControllerApi.ts
@@ -18,6 +20,8 @@ models/PageEpisodeEntity.ts
 models/PageImageEntity.ts
 models/PageShowEntity.ts
 models/PageableObject.ts
+models/PlayQueueEntity.ts
+models/PlayQueueItemEntity.ts
 models/SeasonEntity.ts
 models/ShowEntity.ts
 models/SortObject.ts

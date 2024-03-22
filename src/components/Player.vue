@@ -52,6 +52,10 @@ const props = defineProps<{
   mediaFileEntity: MediaFileEntity
 }>()
 
+const emit = defineEmits<{
+  (e: 'ended'): void
+}>()
+
 const state = reactive({
   fullscreen: false,
   teleport: false,
@@ -157,23 +161,27 @@ function hideControls() {
   controllsVisable.value = false;
 }
 
-function handleEvent(event: any) {
+function handleEvent(_event: Event) {
   if (video.value) {
     progres.value = (offsetTime.value + video.value.currentTime) * 100 / durationTime.value;
     currentTime.value = video.value.currentTime;
   }
 }
 
-function handleVolumeEvent(event: any) {
+function handleVolumeEvent(_event: Event) {
   if (video.value !== undefined) {
     volume.value = video.value.volume * 100;
   }
 }
 
-function handlePlayingEvent(event: any) {
+function handlePlayingEvent(_event: Event) {
   if (video.value !== undefined) {
     paused.value = video.value.paused;
   }
+}
+
+function handleEndedEvent(_event: Event) {
+  emit("ended");
 }
 
 const startPlaying = async () => {
@@ -193,6 +201,7 @@ const startPlaying = async () => {
       video.value.addEventListener("volumechange", handleVolumeEvent);
       video.value.addEventListener("play", handlePlayingEvent);
       video.value.addEventListener("pause", handlePlayingEvent);
+      video.value.addEventListener("ended", handleEndedEvent);
     }
   }
 };
@@ -206,6 +215,7 @@ async function stop() {
       video.value.removeEventListener("volumechange", handleVolumeEvent);
       video.value.removeEventListener("play", handlePlayingEvent);
       video.value.removeEventListener("pause", handlePlayingEvent);
+      video.value.removeEventListener("ended", handleEndedEvent);
       video.value.pause();
     } catch (error) {
       console.log("Video value removed before removing event listeners.")

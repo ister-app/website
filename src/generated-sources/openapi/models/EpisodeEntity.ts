@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { ImageEntity } from './ImageEntity';
 import {
     ImageEntityFromJSON,
@@ -110,12 +110,10 @@ export interface EpisodeEntity {
  * Check if a given object implements the EpisodeEntity interface.
  */
 export function instanceOfEpisodeEntity(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "showEntity" in value;
-    isInstance = isInstance && "seasonEntity" in value;
-    isInstance = isInstance && "number" in value;
-
-    return isInstance;
+    if (!('showEntity' in value)) return false;
+    if (!('seasonEntity' in value)) return false;
+    if (!('number' in value)) return false;
+    return true;
 }
 
 export function EpisodeEntityFromJSON(json: any): EpisodeEntity {
@@ -123,41 +121,38 @@ export function EpisodeEntityFromJSON(json: any): EpisodeEntity {
 }
 
 export function EpisodeEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean): EpisodeEntity {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'dateCreated': !exists(json, 'dateCreated') ? undefined : (new Date(json['dateCreated'])),
-        'dateUpdated': !exists(json, 'dateUpdated') ? undefined : (new Date(json['dateUpdated'])),
+        'id': json['id'] == null ? undefined : json['id'],
+        'dateCreated': json['dateCreated'] == null ? undefined : (new Date(json['dateCreated'])),
+        'dateUpdated': json['dateUpdated'] == null ? undefined : (new Date(json['dateUpdated'])),
         'showEntity': ShowEntityFromJSON(json['showEntity']),
         'seasonEntity': SeasonEntityFromJSON(json['seasonEntity']),
-        'mediaFileEntities': !exists(json, 'mediaFileEntities') ? undefined : ((json['mediaFileEntities'] as Array<any>).map(MediaFileEntityFromJSON)),
-        'imagesEntities': !exists(json, 'imagesEntities') ? undefined : ((json['imagesEntities'] as Array<any>).map(ImageEntityFromJSON)),
-        'metadataEntities': !exists(json, 'metadataEntities') ? undefined : ((json['metadataEntities'] as Array<any>).map(MetadataEntityFromJSON)),
+        'mediaFileEntities': json['mediaFileEntities'] == null ? undefined : ((json['mediaFileEntities'] as Array<any>).map(MediaFileEntityFromJSON)),
+        'imagesEntities': json['imagesEntities'] == null ? undefined : ((json['imagesEntities'] as Array<any>).map(ImageEntityFromJSON)),
+        'metadataEntities': json['metadataEntities'] == null ? undefined : ((json['metadataEntities'] as Array<any>).map(MetadataEntityFromJSON)),
         'number': json['number'],
     };
 }
 
 export function EpisodeEntityToJSON(value?: EpisodeEntity | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'id': value.id,
-        'dateCreated': value.dateCreated === undefined ? undefined : (value.dateCreated.toISOString()),
-        'dateUpdated': value.dateUpdated === undefined ? undefined : (value.dateUpdated.toISOString()),
-        'showEntity': ShowEntityToJSON(value.showEntity),
-        'seasonEntity': SeasonEntityToJSON(value.seasonEntity),
-        'mediaFileEntities': value.mediaFileEntities === undefined ? undefined : ((value.mediaFileEntities as Array<any>).map(MediaFileEntityToJSON)),
-        'imagesEntities': value.imagesEntities === undefined ? undefined : ((value.imagesEntities as Array<any>).map(ImageEntityToJSON)),
-        'metadataEntities': value.metadataEntities === undefined ? undefined : ((value.metadataEntities as Array<any>).map(MetadataEntityToJSON)),
-        'number': value.number,
+        'id': value['id'],
+        'dateCreated': value['dateCreated'] == null ? undefined : ((value['dateCreated']).toISOString()),
+        'dateUpdated': value['dateUpdated'] == null ? undefined : ((value['dateUpdated']).toISOString()),
+        'showEntity': ShowEntityToJSON(value['showEntity']),
+        'seasonEntity': SeasonEntityToJSON(value['seasonEntity']),
+        'mediaFileEntities': value['mediaFileEntities'] == null ? undefined : ((value['mediaFileEntities'] as Array<any>).map(MediaFileEntityToJSON)),
+        'imagesEntities': value['imagesEntities'] == null ? undefined : ((value['imagesEntities'] as Array<any>).map(ImageEntityToJSON)),
+        'metadataEntities': value['metadataEntities'] == null ? undefined : ((value['metadataEntities'] as Array<any>).map(MetadataEntityToJSON)),
+        'number': value['number'],
     };
 }
 

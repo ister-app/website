@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { DiskEntity } from './DiskEntity';
 import {
     DiskEntityFromJSON,
@@ -104,12 +104,10 @@ export type ImageEntityTypeEnum = typeof ImageEntityTypeEnum[keyof typeof ImageE
  * Check if a given object implements the ImageEntity interface.
  */
 export function instanceOfImageEntity(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "diskEntity" in value;
-    isInstance = isInstance && "path" in value;
-    isInstance = isInstance && "type" in value;
-
-    return isInstance;
+    if (!('diskEntity' in value)) return false;
+    if (!('path' in value)) return false;
+    if (!('type' in value)) return false;
+    return true;
 }
 
 export function ImageEntityFromJSON(json: any): ImageEntity {
@@ -117,37 +115,34 @@ export function ImageEntityFromJSON(json: any): ImageEntity {
 }
 
 export function ImageEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean): ImageEntity {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
+        'id': json['id'] == null ? undefined : json['id'],
         'diskEntity': DiskEntityFromJSON(json['diskEntity']),
         'path': json['path'],
         'type': json['type'],
-        'showEntity': !exists(json, 'showEntity') ? undefined : ShowEntityFromJSON(json['showEntity']),
-        'seasonEntity': !exists(json, 'seasonEntity') ? undefined : SeasonEntityFromJSON(json['seasonEntity']),
-        'episodeEntity': !exists(json, 'episodeEntity') ? undefined : EpisodeEntityFromJSON(json['episodeEntity']),
+        'showEntity': json['showEntity'] == null ? undefined : ShowEntityFromJSON(json['showEntity']),
+        'seasonEntity': json['seasonEntity'] == null ? undefined : SeasonEntityFromJSON(json['seasonEntity']),
+        'episodeEntity': json['episodeEntity'] == null ? undefined : EpisodeEntityFromJSON(json['episodeEntity']),
     };
 }
 
 export function ImageEntityToJSON(value?: ImageEntity | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'id': value.id,
-        'diskEntity': DiskEntityToJSON(value.diskEntity),
-        'path': value.path,
-        'type': value.type,
-        'showEntity': ShowEntityToJSON(value.showEntity),
-        'seasonEntity': SeasonEntityToJSON(value.seasonEntity),
-        'episodeEntity': EpisodeEntityToJSON(value.episodeEntity),
+        'id': value['id'],
+        'diskEntity': DiskEntityToJSON(value['diskEntity']),
+        'path': value['path'],
+        'type': value['type'],
+        'showEntity': ShowEntityToJSON(value['showEntity']),
+        'seasonEntity': SeasonEntityToJSON(value['seasonEntity']),
+        'episodeEntity': EpisodeEntityToJSON(value['episodeEntity']),
     };
 }
 

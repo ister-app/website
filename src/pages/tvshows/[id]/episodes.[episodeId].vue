@@ -19,7 +19,7 @@ const emit = defineEmits<{
 
 const route = useRoute("/tvshows/[id]/episodes.[episodeId]");
 
-watch(() => route.params, () => {
+watch(() => route.params.episodeId, () => {
     refreshEpisode();
 });
 

@@ -1,4 +1,4 @@
-import { Configuration, EpisodeControllerApi, ImageControllerApi, ScannerControllerApi, SeasonControllerApi, ShowControllerApi, TranscoderControllerApi } from "@/generated-sources/openapi";
+import { Configuration, EpisodeControllerApi, ImageControllerApi, PlayQueueControllerApi, ScannerControllerApi, SeasonControllerApi, ShowControllerApi, TranscoderControllerApi } from "@/generated-sources/openapi";
 import AuthService from "./auth.service";
 
 export default class ApiService {
@@ -39,5 +39,9 @@ export default class ApiService {
 
     async getTranscoderControllerApi() {
         return new TranscoderControllerApi(await this.getConfiguration());
+    }
+
+    async getPlayQueueControllerApi() {
+        return new PlayQueueControllerApi(await this.getConfiguration());
     }
 }

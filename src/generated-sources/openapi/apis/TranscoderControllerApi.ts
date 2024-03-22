@@ -43,12 +43,18 @@ export class TranscoderControllerApi extends runtime.BaseAPI {
     /**
      */
     async downloadRaw(requestParameters: DownloadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Blob>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling download.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling download().'
+            );
         }
 
-        if (requestParameters.fileName === null || requestParameters.fileName === undefined) {
-            throw new runtime.RequiredError('fileName','Required parameter requestParameters.fileName was null or undefined when calling download.');
+        if (requestParameters['fileName'] == null) {
+            throw new runtime.RequiredError(
+                'fileName',
+                'Required parameter "fileName" was null or undefined when calling download().'
+            );
         }
 
         const queryParameters: any = {};
@@ -56,7 +62,7 @@ export class TranscoderControllerApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/transcode/download/{id}/{fileName}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))).replace(`{${"fileName"}}`, encodeURIComponent(String(requestParameters.fileName))),
+            path: `/transcode/download/{id}/{fileName}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))).replace(`{${"fileName"}}`, encodeURIComponent(String(requestParameters['fileName']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -75,8 +81,11 @@ export class TranscoderControllerApi extends runtime.BaseAPI {
     /**
      */
     async readyRaw(requestParameters: ReadyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<boolean>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling ready.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling ready().'
+            );
         }
 
         const queryParameters: any = {};
@@ -84,7 +93,7 @@ export class TranscoderControllerApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/transcode/ready/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/transcode/ready/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -107,30 +116,36 @@ export class TranscoderControllerApi extends runtime.BaseAPI {
     /**
      */
     async startRaw(requestParameters: StartRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
-        if (requestParameters.mediaFileId === null || requestParameters.mediaFileId === undefined) {
-            throw new runtime.RequiredError('mediaFileId','Required parameter requestParameters.mediaFileId was null or undefined when calling start.');
+        if (requestParameters['mediaFileId'] == null) {
+            throw new runtime.RequiredError(
+                'mediaFileId',
+                'Required parameter "mediaFileId" was null or undefined when calling start().'
+            );
         }
 
-        if (requestParameters.startTimeInSeconds === null || requestParameters.startTimeInSeconds === undefined) {
-            throw new runtime.RequiredError('startTimeInSeconds','Required parameter requestParameters.startTimeInSeconds was null or undefined when calling start.');
+        if (requestParameters['startTimeInSeconds'] == null) {
+            throw new runtime.RequiredError(
+                'startTimeInSeconds',
+                'Required parameter "startTimeInSeconds" was null or undefined when calling start().'
+            );
         }
 
         const queryParameters: any = {};
 
-        if (requestParameters.mediaFileId !== undefined) {
-            queryParameters['mediaFileId'] = requestParameters.mediaFileId;
+        if (requestParameters['mediaFileId'] != null) {
+            queryParameters['mediaFileId'] = requestParameters['mediaFileId'];
         }
 
-        if (requestParameters.startTimeInSeconds !== undefined) {
-            queryParameters['startTimeInSeconds'] = requestParameters.startTimeInSeconds;
+        if (requestParameters['startTimeInSeconds'] != null) {
+            queryParameters['startTimeInSeconds'] = requestParameters['startTimeInSeconds'];
         }
 
-        if (requestParameters.audioId !== undefined) {
-            queryParameters['audioId'] = requestParameters.audioId;
+        if (requestParameters['audioId'] != null) {
+            queryParameters['audioId'] = requestParameters['audioId'];
         }
 
-        if (requestParameters.subtitleId !== undefined) {
-            queryParameters['subtitleId'] = requestParameters.subtitleId;
+        if (requestParameters['subtitleId'] != null) {
+            queryParameters['subtitleId'] = requestParameters['subtitleId'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -159,8 +174,11 @@ export class TranscoderControllerApi extends runtime.BaseAPI {
     /**
      */
     async stopRaw(requestParameters: StopRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling stop.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling stop().'
+            );
         }
 
         const queryParameters: any = {};
@@ -168,7 +186,7 @@ export class TranscoderControllerApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/transcode/stop/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/transcode/stop/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

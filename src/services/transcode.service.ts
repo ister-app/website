@@ -1,8 +1,8 @@
 
 import { ref } from 'vue'
 import type { Ref } from 'vue'
-import { MediaFile } from '@/generated-sources/openapi/models/MediaFile';
 import ApiService from './api.service';
+import { MediaFileEntity } from '@/generated-sources/openapi';
 
 
 export default class TranscodeService {
@@ -19,7 +19,7 @@ export default class TranscodeService {
 
 
 
-    public async start(mediaFileEntity: MediaFile, startTimeInSeconds: number, audioIndex: string | undefined, subtitleIndex: string | undefined | null): Promise<string> {
+    public async start(mediaFileEntity: MediaFileEntity, startTimeInSeconds: number, audioIndex: string | undefined, subtitleIndex: string | undefined | null): Promise<string> {
         this.loaded.value = false;
         this.stopped.value = false;
         if (subtitleIndex === null) {

@@ -16,45 +16,54 @@ import { mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface CategorieEntity
+ * @interface PlayQueueItemEntity
  */
-export interface CategorieEntity {
+export interface PlayQueueItemEntity {
     /**
      * 
      * @type {string}
-     * @memberof CategorieEntity
+     * @memberof PlayQueueItemEntity
      */
     id?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PlayQueueItemEntity
+     */
+    itemId: string;
 }
 
 /**
- * Check if a given object implements the CategorieEntity interface.
+ * Check if a given object implements the PlayQueueItemEntity interface.
  */
-export function instanceOfCategorieEntity(value: object): boolean {
+export function instanceOfPlayQueueItemEntity(value: object): boolean {
+    if (!('itemId' in value)) return false;
     return true;
 }
 
-export function CategorieEntityFromJSON(json: any): CategorieEntity {
-    return CategorieEntityFromJSONTyped(json, false);
+export function PlayQueueItemEntityFromJSON(json: any): PlayQueueItemEntity {
+    return PlayQueueItemEntityFromJSONTyped(json, false);
 }
 
-export function CategorieEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean): CategorieEntity {
+export function PlayQueueItemEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean): PlayQueueItemEntity {
     if (json == null) {
         return json;
     }
     return {
         
         'id': json['id'] == null ? undefined : json['id'],
+        'itemId': json['itemId'],
     };
 }
 
-export function CategorieEntityToJSON(value?: CategorieEntity | null): any {
+export function PlayQueueItemEntityToJSON(value?: PlayQueueItemEntity | null): any {
     if (value == null) {
         return value;
     }
     return {
         
         'id': value['id'],
+        'itemId': value['itemId'],
     };
 }
 

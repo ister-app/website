@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { PageableObject } from './PageableObject';
 import {
     PageableObjectFromJSON,
@@ -82,6 +82,12 @@ export interface PageShowEntity {
     sort?: SortObject;
     /**
      * 
+     * @type {number}
+     * @memberof PageShowEntity
+     */
+    numberOfElements?: number;
+    /**
+     * 
      * @type {boolean}
      * @memberof PageShowEntity
      */
@@ -94,12 +100,6 @@ export interface PageShowEntity {
     last?: boolean;
     /**
      * 
-     * @type {number}
-     * @memberof PageShowEntity
-     */
-    numberOfElements?: number;
-    /**
-     * 
      * @type {boolean}
      * @memberof PageShowEntity
      */
@@ -110,9 +110,7 @@ export interface PageShowEntity {
  * Check if a given object implements the PageShowEntity interface.
  */
 export function instanceOfPageShowEntity(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function PageShowEntityFromJSON(json: any): PageShowEntity {
@@ -120,45 +118,42 @@ export function PageShowEntityFromJSON(json: any): PageShowEntity {
 }
 
 export function PageShowEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean): PageShowEntity {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'totalPages': !exists(json, 'totalPages') ? undefined : json['totalPages'],
-        'totalElements': !exists(json, 'totalElements') ? undefined : json['totalElements'],
-        'pageable': !exists(json, 'pageable') ? undefined : PageableObjectFromJSON(json['pageable']),
-        'size': !exists(json, 'size') ? undefined : json['size'],
-        'content': !exists(json, 'content') ? undefined : ((json['content'] as Array<any>).map(ShowEntityFromJSON)),
-        'number': !exists(json, 'number') ? undefined : json['number'],
-        'sort': !exists(json, 'sort') ? undefined : SortObjectFromJSON(json['sort']),
-        'first': !exists(json, 'first') ? undefined : json['first'],
-        'last': !exists(json, 'last') ? undefined : json['last'],
-        'numberOfElements': !exists(json, 'numberOfElements') ? undefined : json['numberOfElements'],
-        'empty': !exists(json, 'empty') ? undefined : json['empty'],
+        'totalPages': json['totalPages'] == null ? undefined : json['totalPages'],
+        'totalElements': json['totalElements'] == null ? undefined : json['totalElements'],
+        'pageable': json['pageable'] == null ? undefined : PageableObjectFromJSON(json['pageable']),
+        'size': json['size'] == null ? undefined : json['size'],
+        'content': json['content'] == null ? undefined : ((json['content'] as Array<any>).map(ShowEntityFromJSON)),
+        'number': json['number'] == null ? undefined : json['number'],
+        'sort': json['sort'] == null ? undefined : SortObjectFromJSON(json['sort']),
+        'numberOfElements': json['numberOfElements'] == null ? undefined : json['numberOfElements'],
+        'first': json['first'] == null ? undefined : json['first'],
+        'last': json['last'] == null ? undefined : json['last'],
+        'empty': json['empty'] == null ? undefined : json['empty'],
     };
 }
 
 export function PageShowEntityToJSON(value?: PageShowEntity | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'totalPages': value.totalPages,
-        'totalElements': value.totalElements,
-        'pageable': PageableObjectToJSON(value.pageable),
-        'size': value.size,
-        'content': value.content === undefined ? undefined : ((value.content as Array<any>).map(ShowEntityToJSON)),
-        'number': value.number,
-        'sort': SortObjectToJSON(value.sort),
-        'first': value.first,
-        'last': value.last,
-        'numberOfElements': value.numberOfElements,
-        'empty': value.empty,
+        'totalPages': value['totalPages'],
+        'totalElements': value['totalElements'],
+        'pageable': PageableObjectToJSON(value['pageable']),
+        'size': value['size'],
+        'content': value['content'] == null ? undefined : ((value['content'] as Array<any>).map(ShowEntityToJSON)),
+        'number': value['number'],
+        'sort': SortObjectToJSON(value['sort']),
+        'numberOfElements': value['numberOfElements'],
+        'first': value['first'],
+        'last': value['last'],
+        'empty': value['empty'],
     };
 }
 
