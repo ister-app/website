@@ -9,9 +9,9 @@
                 <v-container></v-container>
             </template>
             <v-list-item-title>{{ episodeEntity.number }} {{ episodeEntity.metadataEntities?.length !== 0 ? episodeEntity.metadataEntities![0].title : '' }}</v-list-item-title>
-            <v-list-item-subtitle v-text="'episodeEntity 9 * Mrt 2022 * 41m'"></v-list-item-subtitle>
+            <v-list-item-subtitle>episodeEntity 9 * Mrt 2022 * 41m</v-list-item-subtitle>
         </v-list-item>
-        <v-skeleton-loader v-if="!loaded" v-for="i in 9" type="list-item-avatar" height="100px"
+        <v-skeleton-loader v-else-if="!loaded" v-for="i in 9" type="list-item-avatar" height="100px" :key="'list-item-skeleton-loader' + i"
             class="pa-0 ma-0"></v-skeleton-loader>
     </v-list>
 </template>
@@ -31,8 +31,11 @@ const props = defineProps<{
 }>()
 
 watch(props, () => {
-    if (props.selectedEpisode) {
-        selected.value = [props.selectedEpisode.id!];
+    console.log(props.selectedEpisode)
+    if (props.selectedEpisode?.id) {
+        selected.value = [props.selectedEpisode.id];
+    } else {
+        selected.value = [];
     }
 })
 
@@ -47,7 +50,6 @@ const selected: Ref<Array<String>> = ref([]);
 async function refresh() {
     const postsApi = await apiService?.getSeasonControllerApi();
     const posts: Promise<EpisodeEntity[]> = postsApi!.getEpisodes({ id: props.seasonId });
-    console.log(posts);
     posts.then((response: EpisodeEntity[]) => {
         episodes.value = response;
         loaded.value = true;

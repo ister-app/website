@@ -2,10 +2,10 @@
     <v-skeleton-loader v-if="!loaded" type="image" style="height: 50vh;"></v-skeleton-loader>
     <Image v-else gradient="rgba(0,0,0,0), rgba(0,0,0,1)" cover :style="'height: 50vh;'"
         :imageId="ImageUtilService.getBackgroundImageId(showEntity!.imageEntities!)" position="top">
-        <div class="d-flex flex-column fill-height justify-end ml-5 text-white">
-            <h1 class="text-h4 font-weight-thin mb-4">
-                {{ showEntity?.name }}
-            </h1>
+        <div class="d-flex flex-row align-end fill-height">
+          <v-btn class="text-h4 font-weight-thin mb-4" variant="plain" :to="{ name: '/tvshows/[id]/', params: { id: route.params.id } }">
+            {{ showEntity?.name }}
+        </v-btn>
         </div>
     </Image>
     <v-container style="max-width: 1720px;">
@@ -14,7 +14,6 @@
                 <router-view v-slot="{ Component }">
                     <component :is="Component" :showEntity="showEntity" @newEpisodeEntity="(episodeEntity2 : EpisodeEntity) => episodeEntity=episodeEntity2" />
                 </router-view>
-                <!-- <router-view :showEntity="showEntity" /> -->
             </v-col>
             <v-col md="5" lg="4" xl="3" cols="12">
                 <TVShowsSeasonExpansion v-if="showEntity" :tvShowId="showEntity.id" :selectedEpisode="episodeEntity">

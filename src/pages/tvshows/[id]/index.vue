@@ -4,9 +4,15 @@
 </template>
 
 <script lang="ts" setup>
-import { ShowEntity } from '@/generated-sources/openapi';
+import {EpisodeEntity, ShowEntity} from '@/generated-sources/openapi';
 
-const props = defineProps<{
+defineProps<{
     showEntity: ShowEntity | undefined,
 }>()
+
+const emit = defineEmits<{
+    (e: 'newEpisodeEntity', episodeEntity: EpisodeEntity | undefined): void
+}>()
+
+emit('newEpisodeEntity', undefined);
 </script>
