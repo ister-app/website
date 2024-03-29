@@ -3,7 +3,7 @@
     <Image v-else gradient="rgba(0,0,0,0), rgba(0,0,0,1)" cover :style="'height: 50vh;'"
         :imageId="ImageUtilService.getBackgroundImageId(showEntity!.imageEntities!)" position="top">
         <div class="d-flex flex-row align-end fill-height">
-          <v-btn class="text-h4 font-weight-thin mb-4" variant="plain" :to="{ name: '/tvshows/[id]/', params: { id: route.params.id } }">
+          <v-btn class="text-h4 font-weight-thin mb-4 text-white" variant="plain" :to="{ name: '/tvshows/[id]/', params: { id: route.params.id } }">
             {{ showEntity?.name }}
         </v-btn>
         </div>

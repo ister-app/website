@@ -3,8 +3,7 @@
         <v-list-item v-if="loaded" v-for="episodeEntity in episodes" :key="episodeEntity.id" :value="episodeEntity.id" :id="'list-item-' + episodeEntity.id" color="primary"
             class="pa-0 ma-0" :to="{ name: '/tvshows/[id]/episodes.[episodeId]', params: { id: episodeEntity.showEntity?.id, episodeId: episodeEntity.id } }">
             <template v-slot:prepend>
-                <Image :imageId="ImageUtilService.getBackgroundImageId(episodeEntity.imagesEntities!)" rounded="rounded" class="align-end"
-                    gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.8)" width="160px" height="100px">
+                <Image :imageId="ImageUtilService.getBackgroundImageId(episodeEntity.imagesEntities!)" rounded="rounded" class="align-end" width="160px" height="100px">
                     <v-progress-linear v-if="getProgressInPercent(episodeEntity)" color="primary" :model-value="getProgressInPercent(episodeEntity)"></v-progress-linear>
                 </Image>
                 <v-container></v-container>
