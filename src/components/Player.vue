@@ -15,7 +15,7 @@
             <div class="d-flex text-white">
               <p class="control-item">{{ new Date((offsetTime + currentTime) * 1000).toISOString().slice(11, 19) }}</p>
               <v-slider class="flex-grow-1 flex-shrink-1 control-item" color="primary" thumb-color="white"
-                v-model="progres" @click="goToTime()"></v-slider>
+                        v-model="progress" @click="goToTime()"></v-slider>
               <p class="control-item">{{ new Date(durationTime * 1000).toISOString().slice(11, 19) }}</p>
             </div>
 
@@ -49,11 +49,13 @@ import TranscodeService from '@/services/transcode.service';
 import { useApiService } from '@/plugins/api';
 
 const props = defineProps<{
-  mediaFileEntity: MediaFileEntity
+  mediaFileEntity: MediaFileEntity,
+  startTime: number | undefined
 }>()
 
 const emit = defineEmits<{
-  (e: 'ended'): void
+    (e: 'ended'): void
+    (e: 'progress', progress: number): void
 }>()
 
 const state = reactive({
@@ -73,7 +75,7 @@ var showControllsTimeout: number | undefined;
 const video: Ref<HTMLVideoElement | undefined> = ref();
 const startedPlaying = ref(false);
 const paused = ref(false);
-const progres: Ref<number> = ref(0);
+const progress: Ref<number> = ref(0);
 const currentTime: Ref<number> = ref(0);
 const volume: Ref<number> = ref(100);
 const selectedAudioStream: Ref<string | undefined> = ref();
@@ -81,7 +83,7 @@ const selectedSubtitleStream: Ref<string | undefined> = ref();
 
 const durationTime: Ref<number> = ref(3600);
 const offsetTime: Ref<number> = ref(0);
-const transcodeSesionId: Ref<String | undefined> = ref();
+const transcodeSessionId: Ref<String | undefined> = ref();
 const buffering = ref(false);
 
 var hls: Hls;
@@ -94,6 +96,9 @@ onMounted(async () => {
       xhr.setRequestHeader("Authorization", "Bearer " + await apiService?.authService?.getToken())
     },
   });
+  if (props.startTime) {
+    offsetTime.value = Math.round(props.startTime / 1000);
+  }
   startPlaying()
 })
 
@@ -102,18 +107,21 @@ watch(props, () => {
   offsetTime.value = 0;
   selectedAudioStream.value = undefined;
   selectedSubtitleStream.value = undefined;
+  if (props.startTime) {
+    offsetTime.value = Math.round(props.startTime / 1000);
+  }
   startPlaying();
 })
 
 watch(selectedAudioStream, () => {
   stop();
-  offsetTime.value = Math.round(progres.value * durationTime.value / 100);
+  offsetTime.value = Math.round(progress.value * durationTime.value / 100);
   startPlaying();
 })
 
 watch(selectedSubtitleStream, () => {
   stop();
-  offsetTime.value = Math.round(progres.value * durationTime.value / 100);
+  offsetTime.value = Math.round(progress.value * durationTime.value / 100);
   startPlaying();
 })
 
@@ -137,7 +145,7 @@ function playPause() {
 function goToTime() {
   stop();
   // video.value.currentTime = (progres.value * durationTime.value / 100) - offsetTime.value;
-  offsetTime.value = Math.round(progres.value * durationTime.value / 100);
+  offsetTime.value = Math.round(progress.value * durationTime.value / 100);
   startPlaying();
 }
 
@@ -161,10 +169,11 @@ function hideControls() {
   controllsVisable.value = false;
 }
 
-function handleEvent(_event: Event) {
+function handleTimeUpdateEvent(_event: Event) {
   if (video.value) {
-    progres.value = (offsetTime.value + video.value.currentTime) * 100 / durationTime.value;
+    progress.value = (offsetTime.value + video.value.currentTime) * 100 / durationTime.value;
     currentTime.value = video.value.currentTime;
+    emit("progress", (offsetTime.value + currentTime.value) * 1000);
   }
 }
 
@@ -184,34 +193,34 @@ function handleEndedEvent(_event: Event) {
   emit("ended");
 }
 
-const startPlaying = async () => {
-  console.log("start")
-  buffering.value = true;
-  durationTime.value = props.mediaFileEntity.durationInMilliseconds ? props.mediaFileEntity.durationInMilliseconds / 1000 : 3600;
-  transcodeSesionId.value = await transcodeService.start(props.mediaFileEntity, offsetTime.value, selectedAudioStream.value, selectedSubtitleStream.value);
-  buffering.value = false;
-  startedPlaying.value = true;
-  if (Hls.isSupported()) {
-    console.log(transcodeService.getStreamUrl());
-    hls.loadSource(transcodeService.getStreamUrl());
-    if (video.value !== undefined) {
-      hls.attachMedia(video.value);
-      video.value.play();
-      video.value.addEventListener("timeupdate", handleEvent);
-      video.value.addEventListener("volumechange", handleVolumeEvent);
-      video.value.addEventListener("play", handlePlayingEvent);
-      video.value.addEventListener("pause", handlePlayingEvent);
-      video.value.addEventListener("ended", handleEndedEvent);
+async function startPlaying() {
+    console.log("start")
+    buffering.value = true;
+    durationTime.value = props.mediaFileEntity.durationInMilliseconds ? props.mediaFileEntity.durationInMilliseconds / 1000 : 3600;
+    transcodeSessionId.value = await transcodeService.start(props.mediaFileEntity, offsetTime.value, selectedAudioStream.value, selectedSubtitleStream.value);
+    buffering.value = false;
+    startedPlaying.value = true;
+    if (Hls.isSupported()) {
+        console.log(transcodeService.getStreamUrl());
+        hls.loadSource(transcodeService.getStreamUrl());
+        if (video.value !== undefined) {
+            hls.attachMedia(video.value);
+            video.value.play();
+            video.value.addEventListener("timeupdate", handleTimeUpdateEvent);
+            video.value.addEventListener("volumechange", handleVolumeEvent);
+            video.value.addEventListener("play", handlePlayingEvent);
+            video.value.addEventListener("pause", handlePlayingEvent);
+            video.value.addEventListener("ended", handleEndedEvent);
+        }
     }
-  }
-};
+}
 
 async function stop() {
   console.log("stop")
   startedPlaying.value = false;
   if (video.value !== undefined) {
     try {
-      video.value.removeEventListener("timeupdate", handleEvent);
+      video.value.removeEventListener("timeupdate", handleTimeUpdateEvent);
       video.value.removeEventListener("volumechange", handleVolumeEvent);
       video.value.removeEventListener("play", handlePlayingEvent);
       video.value.removeEventListener("pause", handlePlayingEvent);

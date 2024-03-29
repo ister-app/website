@@ -34,6 +34,18 @@ export interface SeasonEntity {
     id?: string;
     /**
      * 
+     * @type {Date}
+     * @memberof SeasonEntity
+     */
+    dateCreated: Date;
+    /**
+     * 
+     * @type {Date}
+     * @memberof SeasonEntity
+     */
+    dateUpdated: Date;
+    /**
+     * 
      * @type {ShowEntity}
      * @memberof SeasonEntity
      */
@@ -50,6 +62,8 @@ export interface SeasonEntity {
  * Check if a given object implements the SeasonEntity interface.
  */
 export function instanceOfSeasonEntity(value: object): boolean {
+    if (!('dateCreated' in value)) return false;
+    if (!('dateUpdated' in value)) return false;
     if (!('showEntity' in value)) return false;
     if (!('number' in value)) return false;
     return true;
@@ -66,6 +80,8 @@ export function SeasonEntityFromJSONTyped(json: any, ignoreDiscriminator: boolea
     return {
         
         'id': json['id'] == null ? undefined : json['id'],
+        'dateCreated': (new Date(json['dateCreated'])),
+        'dateUpdated': (new Date(json['dateUpdated'])),
         'showEntity': ShowEntityFromJSON(json['showEntity']),
         'number': json['number'],
     };
@@ -78,6 +94,8 @@ export function SeasonEntityToJSON(value?: SeasonEntity | null): any {
     return {
         
         'id': value['id'],
+        'dateCreated': ((value['dateCreated']).toISOString()),
+        'dateUpdated': ((value['dateUpdated']).toISOString()),
         'showEntity': ShowEntityToJSON(value['showEntity']),
         'number': value['number'],
     };

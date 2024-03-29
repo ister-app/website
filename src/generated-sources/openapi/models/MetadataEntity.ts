@@ -46,6 +46,18 @@ export interface MetadataEntity {
     id?: string;
     /**
      * 
+     * @type {Date}
+     * @memberof MetadataEntity
+     */
+    dateCreated: Date;
+    /**
+     * 
+     * @type {Date}
+     * @memberof MetadataEntity
+     */
+    dateUpdated: Date;
+    /**
+     * 
      * @type {ShowEntity}
      * @memberof MetadataEntity
      */
@@ -92,6 +104,8 @@ export interface MetadataEntity {
  * Check if a given object implements the MetadataEntity interface.
  */
 export function instanceOfMetadataEntity(value: object): boolean {
+    if (!('dateCreated' in value)) return false;
+    if (!('dateUpdated' in value)) return false;
     return true;
 }
 
@@ -106,6 +120,8 @@ export function MetadataEntityFromJSONTyped(json: any, ignoreDiscriminator: bool
     return {
         
         'id': json['id'] == null ? undefined : json['id'],
+        'dateCreated': (new Date(json['dateCreated'])),
+        'dateUpdated': (new Date(json['dateUpdated'])),
         'showEntity': json['showEntity'] == null ? undefined : ShowEntityFromJSON(json['showEntity']),
         'seasonEntity': json['seasonEntity'] == null ? undefined : SeasonEntityFromJSON(json['seasonEntity']),
         'episodeEntity': json['episodeEntity'] == null ? undefined : EpisodeEntityFromJSON(json['episodeEntity']),
@@ -123,6 +139,8 @@ export function MetadataEntityToJSON(value?: MetadataEntity | null): any {
     return {
         
         'id': value['id'],
+        'dateCreated': ((value['dateCreated']).toISOString()),
+        'dateUpdated': ((value['dateUpdated']).toISOString()),
         'showEntity': ShowEntityToJSON(value['showEntity']),
         'seasonEntity': SeasonEntityToJSON(value['seasonEntity']),
         'episodeEntity': EpisodeEntityToJSON(value['episodeEntity']),

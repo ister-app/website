@@ -27,6 +27,18 @@ export interface PlayQueueItemEntity {
     id?: string;
     /**
      * 
+     * @type {Date}
+     * @memberof PlayQueueItemEntity
+     */
+    dateCreated: Date;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PlayQueueItemEntity
+     */
+    dateUpdated: Date;
+    /**
+     * 
      * @type {string}
      * @memberof PlayQueueItemEntity
      */
@@ -37,6 +49,8 @@ export interface PlayQueueItemEntity {
  * Check if a given object implements the PlayQueueItemEntity interface.
  */
 export function instanceOfPlayQueueItemEntity(value: object): boolean {
+    if (!('dateCreated' in value)) return false;
+    if (!('dateUpdated' in value)) return false;
     if (!('itemId' in value)) return false;
     return true;
 }
@@ -52,6 +66,8 @@ export function PlayQueueItemEntityFromJSONTyped(json: any, ignoreDiscriminator:
     return {
         
         'id': json['id'] == null ? undefined : json['id'],
+        'dateCreated': (new Date(json['dateCreated'])),
+        'dateUpdated': (new Date(json['dateUpdated'])),
         'itemId': json['itemId'],
     };
 }
@@ -63,6 +79,8 @@ export function PlayQueueItemEntityToJSON(value?: PlayQueueItemEntity | null): a
     return {
         
         'id': value['id'],
+        'dateCreated': ((value['dateCreated']).toISOString()),
+        'dateUpdated': ((value['dateUpdated']).toISOString()),
         'itemId': value['itemId'],
     };
 }

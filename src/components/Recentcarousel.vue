@@ -2,7 +2,7 @@
     <v-col md="7" lg="8" cols="12" class="d-none d-md-inline">
         <v-skeleton-loader :loading="!loaded" type="image" height="450px">
             <v-window v-model="window" show-arrows class="fillcontent">
-                <v-window-item v-for="episodeEntity in episodes" :key="episodeEntity.id">
+                <v-window-item v-for="episodeEntity in episodes.slice(0, 3)" :key="episodeEntity.id">
                     <v-card>
                         <Image :imageId="ImageUtilService.getBackgroundImageId(episodeEntity.imagesEntities!)" class="align-end"
                             gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.8)" height="450px" cover>
@@ -19,7 +19,7 @@
     <v-col md="5" lg="4" cols="12">
         <v-item-group mandatory v-model="window">
             <v-container>
-                <v-row v-for="episodeEntity in episodes" :key="episodeEntity.id">
+                <v-row v-for="episodeEntity in episodes.slice(0, 3)" :key="episodeEntity.id">
                     <v-col class="pa-0 ma-0">
                         <v-item v-slot="{ isSelected, toggle }">
                             <v-card :color="isSelected ? 'primary' : ''" @mouseover="toggle" height="150px"
@@ -49,7 +49,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { Ref } from 'vue'
-import { PageEpisodeEntity, EpisodeEntity } from "@/generated-sources/openapi";
+import { EpisodeEntity } from "@/generated-sources/openapi";
 import ImageUtilService from '@/services/imageUtil.service';
 import { useApiService } from '@/plugins/api';
 
@@ -62,10 +62,10 @@ const apiService = useApiService();
 
 async function refresh() {
     const postsApi = await apiService?.getEpisodeControllerApi();
-    const posts: Promise<PageEpisodeEntity> = postsApi!.getRecent2();
+    const posts: Promise<Array<EpisodeEntity>> = postsApi!.getRecent2();
     console.log(posts);
-    posts.then((response: PageEpisodeEntity) => {
-        response.content?.forEach((episodeEntity: EpisodeEntity) => episodes.value.push(episodeEntity));
+    posts.then((response: Array<EpisodeEntity>) => {
+        response?.forEach((episodeEntity: EpisodeEntity) => episodes.value.push(episodeEntity));
         loaded.value = true;
     })
 }

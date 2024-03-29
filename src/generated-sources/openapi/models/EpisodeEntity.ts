@@ -43,6 +43,12 @@ import {
     ShowEntityFromJSONTyped,
     ShowEntityToJSON,
 } from './ShowEntity';
+import type { WatchStatusEntity } from './WatchStatusEntity';
+import {
+    WatchStatusEntityFromJSON,
+    WatchStatusEntityFromJSONTyped,
+    WatchStatusEntityToJSON,
+} from './WatchStatusEntity';
 
 /**
  * 
@@ -61,13 +67,13 @@ export interface EpisodeEntity {
      * @type {Date}
      * @memberof EpisodeEntity
      */
-    dateCreated?: Date;
+    dateCreated: Date;
     /**
      * 
      * @type {Date}
      * @memberof EpisodeEntity
      */
-    dateUpdated?: Date;
+    dateUpdated: Date;
     /**
      * 
      * @type {ShowEntity}
@@ -100,6 +106,12 @@ export interface EpisodeEntity {
     metadataEntities?: Array<MetadataEntity>;
     /**
      * 
+     * @type {Array<WatchStatusEntity>}
+     * @memberof EpisodeEntity
+     */
+    watchStatusEntities?: Array<WatchStatusEntity>;
+    /**
+     * 
      * @type {number}
      * @memberof EpisodeEntity
      */
@@ -110,6 +122,8 @@ export interface EpisodeEntity {
  * Check if a given object implements the EpisodeEntity interface.
  */
 export function instanceOfEpisodeEntity(value: object): boolean {
+    if (!('dateCreated' in value)) return false;
+    if (!('dateUpdated' in value)) return false;
     if (!('showEntity' in value)) return false;
     if (!('seasonEntity' in value)) return false;
     if (!('number' in value)) return false;
@@ -127,13 +141,14 @@ export function EpisodeEntityFromJSONTyped(json: any, ignoreDiscriminator: boole
     return {
         
         'id': json['id'] == null ? undefined : json['id'],
-        'dateCreated': json['dateCreated'] == null ? undefined : (new Date(json['dateCreated'])),
-        'dateUpdated': json['dateUpdated'] == null ? undefined : (new Date(json['dateUpdated'])),
+        'dateCreated': (new Date(json['dateCreated'])),
+        'dateUpdated': (new Date(json['dateUpdated'])),
         'showEntity': ShowEntityFromJSON(json['showEntity']),
         'seasonEntity': SeasonEntityFromJSON(json['seasonEntity']),
         'mediaFileEntities': json['mediaFileEntities'] == null ? undefined : ((json['mediaFileEntities'] as Array<any>).map(MediaFileEntityFromJSON)),
         'imagesEntities': json['imagesEntities'] == null ? undefined : ((json['imagesEntities'] as Array<any>).map(ImageEntityFromJSON)),
         'metadataEntities': json['metadataEntities'] == null ? undefined : ((json['metadataEntities'] as Array<any>).map(MetadataEntityFromJSON)),
+        'watchStatusEntities': json['watchStatusEntities'] == null ? undefined : ((json['watchStatusEntities'] as Array<any>).map(WatchStatusEntityFromJSON)),
         'number': json['number'],
     };
 }
@@ -145,13 +160,14 @@ export function EpisodeEntityToJSON(value?: EpisodeEntity | null): any {
     return {
         
         'id': value['id'],
-        'dateCreated': value['dateCreated'] == null ? undefined : ((value['dateCreated']).toISOString()),
-        'dateUpdated': value['dateUpdated'] == null ? undefined : ((value['dateUpdated']).toISOString()),
+        'dateCreated': ((value['dateCreated']).toISOString()),
+        'dateUpdated': ((value['dateUpdated']).toISOString()),
         'showEntity': ShowEntityToJSON(value['showEntity']),
         'seasonEntity': SeasonEntityToJSON(value['seasonEntity']),
         'mediaFileEntities': value['mediaFileEntities'] == null ? undefined : ((value['mediaFileEntities'] as Array<any>).map(MediaFileEntityToJSON)),
         'imagesEntities': value['imagesEntities'] == null ? undefined : ((value['imagesEntities'] as Array<any>).map(ImageEntityToJSON)),
         'metadataEntities': value['metadataEntities'] == null ? undefined : ((value['metadataEntities'] as Array<any>).map(MetadataEntityToJSON)),
+        'watchStatusEntities': value['watchStatusEntities'] == null ? undefined : ((value['watchStatusEntities'] as Array<any>).map(WatchStatusEntityToJSON)),
         'number': value['number'],
     };
 }

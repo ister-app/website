@@ -46,6 +46,18 @@ export interface ShowEntity {
     id?: string;
     /**
      * 
+     * @type {Date}
+     * @memberof ShowEntity
+     */
+    dateCreated: Date;
+    /**
+     * 
+     * @type {Date}
+     * @memberof ShowEntity
+     */
+    dateUpdated: Date;
+    /**
+     * 
      * @type {CategorieEntity}
      * @memberof ShowEntity
      */
@@ -80,6 +92,8 @@ export interface ShowEntity {
  * Check if a given object implements the ShowEntity interface.
  */
 export function instanceOfShowEntity(value: object): boolean {
+    if (!('dateCreated' in value)) return false;
+    if (!('dateUpdated' in value)) return false;
     if (!('categorieEntity' in value)) return false;
     if (!('name' in value)) return false;
     if (!('releaseYear' in value)) return false;
@@ -97,6 +111,8 @@ export function ShowEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     return {
         
         'id': json['id'] == null ? undefined : json['id'],
+        'dateCreated': (new Date(json['dateCreated'])),
+        'dateUpdated': (new Date(json['dateUpdated'])),
         'categorieEntity': CategorieEntityFromJSON(json['categorieEntity']),
         'name': json['name'],
         'releaseYear': json['releaseYear'],
@@ -112,6 +128,8 @@ export function ShowEntityToJSON(value?: ShowEntity | null): any {
     return {
         
         'id': value['id'],
+        'dateCreated': ((value['dateCreated']).toISOString()),
+        'dateUpdated': ((value['dateUpdated']).toISOString()),
         'categorieEntity': CategorieEntityToJSON(value['categorieEntity']),
         'name': value['name'],
         'releaseYear': value['releaseYear'],

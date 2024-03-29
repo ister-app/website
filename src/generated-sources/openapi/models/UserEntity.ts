@@ -16,43 +16,62 @@ import { mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface CategorieEntity
+ * @interface UserEntity
  */
-export interface CategorieEntity {
+export interface UserEntity {
     /**
      * 
      * @type {string}
-     * @memberof CategorieEntity
+     * @memberof UserEntity
      */
     id?: string;
     /**
      * 
      * @type {Date}
-     * @memberof CategorieEntity
+     * @memberof UserEntity
      */
     dateCreated: Date;
     /**
      * 
      * @type {Date}
-     * @memberof CategorieEntity
+     * @memberof UserEntity
      */
     dateUpdated: Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserEntity
+     */
+    externalId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserEntity
+     */
+    name?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserEntity
+     */
+    email?: string;
 }
 
 /**
- * Check if a given object implements the CategorieEntity interface.
+ * Check if a given object implements the UserEntity interface.
  */
-export function instanceOfCategorieEntity(value: object): boolean {
+export function instanceOfUserEntity(value: object): boolean {
     if (!('dateCreated' in value)) return false;
     if (!('dateUpdated' in value)) return false;
+    if (!('externalId' in value)) return false;
     return true;
 }
 
-export function CategorieEntityFromJSON(json: any): CategorieEntity {
-    return CategorieEntityFromJSONTyped(json, false);
+export function UserEntityFromJSON(json: any): UserEntity {
+    return UserEntityFromJSONTyped(json, false);
 }
 
-export function CategorieEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean): CategorieEntity {
+export function UserEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean): UserEntity {
     if (json == null) {
         return json;
     }
@@ -61,10 +80,13 @@ export function CategorieEntityFromJSONTyped(json: any, ignoreDiscriminator: boo
         'id': json['id'] == null ? undefined : json['id'],
         'dateCreated': (new Date(json['dateCreated'])),
         'dateUpdated': (new Date(json['dateUpdated'])),
+        'externalId': json['externalId'],
+        'name': json['name'] == null ? undefined : json['name'],
+        'email': json['email'] == null ? undefined : json['email'],
     };
 }
 
-export function CategorieEntityToJSON(value?: CategorieEntity | null): any {
+export function UserEntityToJSON(value?: UserEntity | null): any {
     if (value == null) {
         return value;
     }
@@ -73,6 +95,9 @@ export function CategorieEntityToJSON(value?: CategorieEntity | null): any {
         'id': value['id'],
         'dateCreated': ((value['dateCreated']).toISOString()),
         'dateUpdated': ((value['dateUpdated']).toISOString()),
+        'externalId': value['externalId'],
+        'name': value['name'],
+        'email': value['email'],
     };
 }
 

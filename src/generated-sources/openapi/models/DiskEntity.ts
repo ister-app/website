@@ -40,6 +40,18 @@ export interface DiskEntity {
     id?: string;
     /**
      * 
+     * @type {Date}
+     * @memberof DiskEntity
+     */
+    dateCreated: Date;
+    /**
+     * 
+     * @type {Date}
+     * @memberof DiskEntity
+     */
+    dateUpdated: Date;
+    /**
+     * 
      * @type {NodeEntity}
      * @memberof DiskEntity
      */
@@ -79,6 +91,8 @@ export type DiskEntityDiskTypeEnum = typeof DiskEntityDiskTypeEnum[keyof typeof 
  * Check if a given object implements the DiskEntity interface.
  */
 export function instanceOfDiskEntity(value: object): boolean {
+    if (!('dateCreated' in value)) return false;
+    if (!('dateUpdated' in value)) return false;
     if (!('nodeEntity' in value)) return false;
     if (!('categorieEntity' in value)) return false;
     if (!('path' in value)) return false;
@@ -97,6 +111,8 @@ export function DiskEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     return {
         
         'id': json['id'] == null ? undefined : json['id'],
+        'dateCreated': (new Date(json['dateCreated'])),
+        'dateUpdated': (new Date(json['dateUpdated'])),
         'nodeEntity': NodeEntityFromJSON(json['nodeEntity']),
         'categorieEntity': CategorieEntityFromJSON(json['categorieEntity']),
         'path': json['path'],
@@ -111,6 +127,8 @@ export function DiskEntityToJSON(value?: DiskEntity | null): any {
     return {
         
         'id': value['id'],
+        'dateCreated': ((value['dateCreated']).toISOString()),
+        'dateUpdated': ((value['dateUpdated']).toISOString()),
         'nodeEntity': NodeEntityToJSON(value['nodeEntity']),
         'categorieEntity': CategorieEntityToJSON(value['categorieEntity']),
         'path': value['path'],

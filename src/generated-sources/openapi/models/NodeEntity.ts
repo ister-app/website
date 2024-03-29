@@ -27,6 +27,18 @@ export interface NodeEntity {
     id?: string;
     /**
      * 
+     * @type {Date}
+     * @memberof NodeEntity
+     */
+    dateCreated: Date;
+    /**
+     * 
+     * @type {Date}
+     * @memberof NodeEntity
+     */
+    dateUpdated: Date;
+    /**
+     * 
      * @type {string}
      * @memberof NodeEntity
      */
@@ -37,6 +49,8 @@ export interface NodeEntity {
  * Check if a given object implements the NodeEntity interface.
  */
 export function instanceOfNodeEntity(value: object): boolean {
+    if (!('dateCreated' in value)) return false;
+    if (!('dateUpdated' in value)) return false;
     if (!('name' in value)) return false;
     return true;
 }
@@ -52,6 +66,8 @@ export function NodeEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     return {
         
         'id': json['id'] == null ? undefined : json['id'],
+        'dateCreated': (new Date(json['dateCreated'])),
+        'dateUpdated': (new Date(json['dateUpdated'])),
         'name': json['name'],
     };
 }
@@ -63,6 +79,8 @@ export function NodeEntityToJSON(value?: NodeEntity | null): any {
     return {
         
         'id': value['id'],
+        'dateCreated': ((value['dateCreated']).toISOString()),
+        'dateUpdated': ((value['dateUpdated']).toISOString()),
         'name': value['name'],
     };
 }

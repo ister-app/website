@@ -52,6 +52,18 @@ export interface ImageEntity {
     id?: string;
     /**
      * 
+     * @type {Date}
+     * @memberof ImageEntity
+     */
+    dateCreated: Date;
+    /**
+     * 
+     * @type {Date}
+     * @memberof ImageEntity
+     */
+    dateUpdated: Date;
+    /**
+     * 
      * @type {DiskEntity}
      * @memberof ImageEntity
      */
@@ -104,6 +116,8 @@ export type ImageEntityTypeEnum = typeof ImageEntityTypeEnum[keyof typeof ImageE
  * Check if a given object implements the ImageEntity interface.
  */
 export function instanceOfImageEntity(value: object): boolean {
+    if (!('dateCreated' in value)) return false;
+    if (!('dateUpdated' in value)) return false;
     if (!('diskEntity' in value)) return false;
     if (!('path' in value)) return false;
     if (!('type' in value)) return false;
@@ -121,6 +135,8 @@ export function ImageEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean
     return {
         
         'id': json['id'] == null ? undefined : json['id'],
+        'dateCreated': (new Date(json['dateCreated'])),
+        'dateUpdated': (new Date(json['dateUpdated'])),
         'diskEntity': DiskEntityFromJSON(json['diskEntity']),
         'path': json['path'],
         'type': json['type'],
@@ -137,6 +153,8 @@ export function ImageEntityToJSON(value?: ImageEntity | null): any {
     return {
         
         'id': value['id'],
+        'dateCreated': ((value['dateCreated']).toISOString()),
+        'dateUpdated': ((value['dateUpdated']).toISOString()),
         'diskEntity': DiskEntityToJSON(value['diskEntity']),
         'path': value['path'],
         'type': value['type'],

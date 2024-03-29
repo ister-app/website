@@ -34,6 +34,18 @@ export interface MediaFileStreamEntity {
     id?: string;
     /**
      * 
+     * @type {Date}
+     * @memberof MediaFileStreamEntity
+     */
+    dateCreated: Date;
+    /**
+     * 
+     * @type {Date}
+     * @memberof MediaFileStreamEntity
+     */
+    dateUpdated: Date;
+    /**
+     * 
      * @type {MediaFileEntity}
      * @memberof MediaFileStreamEntity
      */
@@ -109,6 +121,8 @@ export type MediaFileStreamEntityCodecTypeEnum = typeof MediaFileStreamEntityCod
  * Check if a given object implements the MediaFileStreamEntity interface.
  */
 export function instanceOfMediaFileStreamEntity(value: object): boolean {
+    if (!('dateCreated' in value)) return false;
+    if (!('dateUpdated' in value)) return false;
     if (!('mediaFileEntity' in value)) return false;
     if (!('codecName' in value)) return false;
     if (!('codecType' in value)) return false;
@@ -129,6 +143,8 @@ export function MediaFileStreamEntityFromJSONTyped(json: any, ignoreDiscriminato
     return {
         
         'id': json['id'] == null ? undefined : json['id'],
+        'dateCreated': (new Date(json['dateCreated'])),
+        'dateUpdated': (new Date(json['dateUpdated'])),
         'mediaFileEntity': MediaFileEntityFromJSON(json['mediaFileEntity']),
         'streamIndex': json['streamIndex'] == null ? undefined : json['streamIndex'],
         'codecName': json['codecName'],
@@ -148,6 +164,8 @@ export function MediaFileStreamEntityToJSON(value?: MediaFileStreamEntity | null
     return {
         
         'id': value['id'],
+        'dateCreated': ((value['dateCreated']).toISOString()),
+        'dateUpdated': ((value['dateUpdated']).toISOString()),
         'mediaFileEntity': MediaFileEntityToJSON(value['mediaFileEntity']),
         'streamIndex': value['streamIndex'],
         'codecName': value['codecName'],

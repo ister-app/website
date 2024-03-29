@@ -58,6 +58,18 @@ export interface PageImageEntity {
     pageable?: PageableObject;
     /**
      * 
+     * @type {boolean}
+     * @memberof PageImageEntity
+     */
+    first?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof PageImageEntity
+     */
+    last?: boolean;
+    /**
+     * 
      * @type {number}
      * @memberof PageImageEntity
      */
@@ -91,18 +103,6 @@ export interface PageImageEntity {
      * @type {boolean}
      * @memberof PageImageEntity
      */
-    first?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PageImageEntity
-     */
-    last?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PageImageEntity
-     */
     empty?: boolean;
 }
 
@@ -126,13 +126,13 @@ export function PageImageEntityFromJSONTyped(json: any, ignoreDiscriminator: boo
         'totalPages': json['totalPages'] == null ? undefined : json['totalPages'],
         'totalElements': json['totalElements'] == null ? undefined : json['totalElements'],
         'pageable': json['pageable'] == null ? undefined : PageableObjectFromJSON(json['pageable']),
+        'first': json['first'] == null ? undefined : json['first'],
+        'last': json['last'] == null ? undefined : json['last'],
         'size': json['size'] == null ? undefined : json['size'],
         'content': json['content'] == null ? undefined : ((json['content'] as Array<any>).map(ImageEntityFromJSON)),
         'number': json['number'] == null ? undefined : json['number'],
         'sort': json['sort'] == null ? undefined : SortObjectFromJSON(json['sort']),
         'numberOfElements': json['numberOfElements'] == null ? undefined : json['numberOfElements'],
-        'first': json['first'] == null ? undefined : json['first'],
-        'last': json['last'] == null ? undefined : json['last'],
         'empty': json['empty'] == null ? undefined : json['empty'],
     };
 }
@@ -146,13 +146,13 @@ export function PageImageEntityToJSON(value?: PageImageEntity | null): any {
         'totalPages': value['totalPages'],
         'totalElements': value['totalElements'],
         'pageable': PageableObjectToJSON(value['pageable']),
+        'first': value['first'],
+        'last': value['last'],
         'size': value['size'],
         'content': value['content'] == null ? undefined : ((value['content'] as Array<any>).map(ImageEntityToJSON)),
         'number': value['number'],
         'sort': SortObjectToJSON(value['sort']),
         'numberOfElements': value['numberOfElements'],
-        'first': value['first'],
-        'last': value['last'],
         'empty': value['empty'],
     };
 }

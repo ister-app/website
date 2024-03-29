@@ -16,13 +16,10 @@
 import * as runtime from '../runtime';
 import type {
   EpisodeEntity,
-  PageEpisodeEntity,
 } from '../models/index';
 import {
     EpisodeEntityFromJSON,
     EpisodeEntityToJSON,
-    PageEpisodeEntityFromJSON,
-    PageEpisodeEntityToJSON,
 } from '../models/index';
 
 export interface GetEpisodeRequest {
@@ -67,7 +64,7 @@ export class EpisodeControllerApi extends runtime.BaseAPI {
 
     /**
      */
-    async getRecent2Raw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PageEpisodeEntity>> {
+    async getRecent2Raw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<EpisodeEntity>>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -79,12 +76,12 @@ export class EpisodeControllerApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PageEpisodeEntityFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(EpisodeEntityFromJSON));
     }
 
     /**
      */
-    async getRecent2(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PageEpisodeEntity> {
+    async getRecent2(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<EpisodeEntity>> {
         const response = await this.getRecent2Raw(initOverrides);
         return await response.value();
     }

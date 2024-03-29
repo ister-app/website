@@ -3,9 +3,6 @@
         <v-slide-group-item v-if="loaded" v-for="showEntity in tvShows" :key="showEntity.id">
             <v-card class="ma-3" width="200" :to="{ name: '/tvshows/[id]/', params: { id: showEntity.id } }">
                 <Image :imageId="ImageUtilService.getCoverImageId(showEntity.imageEntities!)" height="300px"></Image>
-                <!-- <v-img
-                :src="downloadImage(ImageUtilService.getCoverImageId(showEntity.imageEntities!))"
-                    height="300px" cover></v-img> -->
                 <v-card-title v-text="showEntity.name"></v-card-title>
                 <v-card-subtitle>
                     Episode title

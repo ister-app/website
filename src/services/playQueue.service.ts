@@ -15,6 +15,13 @@ export default class PlayQueueService {
         this.setCurrentItem(itemId);
     }
 
+    public updateProgress(itemId: string, progress: number) {
+        this.currentItem = this.currentQueue?.items.find(item => item.itemId === itemId)?.id;
+        if (this.currentItem) {
+            this.playQueueControllerApi.updateWatchStatus({id: this.currentQueue?.id!, playQueueItemId: this.currentItem, progressInMilliseconds: Math.round(progress)});
+        }
+    }
+
     public setCurrentItem(itemId: string) {
         this.currentItem = this.currentQueue?.items.find(item => item.itemId === itemId)?.id;
         console.log(this.currentItem);

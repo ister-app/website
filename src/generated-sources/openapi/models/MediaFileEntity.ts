@@ -46,6 +46,18 @@ export interface MediaFileEntity {
     id?: string;
     /**
      * 
+     * @type {Date}
+     * @memberof MediaFileEntity
+     */
+    dateCreated: Date;
+    /**
+     * 
+     * @type {Date}
+     * @memberof MediaFileEntity
+     */
+    dateUpdated: Date;
+    /**
+     * 
      * @type {DiskEntity}
      * @memberof MediaFileEntity
      */
@@ -86,6 +98,8 @@ export interface MediaFileEntity {
  * Check if a given object implements the MediaFileEntity interface.
  */
 export function instanceOfMediaFileEntity(value: object): boolean {
+    if (!('dateCreated' in value)) return false;
+    if (!('dateUpdated' in value)) return false;
     if (!('diskEntity' in value)) return false;
     if (!('episodeEntity' in value)) return false;
     if (!('path' in value)) return false;
@@ -104,6 +118,8 @@ export function MediaFileEntityFromJSONTyped(json: any, ignoreDiscriminator: boo
     return {
         
         'id': json['id'] == null ? undefined : json['id'],
+        'dateCreated': (new Date(json['dateCreated'])),
+        'dateUpdated': (new Date(json['dateUpdated'])),
         'diskEntity': DiskEntityFromJSON(json['diskEntity']),
         'episodeEntity': EpisodeEntityFromJSON(json['episodeEntity']),
         'mediaFileStreamEntity': json['mediaFileStreamEntity'] == null ? undefined : ((json['mediaFileStreamEntity'] as Array<any>).map(MediaFileStreamEntityFromJSON)),
@@ -120,6 +136,8 @@ export function MediaFileEntityToJSON(value?: MediaFileEntity | null): any {
     return {
         
         'id': value['id'],
+        'dateCreated': ((value['dateCreated']).toISOString()),
+        'dateUpdated': ((value['dateUpdated']).toISOString()),
         'diskEntity': DiskEntityToJSON(value['diskEntity']),
         'episodeEntity': EpisodeEntityToJSON(value['episodeEntity']),
         'mediaFileStreamEntity': value['mediaFileStreamEntity'] == null ? undefined : ((value['mediaFileStreamEntity'] as Array<any>).map(MediaFileStreamEntityToJSON)),

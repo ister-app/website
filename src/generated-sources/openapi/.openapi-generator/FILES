@@ -1,4 +1,3 @@
-.openapi-generator-ignore
 apis/EpisodeControllerApi.ts
 apis/ImageControllerApi.ts
 apis/PlayQueueControllerApi.ts
@@ -16,7 +15,6 @@ models/MediaFileEntity.ts
 models/MediaFileStreamEntity.ts
 models/MetadataEntity.ts
 models/NodeEntity.ts
-models/PageEpisodeEntity.ts
 models/PageImageEntity.ts
 models/PageShowEntity.ts
 models/PageableObject.ts
@@ -25,5 +23,7 @@ models/PlayQueueItemEntity.ts
 models/SeasonEntity.ts
 models/ShowEntity.ts
 models/SortObject.ts
+models/UserEntity.ts
+models/WatchStatusEntity.ts
 models/index.ts
 runtime.ts

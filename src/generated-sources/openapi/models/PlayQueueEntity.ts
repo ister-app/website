@@ -19,6 +19,12 @@ import {
     PlayQueueItemEntityFromJSONTyped,
     PlayQueueItemEntityToJSON,
 } from './PlayQueueItemEntity';
+import type { UserEntity } from './UserEntity';
+import {
+    UserEntityFromJSON,
+    UserEntityFromJSONTyped,
+    UserEntityToJSON,
+} from './UserEntity';
 
 /**
  * 
@@ -34,6 +40,30 @@ export interface PlayQueueEntity {
     id?: string;
     /**
      * 
+     * @type {Date}
+     * @memberof PlayQueueEntity
+     */
+    dateCreated: Date;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PlayQueueEntity
+     */
+    dateUpdated: Date;
+    /**
+     * 
+     * @type {UserEntity}
+     * @memberof PlayQueueEntity
+     */
+    userEntity: UserEntity;
+    /**
+     * 
+     * @type {string}
+     * @memberof PlayQueueEntity
+     */
+    currentItem?: string;
+    /**
+     * 
      * @type {Array<PlayQueueItemEntity>}
      * @memberof PlayQueueEntity
      */
@@ -44,6 +74,9 @@ export interface PlayQueueEntity {
  * Check if a given object implements the PlayQueueEntity interface.
  */
 export function instanceOfPlayQueueEntity(value: object): boolean {
+    if (!('dateCreated' in value)) return false;
+    if (!('dateUpdated' in value)) return false;
+    if (!('userEntity' in value)) return false;
     if (!('items' in value)) return false;
     return true;
 }
@@ -59,6 +92,10 @@ export function PlayQueueEntityFromJSONTyped(json: any, ignoreDiscriminator: boo
     return {
         
         'id': json['id'] == null ? undefined : json['id'],
+        'dateCreated': (new Date(json['dateCreated'])),
+        'dateUpdated': (new Date(json['dateUpdated'])),
+        'userEntity': UserEntityFromJSON(json['userEntity']),
+        'currentItem': json['currentItem'] == null ? undefined : json['currentItem'],
         'items': ((json['items'] as Array<any>).map(PlayQueueItemEntityFromJSON)),
     };
 }
@@ -70,6 +107,10 @@ export function PlayQueueEntityToJSON(value?: PlayQueueEntity | null): any {
     return {
         
         'id': value['id'],
+        'dateCreated': ((value['dateCreated']).toISOString()),
+        'dateUpdated': ((value['dateUpdated']).toISOString()),
+        'userEntity': UserEntityToJSON(value['userEntity']),
+        'currentItem': value['currentItem'],
         'items': ((value['items'] as Array<any>).map(PlayQueueItemEntityToJSON)),
     };
 }

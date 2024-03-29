@@ -26,6 +26,12 @@ export interface CreateNewForShowRequest {
     showId: string;
 }
 
+export interface UpdateWatchStatusRequest {
+    id: string;
+    progressInMilliseconds: number;
+    playQueueItemId: string;
+}
+
 /**
  * 
  */
@@ -60,6 +66,58 @@ export class PlayQueueControllerApi extends runtime.BaseAPI {
     async createNewForShow(requestParameters: CreateNewForShowRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PlayQueueEntity> {
         const response = await this.createNewForShowRaw(requestParameters, initOverrides);
         return await response.value();
+    }
+
+    /**
+     */
+    async updateWatchStatusRaw(requestParameters: UpdateWatchStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateWatchStatus().'
+            );
+        }
+
+        if (requestParameters['progressInMilliseconds'] == null) {
+            throw new runtime.RequiredError(
+                'progressInMilliseconds',
+                'Required parameter "progressInMilliseconds" was null or undefined when calling updateWatchStatus().'
+            );
+        }
+
+        if (requestParameters['playQueueItemId'] == null) {
+            throw new runtime.RequiredError(
+                'playQueueItemId',
+                'Required parameter "playQueueItemId" was null or undefined when calling updateWatchStatus().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['progressInMilliseconds'] != null) {
+            queryParameters['progressInMilliseconds'] = requestParameters['progressInMilliseconds'];
+        }
+
+        if (requestParameters['playQueueItemId'] != null) {
+            queryParameters['playQueueItemId'] = requestParameters['playQueueItemId'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/playqueue/update/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     */
+    async updateWatchStatus(requestParameters: UpdateWatchStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.updateWatchStatusRaw(requestParameters, initOverrides);
     }
 
 }

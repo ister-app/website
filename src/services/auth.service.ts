@@ -5,7 +5,7 @@ import { User, UserManager, UserManagerSettings } from "oidc-client-ts";
 export default class AuthService {
     userManager: UserManager;
 
-    constructor() {
+    constructor(onAuthUserLoaded: any) {
         const settings: UserManagerSettings = {
             authority: import.meta.env.VITE_OIDC_URL,
             client_id: import.meta.env.VITE_OIDC_CLIENT_ID,
@@ -14,14 +14,15 @@ export default class AuthService {
             response_type: 'code',
         };
         this.userManager = new UserManager(settings);
+        this.userManager.events.addUserLoaded((user: User) => onAuthUserLoaded(user));
     }
 
     getUser(): Promise<User | null> {
         return this.userManager.getUser();
     }
-    
+
     async getToken(): Promise<String | undefined> {
-        var user = await this.getUser();
+        const user = await this.getUser();
         return user?.access_token;
     }
 
