@@ -3,7 +3,7 @@
     <v-expansion-panels v-else v-model="selected">
         <v-expansion-panel v-for="seasonEntity in seasons" :key="seasonEntity.id" :value="seasonEntity.id">
             <v-expansion-panel-title>
-                Season {{ seasonEntity.number }}
+                {{ $t("global.season") }} {{ seasonEntity.number }}
             </v-expansion-panel-title>
             <v-expansion-panel-text>
                 <EpisodeList :seasonId="seasonEntity.id" :selectedEpisode="props.selectedEpisode"></EpisodeList>

@@ -14,9 +14,11 @@ import VueFullscreen from 'vue-fullscreen'
 // Types
 import type { App } from 'vue'
 import { ApiPlugin } from './api'
+import { i18n } from "@/locales";
 
 export function registerPlugins(app: App) {
   app
+    .use(i18n)
     .use(vuetify)
     .use(router)
     .use(pinia)

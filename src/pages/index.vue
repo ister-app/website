@@ -2,7 +2,7 @@
   <v-container class="" style="max-width: 1720px;">
     <v-row class="mt-2">
       <v-col col="12">
-        <strong class="ml-16">Verder kijken:</strong>
+        <strong class="ml-16">{{ $t("index.continue_watching") }}:</strong>
       </v-col>
     </v-row>
     <v-row class="mt-2">
@@ -10,7 +10,7 @@
     </v-row>
     <v-row no-gutters class="mt-2">
       <v-col col="12">
-        <strong class="ml-16">Nieuwe tv-shows</strong>
+        <strong class="ml-16">{{ $t("index.new_shows") }}:</strong>
         <TVShowsSlide></TVShowsSlide>
       </v-col>
     </v-row>

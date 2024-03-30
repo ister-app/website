@@ -8,12 +8,19 @@
 
 <script lang="ts" setup>
 import { onMounted, onUnmounted } from 'vue';
-import { useTheme } from 'vuetify'
+import {useLocale, useTheme} from 'vuetify'
 import { useApiService } from './plugins/api';
 import router from './router';
 import AuthService from './services/auth.service';
+import {supportLocales} from "@/locales";
 
-onMounted(() => window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', systemThemeChange))
+onMounted(() => {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', systemThemeChange);
+    if (window.navigator.language && supportLocales.includes(window.navigator.language.substring(0, 2))) {
+        const { current } = useLocale();
+        current.value = window.navigator.language.substring(0, 2);
+    }
+})
 onUnmounted(() => window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', systemThemeChange))
 
 const authService : AuthService | undefined = useApiService()?.authService;
