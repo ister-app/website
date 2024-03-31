@@ -1,7 +1,7 @@
 <template>
     <v-slide-group>
-        <v-slide-group-item v-if="loaded" v-for="showEntity in tvShows" :key="showEntity.id">
-            <v-card class="ma-3" width="200" :to="{ name: '/tvshows/[id]/', params: { id: showEntity.id } }">
+        <v-slide-group-item v-for="showEntity in tvShows" v-if="loaded" :key="showEntity.id">
+            <v-card :to="{ name: '/tvshows/[id]/', params: { id: showEntity.id } }" class="ma-3" width="200">
                 <Image :imageId="ImageUtilService.getCoverImageId(showEntity.imageEntities!)" height="300px"></Image>
                 <v-card-title v-text="showEntity.name"></v-card-title>
                 <v-card-subtitle>
@@ -9,19 +9,20 @@
                 </v-card-subtitle>
             </v-card>
         </v-slide-group-item>
-        <v-slide-group-item v-else v-for="i in 40" :key="i">
-            <v-skeleton-loader height="340" width="200" type="image, list-item-two-line" class="ma-3"></v-skeleton-loader>
+        <v-slide-group-item v-for="i in 40" v-else :key="i">
+            <v-skeleton-loader class="ma-3" height="340" type="image, list-item-two-line"
+                               width="200"></v-skeleton-loader>
         </v-slide-group-item>
 
     </v-slide-group>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue'
-import type { Ref } from 'vue'
-import { PageShowEntity, ShowEntity } from "@/generated-sources/openapi";
+<script lang="ts" setup>
+import type {Ref} from 'vue'
+import {ref} from 'vue'
+import {PageShowEntity, ShowEntity} from "@/generated-sources/openapi";
 import ImageUtilService from '@/services/imageUtil.service';
-import { useApiService } from '@/plugins/api';
+import {useApiService} from '@/plugins/api';
 
 const tvShows: Ref<ShowEntity[]> = ref([])
 const loaded: Ref<boolean> = ref(false);

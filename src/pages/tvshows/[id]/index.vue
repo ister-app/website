@@ -1,6 +1,8 @@
 <template>
     <v-container v-if="showEntity?.metadataEntities?.length !== 0">{{
-        showEntity?.metadataEntities![0].description }}</v-container>
+            showEntity?.metadataEntities![0].description
+        }}
+    </v-container>
 </template>
 
 <script lang="ts" setup>

@@ -20,7 +20,7 @@ export default class ApiService {
     configuration: Configuration;
 
     constructor() {
-        this.httpHeaders = { "Authorization": "Bearer not set" }
+        this.httpHeaders = {"Authorization": "Bearer not set"}
         this.configuration = new Configuration({
             basePath: import.meta.env.VITE_BACKEND_URL,
             headers: this.httpHeaders

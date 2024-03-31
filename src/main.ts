@@ -5,7 +5,7 @@
  */
 
 // Plugins
-import { registerPlugins } from '@/plugins'
+import {registerPlugins} from '@/plugins'
 
 // Fonts
 import 'unfonts.css'
@@ -14,7 +14,7 @@ import 'unfonts.css'
 import App from './App.vue'
 
 // Composables
-import { createApp } from 'vue'
+import {createApp} from 'vue'
 
 const app = createApp(App)
 

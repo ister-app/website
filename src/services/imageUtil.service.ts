@@ -1,4 +1,4 @@
-import { ImageEntity, ImageEntityTypeEnum } from "@/generated-sources/openapi";
+import {ImageEntity, ImageEntityTypeEnum} from "@/generated-sources/openapi";
 
 export default class ImageUtilService {
     public static getCoverImageId(imageEntities: ImageEntity[]): string {

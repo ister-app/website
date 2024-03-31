@@ -1,4 +1,4 @@
-import { PlayQueueControllerApi, PlayQueueEntity, PlayQueueItemEntity } from "@/generated-sources/openapi";
+import {PlayQueueControllerApi, PlayQueueEntity, PlayQueueItemEntity} from "@/generated-sources/openapi";
 
 export default class PlayQueueService {
     playQueueControllerApi: PlayQueueControllerApi;
@@ -11,14 +11,18 @@ export default class PlayQueueService {
     }
 
     public async createPlayQueueForShow(showId: string, itemId: string) {
-        this.currentQueue = await this.playQueueControllerApi.createNewForShow({ showId: showId });
+        this.currentQueue = await this.playQueueControllerApi.createNewForShow({showId: showId});
         this.setCurrentItem(itemId);
     }
 
     public updateProgress(itemId: string, progress: number) {
         this.currentItem = this.currentQueue?.items.find(item => item.itemId === itemId)?.id;
         if (this.currentItem) {
-            this.playQueueControllerApi.updateWatchStatus({id: this.currentQueue?.id!, playQueueItemId: this.currentItem, progressInMilliseconds: Math.round(progress)});
+            this.playQueueControllerApi.updateWatchStatus({
+                id: this.currentQueue?.id!,
+                playQueueItemId: this.currentItem,
+                progressInMilliseconds: Math.round(progress)
+            });
         }
     }
 

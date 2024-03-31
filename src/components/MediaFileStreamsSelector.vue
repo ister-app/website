@@ -1,29 +1,31 @@
 <template>
     <v-menu v-model="menu" :close-on-content-click="false" location="top end">
         <template v-slot:activator="{ props }">
-            <v-btn  density="compact"  v-bind="props" icon="mdi-cog"></v-btn>
+            <v-btn density="compact" icon="mdi-cog" v-bind="props"></v-btn>
         </template>
 
         <v-card min-width="300">
 
             <v-list>
                 <v-list-item>
-                    <v-select v-model="selectedAudioStream" label="Audio" :items="audioStreams" :item-props="selectProps"></v-select>
+                    <v-select v-model="selectedAudioStream" :item-props="selectProps" :items="audioStreams"
+                              label="Audio"></v-select>
                 </v-list-item>
 
                 <v-list-item>
-                    <v-select v-model="selectedSubtitleStream" label="Subtitle" :clearable="true" :items="subtitlesStreams" :item-props="selectProps"></v-select>
+                    <v-select v-model="selectedSubtitleStream" :clearable="true" :item-props="selectProps"
+                              :items="subtitlesStreams" label="Subtitle"></v-select>
                 </v-list-item>
             </v-list>
         </v-card>
-    </v-menu> 
+    </v-menu>
 </template>
 
 <script lang="ts" setup>
 
-import { ref, computed } from 'vue'
-import type { Ref } from 'vue'
-import { MediaFileStreamEntity } from "@/generated-sources/openapi";
+import type {Ref} from 'vue'
+import {computed, ref} from 'vue'
+import {MediaFileStreamEntity} from "@/generated-sources/openapi";
 
 const menu = ref(false)
 

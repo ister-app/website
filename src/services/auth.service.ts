@@ -1,5 +1,4 @@
-import { User, UserManager, UserManagerSettings } from "oidc-client-ts";
-
+import {User, UserManager, UserManagerSettings} from "oidc-client-ts";
 
 
 export default class AuthService {

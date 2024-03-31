@@ -1,28 +1,35 @@
 <template>
-    <v-list density="compact" class="overflow-auto" height="500px" v-model:selected="selected" :id="'list-' + seasonId">
-        <v-list-item v-if="loaded" v-for="episodeEntity in episodes" :key="episodeEntity.id" :value="episodeEntity.id" :id="'list-item-' + episodeEntity.id" color="primary"
-            class="pa-0 ma-0" :to="{ name: '/tvshows/[id]/episodes.[episodeId]', params: { id: episodeEntity.showEntity?.id, episodeId: episodeEntity.id } }">
+    <v-list :id="'list-' + seasonId" v-model:selected="selected" class="overflow-auto" density="compact" height="500px">
+        <v-list-item v-for="episodeEntity in episodes" v-if="loaded" :id="'list-item-' + episodeEntity.id" :key="episodeEntity.id"
+                     :to="{ name: '/tvshows/[id]/episodes.[episodeId]', params: { id: episodeEntity.showEntity?.id, episodeId: episodeEntity.id } }" :value="episodeEntity.id"
+                     class="pa-0 ma-0"
+                     color="primary">
             <template v-slot:prepend>
-                <Image :imageId="ImageUtilService.getBackgroundImageId(episodeEntity.imagesEntities!)" rounded="rounded" class="align-end" width="160px" height="100px">
-                    <v-progress-linear v-if="getProgressInPercent(episodeEntity)" color="primary" :model-value="getProgressInPercent(episodeEntity)"></v-progress-linear>
+                <Image :imageId="ImageUtilService.getBackgroundImageId(episodeEntity.imagesEntities!)" class="align-end"
+                       height="100px" rounded="rounded" width="160px">
+                    <v-progress-linear v-if="getProgressInPercent(episodeEntity)" :model-value="getProgressInPercent(episodeEntity)"
+                                       color="primary"></v-progress-linear>
                 </Image>
                 <v-container></v-container>
             </template>
-            <v-list-item-title>{{ episodeEntity.number }} {{ episodeEntity.metadataEntities?.length !== 0 ? episodeEntity.metadataEntities![0].title : '' }}</v-list-item-title>
+            <v-list-item-title>{{ episodeEntity.number }}
+                {{ episodeEntity.metadataEntities?.length !== 0 ? episodeEntity.metadataEntities![0].title : '' }}
+            </v-list-item-title>
             <v-list-item-subtitle>episodeEntity 9 * Mrt 2022 * 41m</v-list-item-subtitle>
         </v-list-item>
-        <v-skeleton-loader v-else-if="!loaded" v-for="i in 9" type="list-item-avatar" height="100px" :key="'list-item-skeleton-loader' + i"
-            class="pa-0 ma-0"></v-skeleton-loader>
+        <v-skeleton-loader v-for="i in 9" v-else-if="!loaded" :key="'list-item-skeleton-loader' + i" class="pa-0 ma-0"
+                           height="100px"
+                           type="list-item-avatar"></v-skeleton-loader>
     </v-list>
 </template>
 
 <script lang="ts" setup>
 
-import { ref, watch } from 'vue'
-import type { Ref } from 'vue'
-import {EpisodeEntity, WatchStatusEntity} from "@/generated-sources/openapi";
-import { useGoTo } from 'vuetify'
-import { useApiService } from '@/plugins/api';
+import type {Ref} from 'vue'
+import {ref, watch} from 'vue'
+import {EpisodeEntity} from "@/generated-sources/openapi";
+import {useGoTo} from 'vuetify'
+import {useApiService} from '@/plugins/api';
 import ImageUtilService from '@/services/imageUtil.service';
 
 const props = defineProps<{
@@ -55,7 +62,7 @@ function getProgressInPercent(episodeEntity: EpisodeEntity): number | undefined 
 
 async function refresh() {
     const postsApi = await apiService?.getSeasonControllerApi();
-    const posts: Promise<EpisodeEntity[]> = postsApi!.getEpisodes({ id: props.seasonId });
+    const posts: Promise<EpisodeEntity[]> = postsApi!.getEpisodes({id: props.seasonId});
     posts.then((response: EpisodeEntity[]) => {
         episodes.value = response;
         loaded.value = true;
@@ -68,7 +75,7 @@ async function refresh() {
 
 function scrollTo() {
     if (props.selectedEpisode) {
-        goTo("#list-item-" + props.selectedEpisode.id, { container: "#list-" + props.seasonId })
+        goTo("#list-item-" + props.selectedEpisode.id, {container: "#list-" + props.seasonId})
     }
 }
 

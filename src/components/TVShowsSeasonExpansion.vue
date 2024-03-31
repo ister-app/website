@@ -1,5 +1,5 @@
 <template>
-    <v-skeleton-loader v-if="!loaded" type="ossein" height="50px"></v-skeleton-loader>
+    <v-skeleton-loader v-if="!loaded" height="50px" type="ossein"></v-skeleton-loader>
     <v-expansion-panels v-else v-model="selected">
         <v-expansion-panel v-for="seasonEntity in seasons" :key="seasonEntity.id" :value="seasonEntity.id">
             <v-expansion-panel-title>
@@ -14,10 +14,10 @@
 
 <script lang="ts" setup>
 
-import { ref } from 'vue'
-import type { Ref } from 'vue'
-import { EpisodeEntity, SeasonEntity } from "@/generated-sources/openapi";
-import { useApiService } from '@/plugins/api';
+import type {Ref} from 'vue'
+import {ref} from 'vue'
+import {EpisodeEntity, SeasonEntity} from "@/generated-sources/openapi";
+import {useApiService} from '@/plugins/api';
 
 const props = defineProps<{
     tvShowId: string,
@@ -32,7 +32,7 @@ const apiService = useApiService();
 
 async function refresh() {
     const postsApi = await apiService?.getShowControllerApi();
-    const posts: Promise<SeasonEntity[]> = postsApi!.getSeasons({ id: props.tvShowId });
+    const posts: Promise<SeasonEntity[]> = postsApi!.getSeasons({id: props.tvShowId});
     console.log(posts);
     posts.then((response: SeasonEntity[]) => {
         seasons.value = response;

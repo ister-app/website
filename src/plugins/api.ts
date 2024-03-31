@@ -1,5 +1,5 @@
-import { App, inject } from 'vue'
-import type { InjectionKey } from 'vue'
+import type {InjectionKey} from 'vue'
+import {App, inject} from 'vue'
 import ApiService from '@/services/api.service';
 
 const apiServiceKey = Symbol() as InjectionKey<ApiService>
