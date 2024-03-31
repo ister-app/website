@@ -1,6 +1,8 @@
 {
   "global": {
-    "season": "Season"
+    "season": "Season",
+    "subtitle": "Subtitle",
+    "audio": "Audio"
   },
   "index": {
     "continue_watching": "Continue watching",

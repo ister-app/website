@@ -1,6 +1,8 @@
 {
   "global": {
-    "season": "Seizoen"
+    "season": "Seizoen",
+    "subtitle": "Ondertiteling",
+    "audio": "Geluid"
   },
   "index": {
     "continue_watching": "Verder kijken",

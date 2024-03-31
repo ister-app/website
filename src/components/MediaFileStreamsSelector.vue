@@ -9,12 +9,12 @@
             <v-list>
                 <v-list-item>
                     <v-select v-model="selectedAudioStream" :item-props="selectProps" :items="audioStreams"
-                              label="Audio"></v-select>
+                              :label="$t('global.audio')"></v-select>
                 </v-list-item>
 
                 <v-list-item>
                     <v-select v-model="selectedSubtitleStream" :clearable="true" :item-props="selectProps"
-                              :items="subtitlesStreams" label="Subtitle"></v-select>
+                              :items="subtitlesStreams" :label="$t('global.subtitle')"></v-select>
                 </v-list-item>
             </v-list>
         </v-card>
@@ -26,8 +26,11 @@
 import type {Ref} from 'vue'
 import {computed, ref} from 'vue'
 import {MediaFileStreamEntity} from "@/generated-sources/openapi";
+import {useAppStore} from "@/store/app";
 
 const menu = ref(false)
+
+const appStore = useAppStore();
 
 const props = defineProps<{
     mediaFileStreams: MediaFileStreamEntity[],
@@ -35,6 +38,8 @@ const props = defineProps<{
 
 const selectedAudioStream: Ref<number | undefined> = defineModel('selectedAudioStream')
 const selectedSubtitleStream: Ref<number | undefined> = defineModel('selectedSubtitleStream')
+
+const languageNames = new Intl.DisplayNames([appStore.language], {type: "language"});
 
 const audioStreams = computed(() => {
     return props.mediaFileStreams.filter((stream) => stream.codecType === "AUDIO");
@@ -46,10 +51,14 @@ const subtitlesStreams = computed(() => {
 
 function selectProps(item: MediaFileStreamEntity) {
     return {
-        title: item.language,
+        title: getLanguageName(item.language),
         subtitle: item.title,
         value: item.id
     }
+}
+
+function getLanguageName(languageCode: string | undefined) {
+    return languageCode ? languageNames.of(languageCode) : "unknown";
 }
 
 
