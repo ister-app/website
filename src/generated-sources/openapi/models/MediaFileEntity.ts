@@ -13,12 +13,12 @@
  */
 
 import { mapValues } from '../runtime';
-import type { DiskEntity } from './DiskEntity';
+import type { DirectoryEntity } from './DirectoryEntity';
 import {
-    DiskEntityFromJSON,
-    DiskEntityFromJSONTyped,
-    DiskEntityToJSON,
-} from './DiskEntity';
+    DirectoryEntityFromJSON,
+    DirectoryEntityFromJSONTyped,
+    DirectoryEntityToJSON,
+} from './DirectoryEntity';
 import type { EpisodeEntity } from './EpisodeEntity';
 import {
     EpisodeEntityFromJSON,
@@ -49,25 +49,25 @@ export interface MediaFileEntity {
      * @type {Date}
      * @memberof MediaFileEntity
      */
-    dateCreated: Date;
+    dateCreated?: Date;
     /**
      * 
      * @type {Date}
      * @memberof MediaFileEntity
      */
-    dateUpdated: Date;
+    dateUpdated?: Date;
     /**
      * 
-     * @type {DiskEntity}
+     * @type {DirectoryEntity}
      * @memberof MediaFileEntity
      */
-    diskEntity: DiskEntity;
+    directoryEntity?: DirectoryEntity;
     /**
      * 
      * @type {EpisodeEntity}
      * @memberof MediaFileEntity
      */
-    episodeEntity: EpisodeEntity;
+    episodeEntity?: EpisodeEntity;
     /**
      * 
      * @type {Array<MediaFileStreamEntity>}
@@ -79,13 +79,13 @@ export interface MediaFileEntity {
      * @type {string}
      * @memberof MediaFileEntity
      */
-    path: string;
+    path?: string;
     /**
      * 
      * @type {number}
      * @memberof MediaFileEntity
      */
-    size: number;
+    size?: number;
     /**
      * 
      * @type {number}
@@ -98,12 +98,6 @@ export interface MediaFileEntity {
  * Check if a given object implements the MediaFileEntity interface.
  */
 export function instanceOfMediaFileEntity(value: object): boolean {
-    if (!('dateCreated' in value)) return false;
-    if (!('dateUpdated' in value)) return false;
-    if (!('diskEntity' in value)) return false;
-    if (!('episodeEntity' in value)) return false;
-    if (!('path' in value)) return false;
-    if (!('size' in value)) return false;
     return true;
 }
 
@@ -118,13 +112,13 @@ export function MediaFileEntityFromJSONTyped(json: any, ignoreDiscriminator: boo
     return {
         
         'id': json['id'] == null ? undefined : json['id'],
-        'dateCreated': (new Date(json['dateCreated'])),
-        'dateUpdated': (new Date(json['dateUpdated'])),
-        'diskEntity': DiskEntityFromJSON(json['diskEntity']),
-        'episodeEntity': EpisodeEntityFromJSON(json['episodeEntity']),
+        'dateCreated': json['dateCreated'] == null ? undefined : (new Date(json['dateCreated'])),
+        'dateUpdated': json['dateUpdated'] == null ? undefined : (new Date(json['dateUpdated'])),
+        'directoryEntity': json['directoryEntity'] == null ? undefined : DirectoryEntityFromJSON(json['directoryEntity']),
+        'episodeEntity': json['episodeEntity'] == null ? undefined : EpisodeEntityFromJSON(json['episodeEntity']),
         'mediaFileStreamEntity': json['mediaFileStreamEntity'] == null ? undefined : ((json['mediaFileStreamEntity'] as Array<any>).map(MediaFileStreamEntityFromJSON)),
-        'path': json['path'],
-        'size': json['size'],
+        'path': json['path'] == null ? undefined : json['path'],
+        'size': json['size'] == null ? undefined : json['size'],
         'durationInMilliseconds': json['durationInMilliseconds'] == null ? undefined : json['durationInMilliseconds'],
     };
 }
@@ -136,9 +130,9 @@ export function MediaFileEntityToJSON(value?: MediaFileEntity | null): any {
     return {
         
         'id': value['id'],
-        'dateCreated': ((value['dateCreated']).toISOString()),
-        'dateUpdated': ((value['dateUpdated']).toISOString()),
-        'diskEntity': DiskEntityToJSON(value['diskEntity']),
+        'dateCreated': value['dateCreated'] == null ? undefined : ((value['dateCreated']).toISOString()),
+        'dateUpdated': value['dateUpdated'] == null ? undefined : ((value['dateUpdated']).toISOString()),
+        'directoryEntity': DirectoryEntityToJSON(value['directoryEntity']),
         'episodeEntity': EpisodeEntityToJSON(value['episodeEntity']),
         'mediaFileStreamEntity': value['mediaFileStreamEntity'] == null ? undefined : ((value['mediaFileStreamEntity'] as Array<any>).map(MediaFileStreamEntityToJSON)),
         'path': value['path'],

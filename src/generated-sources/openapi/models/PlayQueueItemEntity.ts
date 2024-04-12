@@ -30,28 +30,25 @@ export interface PlayQueueItemEntity {
      * @type {Date}
      * @memberof PlayQueueItemEntity
      */
-    dateCreated: Date;
+    dateCreated?: Date;
     /**
      * 
      * @type {Date}
      * @memberof PlayQueueItemEntity
      */
-    dateUpdated: Date;
+    dateUpdated?: Date;
     /**
      * 
      * @type {string}
      * @memberof PlayQueueItemEntity
      */
-    itemId: string;
+    itemId?: string;
 }
 
 /**
  * Check if a given object implements the PlayQueueItemEntity interface.
  */
 export function instanceOfPlayQueueItemEntity(value: object): boolean {
-    if (!('dateCreated' in value)) return false;
-    if (!('dateUpdated' in value)) return false;
-    if (!('itemId' in value)) return false;
     return true;
 }
 
@@ -66,9 +63,9 @@ export function PlayQueueItemEntityFromJSONTyped(json: any, ignoreDiscriminator:
     return {
         
         'id': json['id'] == null ? undefined : json['id'],
-        'dateCreated': (new Date(json['dateCreated'])),
-        'dateUpdated': (new Date(json['dateUpdated'])),
-        'itemId': json['itemId'],
+        'dateCreated': json['dateCreated'] == null ? undefined : (new Date(json['dateCreated'])),
+        'dateUpdated': json['dateUpdated'] == null ? undefined : (new Date(json['dateUpdated'])),
+        'itemId': json['itemId'] == null ? undefined : json['itemId'],
     };
 }
 
@@ -79,8 +76,8 @@ export function PlayQueueItemEntityToJSON(value?: PlayQueueItemEntity | null): a
     return {
         
         'id': value['id'],
-        'dateCreated': ((value['dateCreated']).toISOString()),
-        'dateUpdated': ((value['dateUpdated']).toISOString()),
+        'dateCreated': value['dateCreated'] == null ? undefined : ((value['dateCreated']).toISOString()),
+        'dateUpdated': value['dateUpdated'] == null ? undefined : ((value['dateUpdated']).toISOString()),
         'itemId': value['itemId'],
     };
 }

@@ -13,7 +13,7 @@
                 <v-container></v-container>
             </template>
             <v-list-item-title>{{ episodeEntity.number }}
-                {{ episodeEntity.metadataEntities?.length !== 0 ? episodeEntity.metadataEntities![0].title : '' }}
+                {{ MetadataUtilService.getMetadataFieldForLanguage('title', episodeEntity.metadataEntities, $t("iso-639-3")) }}
             </v-list-item-title>
             <v-list-item-subtitle>episodeEntity 9 * Mrt 2022 * 41m</v-list-item-subtitle>
         </v-list-item>
@@ -31,6 +31,7 @@ import {EpisodeEntity} from "@/generated-sources/openapi";
 import {useGoTo} from 'vuetify'
 import {useApiService} from '@/plugins/api';
 import ImageUtilService from '@/services/imageUtil.service';
+import MetadataUtilService from "@/services/metadataUtil.service";
 
 const props = defineProps<{
     seasonId: string,

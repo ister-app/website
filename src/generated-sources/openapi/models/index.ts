@@ -1,9 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
-export * from './CategorieEntity';
-export * from './DiskEntity';
+export * from './DirectoryEntity';
 export * from './EpisodeEntity';
 export * from './ImageEntity';
+export * from './LibraryEntity';
 export * from './MediaFileEntity';
 export * from './MediaFileStreamEntity';
 export * from './MetadataEntity';

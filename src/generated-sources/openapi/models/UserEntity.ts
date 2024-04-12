@@ -30,19 +30,19 @@ export interface UserEntity {
      * @type {Date}
      * @memberof UserEntity
      */
-    dateCreated: Date;
+    dateCreated?: Date;
     /**
      * 
      * @type {Date}
      * @memberof UserEntity
      */
-    dateUpdated: Date;
+    dateUpdated?: Date;
     /**
      * 
      * @type {string}
      * @memberof UserEntity
      */
-    externalId: string;
+    externalId?: string;
     /**
      * 
      * @type {string}
@@ -61,9 +61,6 @@ export interface UserEntity {
  * Check if a given object implements the UserEntity interface.
  */
 export function instanceOfUserEntity(value: object): boolean {
-    if (!('dateCreated' in value)) return false;
-    if (!('dateUpdated' in value)) return false;
-    if (!('externalId' in value)) return false;
     return true;
 }
 
@@ -78,9 +75,9 @@ export function UserEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     return {
         
         'id': json['id'] == null ? undefined : json['id'],
-        'dateCreated': (new Date(json['dateCreated'])),
-        'dateUpdated': (new Date(json['dateUpdated'])),
-        'externalId': json['externalId'],
+        'dateCreated': json['dateCreated'] == null ? undefined : (new Date(json['dateCreated'])),
+        'dateUpdated': json['dateUpdated'] == null ? undefined : (new Date(json['dateUpdated'])),
+        'externalId': json['externalId'] == null ? undefined : json['externalId'],
         'name': json['name'] == null ? undefined : json['name'],
         'email': json['email'] == null ? undefined : json['email'],
     };
@@ -93,8 +90,8 @@ export function UserEntityToJSON(value?: UserEntity | null): any {
     return {
         
         'id': value['id'],
-        'dateCreated': ((value['dateCreated']).toISOString()),
-        'dateUpdated': ((value['dateUpdated']).toISOString()),
+        'dateCreated': value['dateCreated'] == null ? undefined : ((value['dateCreated']).toISOString()),
+        'dateUpdated': value['dateUpdated'] == null ? undefined : ((value['dateUpdated']).toISOString()),
         'externalId': value['externalId'],
         'name': value['name'],
         'email': value['email'],

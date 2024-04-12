@@ -29,8 +29,7 @@
 
 <script lang="ts" setup>
 
-import type {Ref} from 'vue'
-import {ref} from 'vue'
+import {Ref, ref} from 'vue'
 import {EpisodeEntity, ShowEntity} from "@/generated-sources/openapi";
 import {useRoute} from 'vue-router/auto';
 import {useApiService} from '@/plugins/api';

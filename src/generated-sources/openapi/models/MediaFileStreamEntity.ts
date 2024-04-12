@@ -37,19 +37,19 @@ export interface MediaFileStreamEntity {
      * @type {Date}
      * @memberof MediaFileStreamEntity
      */
-    dateCreated: Date;
+    dateCreated?: Date;
     /**
      * 
      * @type {Date}
      * @memberof MediaFileStreamEntity
      */
-    dateUpdated: Date;
+    dateUpdated?: Date;
     /**
      * 
      * @type {MediaFileEntity}
      * @memberof MediaFileStreamEntity
      */
-    mediaFileEntity: MediaFileEntity;
+    mediaFileEntity?: MediaFileEntity;
     /**
      * 
      * @type {number}
@@ -61,31 +61,31 @@ export interface MediaFileStreamEntity {
      * @type {string}
      * @memberof MediaFileStreamEntity
      */
-    codecName: string;
+    codecName?: string;
     /**
      * 
      * @type {string}
      * @memberof MediaFileStreamEntity
      */
-    codecType: MediaFileStreamEntityCodecTypeEnum;
+    codecType?: MediaFileStreamEntityCodecTypeEnum;
     /**
      * 
      * @type {number}
      * @memberof MediaFileStreamEntity
      */
-    width: number;
+    width?: number;
     /**
      * 
      * @type {number}
      * @memberof MediaFileStreamEntity
      */
-    height: number;
+    height?: number;
     /**
      * 
      * @type {string}
      * @memberof MediaFileStreamEntity
      */
-    path: string;
+    path?: string;
     /**
      * 
      * @type {string}
@@ -121,14 +121,6 @@ export type MediaFileStreamEntityCodecTypeEnum = typeof MediaFileStreamEntityCod
  * Check if a given object implements the MediaFileStreamEntity interface.
  */
 export function instanceOfMediaFileStreamEntity(value: object): boolean {
-    if (!('dateCreated' in value)) return false;
-    if (!('dateUpdated' in value)) return false;
-    if (!('mediaFileEntity' in value)) return false;
-    if (!('codecName' in value)) return false;
-    if (!('codecType' in value)) return false;
-    if (!('width' in value)) return false;
-    if (!('height' in value)) return false;
-    if (!('path' in value)) return false;
     return true;
 }
 
@@ -143,15 +135,15 @@ export function MediaFileStreamEntityFromJSONTyped(json: any, ignoreDiscriminato
     return {
         
         'id': json['id'] == null ? undefined : json['id'],
-        'dateCreated': (new Date(json['dateCreated'])),
-        'dateUpdated': (new Date(json['dateUpdated'])),
-        'mediaFileEntity': MediaFileEntityFromJSON(json['mediaFileEntity']),
+        'dateCreated': json['dateCreated'] == null ? undefined : (new Date(json['dateCreated'])),
+        'dateUpdated': json['dateUpdated'] == null ? undefined : (new Date(json['dateUpdated'])),
+        'mediaFileEntity': json['mediaFileEntity'] == null ? undefined : MediaFileEntityFromJSON(json['mediaFileEntity']),
         'streamIndex': json['streamIndex'] == null ? undefined : json['streamIndex'],
-        'codecName': json['codecName'],
-        'codecType': json['codecType'],
-        'width': json['width'],
-        'height': json['height'],
-        'path': json['path'],
+        'codecName': json['codecName'] == null ? undefined : json['codecName'],
+        'codecType': json['codecType'] == null ? undefined : json['codecType'],
+        'width': json['width'] == null ? undefined : json['width'],
+        'height': json['height'] == null ? undefined : json['height'],
+        'path': json['path'] == null ? undefined : json['path'],
         'language': json['language'] == null ? undefined : json['language'],
         'title': json['title'] == null ? undefined : json['title'],
     };
@@ -164,8 +156,8 @@ export function MediaFileStreamEntityToJSON(value?: MediaFileStreamEntity | null
     return {
         
         'id': value['id'],
-        'dateCreated': ((value['dateCreated']).toISOString()),
-        'dateUpdated': ((value['dateUpdated']).toISOString()),
+        'dateCreated': value['dateCreated'] == null ? undefined : ((value['dateCreated']).toISOString()),
+        'dateUpdated': value['dateUpdated'] == null ? undefined : ((value['dateUpdated']).toISOString()),
         'mediaFileEntity': MediaFileEntityToJSON(value['mediaFileEntity']),
         'streamIndex': value['streamIndex'],
         'codecName': value['codecName'],

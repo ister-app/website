@@ -49,13 +49,13 @@ export interface MetadataEntity {
      * @type {Date}
      * @memberof MetadataEntity
      */
-    dateCreated: Date;
+    dateCreated?: Date;
     /**
      * 
      * @type {Date}
      * @memberof MetadataEntity
      */
-    dateUpdated: Date;
+    dateUpdated?: Date;
     /**
      * 
      * @type {ShowEntity}
@@ -85,6 +85,12 @@ export interface MetadataEntity {
      * @type {string}
      * @memberof MetadataEntity
      */
+    language?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MetadataEntity
+     */
     title?: string;
     /**
      * 
@@ -104,8 +110,6 @@ export interface MetadataEntity {
  * Check if a given object implements the MetadataEntity interface.
  */
 export function instanceOfMetadataEntity(value: object): boolean {
-    if (!('dateCreated' in value)) return false;
-    if (!('dateUpdated' in value)) return false;
     return true;
 }
 
@@ -120,12 +124,13 @@ export function MetadataEntityFromJSONTyped(json: any, ignoreDiscriminator: bool
     return {
         
         'id': json['id'] == null ? undefined : json['id'],
-        'dateCreated': (new Date(json['dateCreated'])),
-        'dateUpdated': (new Date(json['dateUpdated'])),
+        'dateCreated': json['dateCreated'] == null ? undefined : (new Date(json['dateCreated'])),
+        'dateUpdated': json['dateUpdated'] == null ? undefined : (new Date(json['dateUpdated'])),
         'showEntity': json['showEntity'] == null ? undefined : ShowEntityFromJSON(json['showEntity']),
         'seasonEntity': json['seasonEntity'] == null ? undefined : SeasonEntityFromJSON(json['seasonEntity']),
         'episodeEntity': json['episodeEntity'] == null ? undefined : EpisodeEntityFromJSON(json['episodeEntity']),
         'sourceUri': json['sourceUri'] == null ? undefined : json['sourceUri'],
+        'language': json['language'] == null ? undefined : json['language'],
         'title': json['title'] == null ? undefined : json['title'],
         'description': json['description'] == null ? undefined : json['description'],
         'released': json['released'] == null ? undefined : (new Date(json['released'])),
@@ -139,15 +144,16 @@ export function MetadataEntityToJSON(value?: MetadataEntity | null): any {
     return {
         
         'id': value['id'],
-        'dateCreated': ((value['dateCreated']).toISOString()),
-        'dateUpdated': ((value['dateUpdated']).toISOString()),
+        'dateCreated': value['dateCreated'] == null ? undefined : ((value['dateCreated']).toISOString()),
+        'dateUpdated': value['dateUpdated'] == null ? undefined : ((value['dateUpdated']).toISOString()),
         'showEntity': ShowEntityToJSON(value['showEntity']),
         'seasonEntity': SeasonEntityToJSON(value['seasonEntity']),
         'episodeEntity': EpisodeEntityToJSON(value['episodeEntity']),
         'sourceUri': value['sourceUri'],
+        'language': value['language'],
         'title': value['title'],
         'description': value['description'],
-        'released': value['released'] == null ? undefined : ((value['released']).toISOString()),
+        'released': value['released'] == null ? undefined : ((value['released']).toISOString().substring(0,10)),
     };
 }
 

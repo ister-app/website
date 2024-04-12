@@ -8,10 +8,8 @@
                                class="align-end"
                                cover gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.8)" height="450px">
                             <v-card-text class="text-white">
-                                <p class="text-h5">{{ episodeEntity.showEntity?.name }}</p>
-                                s{{ episodeEntity.seasonEntity?.number }}e{{ episodeEntity.number }} {{
-                                    episodeEntity.metadataEntities?.length !== 0 ? episodeEntity.metadataEntities![0].title : ''
-                                }}
+                                <p class="text-h5">{{ MetadataUtilService.getMetadataFieldForLanguage('title', episodeEntity.showEntity?.metadataEntities, $t("iso-639-3")) }}</p>
+                                s{{ episodeEntity.seasonEntity?.number }}e{{ episodeEntity.number }} {{ MetadataUtilService.getMetadataFieldForLanguage('title', episodeEntity.metadataEntities, $t("iso-639-3")) }}
                             </v-card-text>
                         </Image>
                     </v-card>
@@ -31,13 +29,10 @@
                                     <v-container class="pa-0 ma-0">
                                         <v-row class="flex-nowrap">
                                             <v-col class="flex-grow-1 flex-shrink-1 text-truncate">
-                                                <v-card-title class="text-h5"
-                                                              v-text="episodeEntity.showEntity?.name"></v-card-title>
+                                                <v-card-title class="text-h5">{{ MetadataUtilService.getMetadataFieldForLanguage('title', episodeEntity.showEntity?.metadataEntities, $t("iso-639-3")) }}</v-card-title>
                                                 <v-card-subtitle>s{{
                                                         episodeEntity.seasonEntity?.number
-                                                    }}e{{ episodeEntity.number }} {{
-                                                        episodeEntity.metadataEntities?.length !== 0 ? episodeEntity.metadataEntities![0].title : ''
-                                                    }}
+                                                    }}e{{ episodeEntity.number }} {{ MetadataUtilService.getMetadataFieldForLanguage('title', episodeEntity.metadataEntities, $t("iso-639-3")) }}
                                                 </v-card-subtitle>
                                             </v-col>
                                             <v-col class="flex-grow-0 flex-shrink-0">
@@ -63,6 +58,7 @@ import {ref} from 'vue'
 import {EpisodeEntity} from "@/generated-sources/openapi";
 import ImageUtilService from '@/services/imageUtil.service';
 import {useApiService} from '@/plugins/api';
+import MetadataUtilService from "../services/metadataUtil.service";
 
 const episodes: Ref<EpisodeEntity[]> = ref([])
 const loaded: Ref<boolean> = ref(false);

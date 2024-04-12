@@ -3,7 +3,7 @@
         <v-slide-group-item v-for="showEntity in tvShows" v-if="loaded" :key="showEntity.id">
             <v-card :to="{ name: '/tvshows/[id]/', params: { id: showEntity.id } }" class="ma-3" width="200">
                 <Image :imageId="ImageUtilService.getCoverImageId(showEntity.imageEntities!)" height="300px"></Image>
-                <v-card-title v-text="showEntity.name"></v-card-title>
+                <v-card-title>{{ MetadataUtilService.getMetadataFieldForLanguage('title', showEntity.metadataEntities, $t("iso-639-3")) }}</v-card-title>
                 <v-card-subtitle>
                     Episode title
                 </v-card-subtitle>
@@ -23,6 +23,7 @@ import {ref} from 'vue'
 import {PageShowEntity, ShowEntity} from "@/generated-sources/openapi";
 import ImageUtilService from '@/services/imageUtil.service';
 import {useApiService} from '@/plugins/api';
+import MetadataUtilService from "../services/metadataUtil.service";
 
 const tvShows: Ref<ShowEntity[]> = ref([])
 const loaded: Ref<boolean> = ref(false);

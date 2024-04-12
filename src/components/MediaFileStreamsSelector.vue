@@ -46,7 +46,13 @@ const audioStreams = computed(() => {
 });
 
 const subtitlesStreams = computed(() => {
-    return props.mediaFileStreams.filter((stream) => ["SUBTITLE", "EXTERNAL_SUBTITLE"].includes(stream.codecType));
+    return props.mediaFileStreams.filter((stream) => {
+        if (stream.codecType) {
+            return ["SUBTITLE", "EXTERNAL_SUBTITLE"].includes(stream.codecType);
+        } else {
+            return false;
+        }
+    });
 });
 
 function selectProps(item: MediaFileStreamEntity) {

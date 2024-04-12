@@ -16,53 +16,63 @@ import { mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface NodeEntity
+ * @interface LibraryEntity
  */
-export interface NodeEntity {
+export interface LibraryEntity {
     /**
      * 
      * @type {string}
-     * @memberof NodeEntity
+     * @memberof LibraryEntity
      */
     id?: string;
     /**
      * 
      * @type {Date}
-     * @memberof NodeEntity
+     * @memberof LibraryEntity
      */
     dateCreated?: Date;
     /**
      * 
      * @type {Date}
-     * @memberof NodeEntity
+     * @memberof LibraryEntity
      */
     dateUpdated?: Date;
     /**
      * 
      * @type {string}
-     * @memberof NodeEntity
+     * @memberof LibraryEntity
      */
-    name?: string;
+    libraryType?: LibraryEntityLibraryTypeEnum;
     /**
      * 
      * @type {string}
-     * @memberof NodeEntity
+     * @memberof LibraryEntity
      */
-    url?: string;
+    name?: string;
 }
 
+
 /**
- * Check if a given object implements the NodeEntity interface.
+ * @export
  */
-export function instanceOfNodeEntity(value: object): boolean {
+export const LibraryEntityLibraryTypeEnum = {
+    Show: 'SHOW'
+} as const;
+export type LibraryEntityLibraryTypeEnum = typeof LibraryEntityLibraryTypeEnum[keyof typeof LibraryEntityLibraryTypeEnum];
+
+
+/**
+ * Check if a given object implements the LibraryEntity interface.
+ */
+export function instanceOfLibraryEntity(value: object): boolean {
     return true;
 }
 
-export function NodeEntityFromJSON(json: any): NodeEntity {
-    return NodeEntityFromJSONTyped(json, false);
+export function LibraryEntityFromJSON(json: any): LibraryEntity {
+    return LibraryEntityFromJSONTyped(json, false);
 }
 
-export function NodeEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean): NodeEntity {
+export function LibraryEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean): LibraryEntity {
     if (json == null) {
         return json;
     }
@@ -71,12 +81,12 @@ export function NodeEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'id': json['id'] == null ? undefined : json['id'],
         'dateCreated': json['dateCreated'] == null ? undefined : (new Date(json['dateCreated'])),
         'dateUpdated': json['dateUpdated'] == null ? undefined : (new Date(json['dateUpdated'])),
+        'libraryType': json['libraryType'] == null ? undefined : json['libraryType'],
         'name': json['name'] == null ? undefined : json['name'],
-        'url': json['url'] == null ? undefined : json['url'],
     };
 }
 
-export function NodeEntityToJSON(value?: NodeEntity | null): any {
+export function LibraryEntityToJSON(value?: LibraryEntity | null): any {
     if (value == null) {
         return value;
     }
@@ -85,8 +95,8 @@ export function NodeEntityToJSON(value?: NodeEntity | null): any {
         'id': value['id'],
         'dateCreated': value['dateCreated'] == null ? undefined : ((value['dateCreated']).toISOString()),
         'dateUpdated': value['dateUpdated'] == null ? undefined : ((value['dateUpdated']).toISOString()),
+        'libraryType': value['libraryType'],
         'name': value['name'],
-        'url': value['url'],
     };
 }
 

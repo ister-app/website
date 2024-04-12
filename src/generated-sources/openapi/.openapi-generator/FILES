@@ -7,10 +7,10 @@ apis/ShowControllerApi.ts
 apis/TranscoderControllerApi.ts
 apis/index.ts
 index.ts
-models/CategorieEntity.ts
-models/DiskEntity.ts
+models/DirectoryEntity.ts
 models/EpisodeEntity.ts
 models/ImageEntity.ts
+models/LibraryEntity.ts
 models/MediaFileEntity.ts
 models/MediaFileStreamEntity.ts
 models/MetadataEntity.ts

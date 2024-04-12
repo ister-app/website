@@ -2,9 +2,9 @@
     <Player v-if="episodeEntity.mediaFileEntities?.length !== 0" :mediaFileEntity="episodeEntity.mediaFileEntities![0]"
             :start-time="startTime" @ended="onPlayerEnded" @progress="onProgress"></Player>
     <template v-if="episodeEntity.metadataEntities?.length !== 0">
-        <p class="text-h6 mt-4">{{ episodeEntity.metadataEntities![0].title }}</p>
-        <p class="text-subtitle-2">{{ episodeEntity.metadataEntities![0].released }}</p>
-        <p class="mt-4 text-body-2">{{ episodeEntity.metadataEntities![0].description }}</p>
+        <p class="text-h6 mt-4">{{ MetadataUtilService.getMetadataFieldForLanguage('title', episodeEntity.metadataEntities, $t("iso-639-3")) }}</p>
+        <p class="text-subtitle-2">{{ MetadataUtilService.getMetadataFieldForLanguage('released', episodeEntity.metadataEntities, $t("iso-639-3")) }}</p>
+        <p class="mt-4 text-body-2">{{ MetadataUtilService.getMetadataFieldForLanguage('description', episodeEntity.metadataEntities, $t("iso-639-3")) }}</p>
     </template>
 </template>
 
@@ -14,6 +14,7 @@ import {useApiService} from "@/plugins/api";
 import PlayQueueService from "@/services/playQueue.service";
 import {computed, ComputedRef, onUnmounted, watch} from 'vue';
 import {useRouter} from "vue-router/auto";
+import MetadataUtilService from "../services/metadataUtil.service";
 
 const router = useRouter()
 const apiService = useApiService();
@@ -49,7 +50,7 @@ const startTime: ComputedRef<number | undefined> = computed(() => {
 async function start() {
     currentProgress = undefined;
     playQueueService = new PlayQueueService(await apiService?.getPlayQueueControllerApi()!);
-    await playQueueService.createPlayQueueForShow(props.episodeEntity.showEntity.id!, props.episodeEntity.id!);
+    await playQueueService.createPlayQueueForShow(props.episodeEntity.showEntity!.id!, props.episodeEntity.id!);
 }
 
 function onProgress(progress: number) {
@@ -67,7 +68,7 @@ function onPlayerEnded() {
         console.log("Go to next item: " + nextItem.itemId);
         router.push({
             name: "/tvshows/[id]/episodes.[episodeId]",
-            params: {id: props.episodeEntity.showEntity.id!, episodeId: nextItem?.itemId!}
+            params: {id: props.episodeEntity.showEntity!.id!, episodeId: nextItem?.itemId!}
         });
     }
 }

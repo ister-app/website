@@ -13,93 +13,98 @@
  */
 
 import { mapValues } from '../runtime';
-import type { ImageEntity } from './ImageEntity';
-import {
-    ImageEntityFromJSON,
-    ImageEntityFromJSONTyped,
-    ImageEntityToJSON,
-} from './ImageEntity';
 import type { LibraryEntity } from './LibraryEntity';
 import {
     LibraryEntityFromJSON,
     LibraryEntityFromJSONTyped,
     LibraryEntityToJSON,
 } from './LibraryEntity';
-import type { MetadataEntity } from './MetadataEntity';
+import type { NodeEntity } from './NodeEntity';
 import {
-    MetadataEntityFromJSON,
-    MetadataEntityFromJSONTyped,
-    MetadataEntityToJSON,
-} from './MetadataEntity';
+    NodeEntityFromJSON,
+    NodeEntityFromJSONTyped,
+    NodeEntityToJSON,
+} from './NodeEntity';
 
 /**
  * 
  * @export
- * @interface ShowEntity
+ * @interface DirectoryEntity
  */
-export interface ShowEntity {
+export interface DirectoryEntity {
     /**
      * 
      * @type {string}
-     * @memberof ShowEntity
+     * @memberof DirectoryEntity
      */
     id?: string;
     /**
      * 
      * @type {Date}
-     * @memberof ShowEntity
+     * @memberof DirectoryEntity
      */
     dateCreated?: Date;
     /**
      * 
      * @type {Date}
-     * @memberof ShowEntity
+     * @memberof DirectoryEntity
      */
     dateUpdated?: Date;
     /**
      * 
+     * @type {NodeEntity}
+     * @memberof DirectoryEntity
+     */
+    nodeEntity?: NodeEntity;
+    /**
+     * 
      * @type {LibraryEntity}
-     * @memberof ShowEntity
+     * @memberof DirectoryEntity
      */
     libraryEntity?: LibraryEntity;
     /**
      * 
      * @type {string}
-     * @memberof ShowEntity
+     * @memberof DirectoryEntity
      */
     name?: string;
     /**
      * 
-     * @type {number}
-     * @memberof ShowEntity
+     * @type {string}
+     * @memberof DirectoryEntity
      */
-    releaseYear?: number;
+    path?: string;
     /**
      * 
-     * @type {Array<ImageEntity>}
-     * @memberof ShowEntity
+     * @type {string}
+     * @memberof DirectoryEntity
      */
-    imageEntities?: Array<ImageEntity>;
-    /**
-     * 
-     * @type {Array<MetadataEntity>}
-     * @memberof ShowEntity
-     */
-    metadataEntities?: Array<MetadataEntity>;
+    directoryType?: DirectoryEntityDirectoryTypeEnum;
 }
 
+
 /**
- * Check if a given object implements the ShowEntity interface.
+ * @export
  */
-export function instanceOfShowEntity(value: object): boolean {
+export const DirectoryEntityDirectoryTypeEnum = {
+    Library: 'LIBRARY',
+    Cache: 'CACHE'
+} as const;
+export type DirectoryEntityDirectoryTypeEnum = typeof DirectoryEntityDirectoryTypeEnum[keyof typeof DirectoryEntityDirectoryTypeEnum];
+
+
+/**
+ * Check if a given object implements the DirectoryEntity interface.
+ */
+export function instanceOfDirectoryEntity(value: object): boolean {
     return true;
 }
 
-export function ShowEntityFromJSON(json: any): ShowEntity {
-    return ShowEntityFromJSONTyped(json, false);
+export function DirectoryEntityFromJSON(json: any): DirectoryEntity {
+    return DirectoryEntityFromJSONTyped(json, false);
 }
 
-export function ShowEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShowEntity {
+export function DirectoryEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean): DirectoryEntity {
     if (json == null) {
         return json;
     }
@@ -108,15 +113,15 @@ export function ShowEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'id': json['id'] == null ? undefined : json['id'],
         'dateCreated': json['dateCreated'] == null ? undefined : (new Date(json['dateCreated'])),
         'dateUpdated': json['dateUpdated'] == null ? undefined : (new Date(json['dateUpdated'])),
+        'nodeEntity': json['nodeEntity'] == null ? undefined : NodeEntityFromJSON(json['nodeEntity']),
         'libraryEntity': json['libraryEntity'] == null ? undefined : LibraryEntityFromJSON(json['libraryEntity']),
         'name': json['name'] == null ? undefined : json['name'],
-        'releaseYear': json['releaseYear'] == null ? undefined : json['releaseYear'],
-        'imageEntities': json['imageEntities'] == null ? undefined : ((json['imageEntities'] as Array<any>).map(ImageEntityFromJSON)),
-        'metadataEntities': json['metadataEntities'] == null ? undefined : ((json['metadataEntities'] as Array<any>).map(MetadataEntityFromJSON)),
+        'path': json['path'] == null ? undefined : json['path'],
+        'directoryType': json['directoryType'] == null ? undefined : json['directoryType'],
     };
 }
 
-export function ShowEntityToJSON(value?: ShowEntity | null): any {
+export function DirectoryEntityToJSON(value?: DirectoryEntity | null): any {
     if (value == null) {
         return value;
     }
@@ -125,11 +130,11 @@ export function ShowEntityToJSON(value?: ShowEntity | null): any {
         'id': value['id'],
         'dateCreated': value['dateCreated'] == null ? undefined : ((value['dateCreated']).toISOString()),
         'dateUpdated': value['dateUpdated'] == null ? undefined : ((value['dateUpdated']).toISOString()),
+        'nodeEntity': NodeEntityToJSON(value['nodeEntity']),
         'libraryEntity': LibraryEntityToJSON(value['libraryEntity']),
         'name': value['name'],
-        'releaseYear': value['releaseYear'],
-        'imageEntities': value['imageEntities'] == null ? undefined : ((value['imageEntities'] as Array<any>).map(ImageEntityToJSON)),
-        'metadataEntities': value['metadataEntities'] == null ? undefined : ((value['metadataEntities'] as Array<any>).map(MetadataEntityToJSON)),
+        'path': value['path'],
+        'directoryType': value['directoryType'],
     };
 }
 

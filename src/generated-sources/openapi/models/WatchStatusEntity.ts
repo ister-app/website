@@ -43,37 +43,37 @@ export interface WatchStatusEntity {
      * @type {Date}
      * @memberof WatchStatusEntity
      */
-    dateCreated: Date;
+    dateCreated?: Date;
     /**
      * 
      * @type {Date}
      * @memberof WatchStatusEntity
      */
-    dateUpdated: Date;
+    dateUpdated?: Date;
     /**
      * 
      * @type {string}
      * @memberof WatchStatusEntity
      */
-    playQueueItemId: string;
+    playQueueItemId?: string;
     /**
      * 
      * @type {UserEntity}
      * @memberof WatchStatusEntity
      */
-    userEntity: UserEntity;
+    userEntity?: UserEntity;
     /**
      * 
      * @type {EpisodeEntity}
      * @memberof WatchStatusEntity
      */
-    episodeEntity: EpisodeEntity;
+    episodeEntity?: EpisodeEntity;
     /**
      * 
      * @type {boolean}
      * @memberof WatchStatusEntity
      */
-    watched: boolean;
+    watched?: boolean;
     /**
      * 
      * @type {number}
@@ -86,12 +86,6 @@ export interface WatchStatusEntity {
  * Check if a given object implements the WatchStatusEntity interface.
  */
 export function instanceOfWatchStatusEntity(value: object): boolean {
-    if (!('dateCreated' in value)) return false;
-    if (!('dateUpdated' in value)) return false;
-    if (!('playQueueItemId' in value)) return false;
-    if (!('userEntity' in value)) return false;
-    if (!('episodeEntity' in value)) return false;
-    if (!('watched' in value)) return false;
     return true;
 }
 
@@ -106,12 +100,12 @@ export function WatchStatusEntityFromJSONTyped(json: any, ignoreDiscriminator: b
     return {
         
         'id': json['id'] == null ? undefined : json['id'],
-        'dateCreated': (new Date(json['dateCreated'])),
-        'dateUpdated': (new Date(json['dateUpdated'])),
-        'playQueueItemId': json['playQueueItemId'],
-        'userEntity': UserEntityFromJSON(json['userEntity']),
-        'episodeEntity': EpisodeEntityFromJSON(json['episodeEntity']),
-        'watched': json['watched'],
+        'dateCreated': json['dateCreated'] == null ? undefined : (new Date(json['dateCreated'])),
+        'dateUpdated': json['dateUpdated'] == null ? undefined : (new Date(json['dateUpdated'])),
+        'playQueueItemId': json['playQueueItemId'] == null ? undefined : json['playQueueItemId'],
+        'userEntity': json['userEntity'] == null ? undefined : UserEntityFromJSON(json['userEntity']),
+        'episodeEntity': json['episodeEntity'] == null ? undefined : EpisodeEntityFromJSON(json['episodeEntity']),
+        'watched': json['watched'] == null ? undefined : json['watched'],
         'progressInMilliseconds': json['progressInMilliseconds'] == null ? undefined : json['progressInMilliseconds'],
     };
 }
@@ -123,8 +117,8 @@ export function WatchStatusEntityToJSON(value?: WatchStatusEntity | null): any {
     return {
         
         'id': value['id'],
-        'dateCreated': ((value['dateCreated']).toISOString()),
-        'dateUpdated': ((value['dateUpdated']).toISOString()),
+        'dateCreated': value['dateCreated'] == null ? undefined : ((value['dateCreated']).toISOString()),
+        'dateUpdated': value['dateUpdated'] == null ? undefined : ((value['dateUpdated']).toISOString()),
         'playQueueItemId': value['playQueueItemId'],
         'userEntity': UserEntityToJSON(value['userEntity']),
         'episodeEntity': EpisodeEntityToJSON(value['episodeEntity']),

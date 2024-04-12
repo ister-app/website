@@ -13,12 +13,12 @@
  */
 
 import { mapValues } from '../runtime';
-import type { DiskEntity } from './DiskEntity';
+import type { DirectoryEntity } from './DirectoryEntity';
 import {
-    DiskEntityFromJSON,
-    DiskEntityFromJSONTyped,
-    DiskEntityToJSON,
-} from './DiskEntity';
+    DirectoryEntityFromJSON,
+    DirectoryEntityFromJSONTyped,
+    DirectoryEntityToJSON,
+} from './DirectoryEntity';
 import type { EpisodeEntity } from './EpisodeEntity';
 import {
     EpisodeEntityFromJSON,
@@ -55,31 +55,43 @@ export interface ImageEntity {
      * @type {Date}
      * @memberof ImageEntity
      */
-    dateCreated: Date;
+    dateCreated?: Date;
     /**
      * 
      * @type {Date}
      * @memberof ImageEntity
      */
-    dateUpdated: Date;
+    dateUpdated?: Date;
     /**
      * 
-     * @type {DiskEntity}
+     * @type {DirectoryEntity}
      * @memberof ImageEntity
      */
-    diskEntity: DiskEntity;
-    /**
-     * 
-     * @type {string}
-     * @memberof ImageEntity
-     */
-    path: string;
+    directoryEntity?: DirectoryEntity;
     /**
      * 
      * @type {string}
      * @memberof ImageEntity
      */
-    type: ImageEntityTypeEnum;
+    path?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ImageEntity
+     */
+    type?: ImageEntityTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof ImageEntity
+     */
+    language?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ImageEntity
+     */
+    sourceUri?: string;
     /**
      * 
      * @type {ShowEntity}
@@ -116,11 +128,6 @@ export type ImageEntityTypeEnum = typeof ImageEntityTypeEnum[keyof typeof ImageE
  * Check if a given object implements the ImageEntity interface.
  */
 export function instanceOfImageEntity(value: object): boolean {
-    if (!('dateCreated' in value)) return false;
-    if (!('dateUpdated' in value)) return false;
-    if (!('diskEntity' in value)) return false;
-    if (!('path' in value)) return false;
-    if (!('type' in value)) return false;
     return true;
 }
 
@@ -135,11 +142,13 @@ export function ImageEntityFromJSONTyped(json: any, ignoreDiscriminator: boolean
     return {
         
         'id': json['id'] == null ? undefined : json['id'],
-        'dateCreated': (new Date(json['dateCreated'])),
-        'dateUpdated': (new Date(json['dateUpdated'])),
-        'diskEntity': DiskEntityFromJSON(json['diskEntity']),
-        'path': json['path'],
-        'type': json['type'],
+        'dateCreated': json['dateCreated'] == null ? undefined : (new Date(json['dateCreated'])),
+        'dateUpdated': json['dateUpdated'] == null ? undefined : (new Date(json['dateUpdated'])),
+        'directoryEntity': json['directoryEntity'] == null ? undefined : DirectoryEntityFromJSON(json['directoryEntity']),
+        'path': json['path'] == null ? undefined : json['path'],
+        'type': json['type'] == null ? undefined : json['type'],
+        'language': json['language'] == null ? undefined : json['language'],
+        'sourceUri': json['sourceUri'] == null ? undefined : json['sourceUri'],
         'showEntity': json['showEntity'] == null ? undefined : ShowEntityFromJSON(json['showEntity']),
         'seasonEntity': json['seasonEntity'] == null ? undefined : SeasonEntityFromJSON(json['seasonEntity']),
         'episodeEntity': json['episodeEntity'] == null ? undefined : EpisodeEntityFromJSON(json['episodeEntity']),
@@ -153,11 +162,13 @@ export function ImageEntityToJSON(value?: ImageEntity | null): any {
     return {
         
         'id': value['id'],
-        'dateCreated': ((value['dateCreated']).toISOString()),
-        'dateUpdated': ((value['dateUpdated']).toISOString()),
-        'diskEntity': DiskEntityToJSON(value['diskEntity']),
+        'dateCreated': value['dateCreated'] == null ? undefined : ((value['dateCreated']).toISOString()),
+        'dateUpdated': value['dateUpdated'] == null ? undefined : ((value['dateUpdated']).toISOString()),
+        'directoryEntity': DirectoryEntityToJSON(value['directoryEntity']),
         'path': value['path'],
         'type': value['type'],
+        'language': value['language'],
+        'sourceUri': value['sourceUri'],
         'showEntity': ShowEntityToJSON(value['showEntity']),
         'seasonEntity': SeasonEntityToJSON(value['seasonEntity']),
         'episodeEntity': EpisodeEntityToJSON(value['episodeEntity']),
