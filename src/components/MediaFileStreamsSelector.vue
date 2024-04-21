@@ -25,15 +25,15 @@
 
 import type {Ref} from 'vue'
 import {computed, ref} from 'vue'
-import {MediaFileStreamEntity} from "@/generated-sources/openapi";
 import {useAppStore} from "@/store/app";
+import {MediaFileStream} from "@/generated-sources/gql/graphql";
 
 const menu = ref(false)
 
 const appStore = useAppStore();
 
 const props = defineProps<{
-    mediaFileStreams: MediaFileStreamEntity[],
+    mediaFileStreams: MediaFileStream[],
 }>()
 
 const selectedAudioStream: Ref<number | undefined> = defineModel('selectedAudioStream')
@@ -55,9 +55,9 @@ const subtitlesStreams = computed(() => {
     });
 });
 
-function selectProps(item: MediaFileStreamEntity) {
+function selectProps(item: MediaFileStream) {
     return {
-        title: getLanguageName(item.language),
+        title: getLanguageName(item.language!),
         subtitle: item.title,
         value: item.id
     }

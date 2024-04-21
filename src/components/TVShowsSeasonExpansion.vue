@@ -1,12 +1,15 @@
 <template>
-    <v-skeleton-loader v-if="!loaded" height="50px" type="ossein"></v-skeleton-loader>
+    <!-- Error -->
+    <v-alert v-if="error" type="error">{{ error }}</v-alert>
+
+    <v-skeleton-loader v-if="fetching" height="50px" type="ossein"></v-skeleton-loader>
     <v-expansion-panels v-else v-model="selected">
-        <v-expansion-panel v-for="seasonEntity in seasons" :key="seasonEntity.id" :value="seasonEntity.id">
+        <v-expansion-panel v-for="season in data?.showById?.seasons" :key="season.id" :value="season.id">
             <v-expansion-panel-title>
-                {{ $t("global.season") }} {{ seasonEntity.number }}
+                {{ $t("global.season") }} {{ season.number }}
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-                <EpisodeList :seasonId="seasonEntity.id" :selectedEpisode="props.selectedEpisode"></EpisodeList>
+                <EpisodeList :seasonId="season.id" :selectedEpisodeId="props.selectedEpisodeId"></EpisodeList>
             </v-expansion-panel-text>
         </v-expansion-panel>
     </v-expansion-panels>
@@ -14,34 +17,52 @@
 
 <script lang="ts" setup>
 
-import type {Ref} from 'vue'
+import {Ref, watch} from 'vue'
 import {ref} from 'vue'
-import {EpisodeEntity, SeasonEntity} from "@/generated-sources/openapi";
-import {useApiService} from '@/plugins/api';
+import {useQuery} from "@urql/vue";
+import {graphql} from "@/generated-sources/gql";
+import {ShowByIdSeasonsQuery} from "@/generated-sources/gql/graphql";
 
 const props = defineProps<{
     tvShowId: string,
-    selectedEpisode?: EpisodeEntity
+    selectedEpisodeId?: string
+    selectedSeasonId?: string
 }>()
 
-const seasons: Ref<Array<SeasonEntity>> = ref([])
-const loaded: Ref<boolean> = ref(false);
 const selected: Ref<String | undefined> = ref();
 
-const apiService = useApiService();
+const fetching: Ref<boolean | undefined> = ref(true);
+const error: Ref<any | undefined> = ref();
+const data: Ref<ShowByIdSeasonsQuery | undefined> = ref();
 
-async function refresh() {
-    const postsApi = await apiService?.getShowControllerApi();
-    const posts: Promise<SeasonEntity[]> = postsApi!.getSeasons({id: props.tvShowId});
-    console.log(posts);
-    posts.then((response: SeasonEntity[]) => {
-        seasons.value = response;
-        loaded.value = true;
-        if (props.selectedEpisode) {
-            selected.value = props.selectedEpisode.seasonEntity?.id;
-        }
-    })
-}
+const id = props.tvShowId;
 
-refresh();
+watch(props, () => {
+    if (props.selectedSeasonId) {
+        selected.value = props.selectedSeasonId;
+    } else {
+        selected.value = undefined;
+    }
+})
+
+useQuery({
+    variables: { id },
+    query: graphql(`
+        query showByIdSeasons($id: ID!) {
+          showById(id: $id) {
+            seasons {
+              id
+              number
+            }
+          }
+        }`
+    )
+}).then(result => {
+    fetching.value = result.fetching.value;
+    error.value = result.error.value;
+    data.value = result.data.value;
+    if (props.selectedSeasonId) {
+        selected.value = props.selectedSeasonId;
+    }
+})
 </script>

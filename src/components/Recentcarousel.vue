@@ -1,15 +1,18 @@
 <template>
+    <!-- Error -->
+    <v-alert v-if="error" type="error">{{ error }}</v-alert>
+
     <v-col class="d-none d-md-inline" cols="12" lg="8" md="7">
-        <v-skeleton-loader :loading="!loaded" height="450px" type="image">
-            <v-window v-model="window" class="fillcontent" show-arrows>
-                <v-window-item v-for="episodeEntity in episodes.slice(0, 3)" :key="episodeEntity.id">
+        <v-skeleton-loader :loading="fetching" height="450px" type="image">
+            <v-window v-model="window" class="fillcontent" show-arrows v-if="data?.episodesRecentWatched">
+                <v-window-item v-for="episodes in data?.episodesRecentWatched.slice(0, 3)" :key="episodes.id">
                     <v-card>
-                        <Image :imageId="ImageUtilService.getBackgroundImageId(episodeEntity.imagesEntities!)"
+                        <Image :imageId="ImageUtilService.getBackgroundImageId(episodes.images!)"
                                class="align-end"
                                cover gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.8)" height="450px">
                             <v-card-text class="text-white">
-                                <p class="text-h5">{{ MetadataUtilService.getMetadataFieldForLanguage('title', episodeEntity.showEntity?.metadataEntities, $t("iso-639-3")) }}</p>
-                                s{{ episodeEntity.seasonEntity?.number }}e{{ episodeEntity.number }} {{ MetadataUtilService.getMetadataFieldForLanguage('title', episodeEntity.metadataEntities, $t("iso-639-3")) }}
+                                <p class="text-h5">{{ MetadataUtilService.getMetadataFieldForLanguage('title', episodes.show!.metadata, $t("iso-639-3")) }}</p>
+                                s{{ episodes.season?.number }}e{{ episodes.number }} {{ MetadataUtilService.getMetadataFieldForLanguage('title', episodes.metadata, $t("iso-639-3")) }}
                             </v-card-text>
                         </Image>
                     </v-card>
@@ -18,26 +21,26 @@
         </v-skeleton-loader>
     </v-col>
     <v-col cols="12" lg="4" md="5">
-        <v-item-group v-model="window" mandatory>
+        <v-item-group v-model="window" mandatory v-if="data?.episodesRecentWatched">
             <v-container>
-                <v-row v-for="episodeEntity in episodes.slice(0, 3)" :key="episodeEntity.id">
+                <v-row v-for="episodeEntity in data?.episodesRecentWatched.slice(0, 3)" :key="episodeEntity.id">
                     <v-col class="pa-0 ma-0">
                         <v-item v-slot="{ isSelected, toggle }">
-                            <v-card :color="isSelected ? 'primary' : ''" :to="{ name: '/tvshows/[id]/episodes.[episodeId]', params: { id: episodeEntity.showEntity?.id, episodeId: episodeEntity.id } }" height="150px"
+                            <v-card :color="isSelected ? 'primary' : ''" :to="{ name: '/shows/[id]/episodes.[episodeId]', params: { id: episodeEntity.show?.id, episodeId: episodeEntity.id } }" height="150px"
                                     @mouseover="toggle">
                                 <v-scroll-y-transition>
                                     <v-container class="pa-0 ma-0">
                                         <v-row class="flex-nowrap">
                                             <v-col class="flex-grow-1 flex-shrink-1 text-truncate">
-                                                <v-card-title class="text-h5">{{ MetadataUtilService.getMetadataFieldForLanguage('title', episodeEntity.showEntity?.metadataEntities, $t("iso-639-3")) }}</v-card-title>
+                                                <v-card-title class="text-h5">{{ MetadataUtilService.getMetadataFieldForLanguage('title', episodeEntity.show?.metadata, $t("iso-639-3")) }}</v-card-title>
                                                 <v-card-subtitle>s{{
-                                                        episodeEntity.seasonEntity?.number
-                                                    }}e{{ episodeEntity.number }} {{ MetadataUtilService.getMetadataFieldForLanguage('title', episodeEntity.metadataEntities, $t("iso-639-3")) }}
+                                                        episodeEntity.season?.number
+                                                    }}e{{ episodeEntity.number }} {{ MetadataUtilService.getMetadataFieldForLanguage('title', episodeEntity.metadata, $t("iso-639-3")) }}
                                                 </v-card-subtitle>
                                             </v-col>
                                             <v-col class="flex-grow-0 flex-shrink-0">
                                                 <Image
-                                                    :imageId="ImageUtilService.getCoverImageId(episodeEntity.showEntity?.imageEntities!)"
+                                                    :imageId="ImageUtilService.getCoverImageId(episodeEntity.show?.images!)"
                                                     height="100%" width="100px"></Image>
                                             </v-col>
                                         </v-row>
@@ -53,31 +56,52 @@
 </template>
 
 <script lang="ts" setup>
-import type {Ref} from 'vue'
 import {ref} from 'vue'
-import {EpisodeEntity} from "@/generated-sources/openapi";
 import ImageUtilService from '@/services/imageUtil.service';
-import {useApiService} from '@/plugins/api';
 import MetadataUtilService from "../services/metadataUtil.service";
-
-const episodes: Ref<EpisodeEntity[]> = ref([])
-const loaded: Ref<boolean> = ref(false);
 
 const window = ref(0)
 
-const apiService = useApiService();
+import {useQuery} from '@urql/vue';
+import {graphql} from '@/generated-sources/gql';
 
-async function refresh() {
-    const postsApi = await apiService?.getEpisodeControllerApi();
-    const posts: Promise<Array<EpisodeEntity>> = postsApi!.getRecent2();
-    console.log(posts);
-    posts.then((response: Array<EpisodeEntity>) => {
-        response?.forEach((episodeEntity: EpisodeEntity) => episodes.value.push(episodeEntity));
-        loaded.value = true;
-    })
-}
-
-refresh();
+const {fetching, error, data} = useQuery({
+    requestPolicy: 'cache-and-network',
+    query: graphql(`
+        query episodesRecentWatched {
+          episodesRecentWatched {
+            id
+            show {
+              id
+              metadata {
+                language
+                title
+              }
+              images {
+                language
+                id
+                type
+              }
+            }
+            season {
+              number
+            }
+            number
+            metadata {
+              language
+              title
+              id
+              description
+            }
+            images {
+              language
+              id
+              type
+            }
+          }
+        }`
+    )
+});
 </script>
 
 <style>

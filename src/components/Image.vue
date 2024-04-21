@@ -27,7 +27,7 @@ const imgObj = ref();
 const apiService = useApiService();
 
 async function downloadImage(imageId: string) {
-    const posts = await apiService?.getImageControllerApi();
+    const posts = await apiService?.getFileControllerApi();
 
     const imageArray = await posts?.download1({id: imageId});
 

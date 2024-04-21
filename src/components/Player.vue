@@ -32,7 +32,7 @@
                             <div class="flex-grow-1 flex-shrink-1"></div>
                             <MediaFileStreamsSelector v-model:selectedAudioStream="selectedAudioStream"
                                                       v-model:selectedSubtitleStream="selectedSubtitleStream"
-                                                      :mediaFileStreams="mediaFileEntity.mediaFileStreamEntity">
+                                                      :mediaFileStreams="mediaFile.mediaFileStreams">
                             </MediaFileStreamsSelector>
                             <v-btn class="control-item" density="compact" icon="mdi-fullscreen"
                                    @click="toggle()"></v-btn>
@@ -49,12 +49,13 @@ import type {Ref} from 'vue'
 import {onMounted, onUnmounted, reactive, ref, watch} from 'vue';
 import Hls from 'hls.js';
 import {api as fullscreen} from 'vue-fullscreen'
-import {MediaFileEntity} from '@/generated-sources/openapi';
-import TranscodeService from '@/services/transcode.service';
-import {useApiService} from '@/plugins/api';
+import {MediaFile} from "@/generated-sources/gql/graphql";
+import {useApiService} from "@/plugins/api";
+import {useMutation} from "@urql/vue";
+import {graphql} from "@/generated-sources/gql";
 
 const props = defineProps<{
-    mediaFileEntity: MediaFileEntity,
+    mediaFile: MediaFile,
     startTime: number | undefined
 }>()
 
@@ -69,9 +70,6 @@ const state = reactive({
 })
 
 const apiService = useApiService();
-
-const transcodeService = new TranscodeService(apiService!);
-
 const root = ref()
 
 const controllsVisable: Ref<Boolean> = ref(true);
@@ -88,13 +86,80 @@ const selectedSubtitleStream: Ref<string | undefined> = ref();
 
 const durationTime: Ref<number> = ref(3600);
 const offsetTime: Ref<number> = ref(0);
-const transcodeSessionId: Ref<String | undefined> = ref();
+const transcodeSessionId: Ref<string | undefined> = ref();
 const buffering = ref(false);
 
-var hls: Hls;
+let hls: Hls;
+
+const startTranscodingResult = useMutation(graphql(`
+        mutation startTranscoding($mediaFileId: ID!, $startTimeInSeconds: Int!, $audioId: ID, $subtitleId: ID) {
+            startTranscoding(mediaFileId: $mediaFileId, startTimeInSeconds: $startTimeInSeconds, audioId: $audioId, subtitleId: $subtitleId)
+        }`
+));
+
+function startTranscoding(mediaFileId: string, startTimeInSeconds: number, audioId: string | undefined, subtitleId: string | undefined) {
+    const variables = { mediaFileId, startTimeInSeconds, audioId, subtitleId };
+    startTranscodingResult.executeMutation(variables);
+}
+
+const readyTranscodingResult = useMutation(graphql(`
+        mutation readyTranscoding($id: ID!) {
+            readyTranscoding(id: $id)
+        }`
+));
+
+async function readyTranscoding(id: string): Promise<boolean> {
+    const variables = {id};
+    return await readyTranscodingResult.executeMutation(variables).then(async value => {
+        if (value.data?.readyTranscoding) {
+            return true;
+        } else {
+            await pause();
+            return readyTranscoding(id);
+        }
+    })
+}
+
+const stopTranscodingResult = useMutation(graphql(`
+        mutation stopTranscoding($id: ID!) {
+        stopTranscoding(id: $id)
+        }`
+));
+
+async function stopTranscoding(id: string): Promise<boolean | undefined> {
+    const variables = {id};
+    return (await stopTranscodingResult.executeMutation(variables)).data?.stopTranscoding;
+}
+
+function pause() {
+    return new Promise((resolve, reject) => setTimeout(() => {
+        resolve(1);
+    }, 1500));
+}
+
+watch(() => startTranscodingResult.data.value, async () => {
+    if (startTranscodingResult.data.value !== undefined) {
+        transcodeSessionId.value = startTranscodingResult.data.value.startTranscoding;
+        await readyTranscoding(startTranscodingResult.data.value.startTranscoding);
+        buffering.value = false;
+        startedPlaying.value = true;
+        if (Hls.isSupported()) {
+            hls.loadSource(import.meta.env.VITE_BACKEND_URL + '/transcode/download/' + startTranscodingResult.data.value.startTranscoding + '/index.m3u8');
+            if (video.value !== undefined) {
+                hls.attachMedia(video.value);
+                video.value.play();
+                video.value.addEventListener("timeupdate", handleTimeUpdateEvent);
+                video.value.addEventListener("volumechange", handleVolumeEvent);
+                video.value.addEventListener("play", handlePlayingEvent);
+                video.value.addEventListener("pause", handlePlayingEvent);
+                video.value.addEventListener("ended", handleEndedEvent);
+            }
+        }
+    }
+
+});
 
 onMounted(async () => {
-    // const token = await apiService?.authService?.getToken();
     hls = new Hls({
         startPosition: 0,
         xhrSetup: async function (xhr, url) {
@@ -201,23 +266,8 @@ function handleEndedEvent(_event: Event) {
 async function startPlaying() {
     console.log("start")
     buffering.value = true;
-    durationTime.value = props.mediaFileEntity.durationInMilliseconds ? props.mediaFileEntity.durationInMilliseconds / 1000 : 3600;
-    transcodeSessionId.value = await transcodeService.start(props.mediaFileEntity, offsetTime.value, selectedAudioStream.value, selectedSubtitleStream.value);
-    buffering.value = false;
-    startedPlaying.value = true;
-    if (Hls.isSupported()) {
-        console.log(transcodeService.getStreamUrl());
-        hls.loadSource(transcodeService.getStreamUrl());
-        if (video.value !== undefined) {
-            hls.attachMedia(video.value);
-            video.value.play();
-            video.value.addEventListener("timeupdate", handleTimeUpdateEvent);
-            video.value.addEventListener("volumechange", handleVolumeEvent);
-            video.value.addEventListener("play", handlePlayingEvent);
-            video.value.addEventListener("pause", handlePlayingEvent);
-            video.value.addEventListener("ended", handleEndedEvent);
-        }
-    }
+    durationTime.value = props.mediaFile.durationInMilliseconds ? props.mediaFile.durationInMilliseconds / 1000 : 3600;
+    startTranscoding(props.mediaFile.id, offsetTime.value, selectedAudioStream.value, selectedSubtitleStream.value);
 }
 
 async function stop() {
@@ -236,7 +286,9 @@ async function stop() {
         }
     }
     hls.stopLoad();
-    return await transcodeService.stop();
+    if (transcodeSessionId.value) {
+        return await stopTranscoding(transcodeSessionId.value);
+    }
 }
 
 onUnmounted(() => {

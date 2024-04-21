@@ -40,11 +40,11 @@ import type {
 declare module 'vue-router/auto/routes' {
   export interface RouteNamedMap {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
+    '/shows/': RouteRecordInfo<'/shows/', '/shows', Record<never, never>, Record<never, never>>,
+    '/shows/[id]': RouteRecordInfo<'/shows/[id]', '/shows/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    '/shows/[id]/': RouteRecordInfo<'/shows/[id]/', '/shows/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    '/shows/[id]/episodes.[episodeId]': RouteRecordInfo<'/shows/[id]/episodes.[episodeId]', '/shows/:id/episodes/:episodeId', { id: ParamValue<true>, episodeId: ParamValue<true> }, { id: ParamValue<false>, episodeId: ParamValue<false> }>,
     '/signin-callback': RouteRecordInfo<'/signin-callback', '/signin-callback', Record<never, never>, Record<never, never>>,
-    '/tvshows/': RouteRecordInfo<'/tvshows/', '/tvshows', Record<never, never>, Record<never, never>>,
-    '/tvshows/[id]': RouteRecordInfo<'/tvshows/[id]', '/tvshows/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
-    '/tvshows/[id]/': RouteRecordInfo<'/tvshows/[id]/', '/tvshows/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
-    '/tvshows/[id]/episodes.[episodeId]': RouteRecordInfo<'/tvshows/[id]/episodes.[episodeId]', '/tvshows/:id/episodes/:episodeId', { id: ParamValue<true>, episodeId: ParamValue<true> }, { id: ParamValue<false>, episodeId: ParamValue<false> }>,
   }
 }
 

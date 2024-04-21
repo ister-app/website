@@ -1,14 +1,4 @@
-import {
-    Configuration,
-    EpisodeControllerApi,
-    HTTPHeaders,
-    ImageControllerApi,
-    PlayQueueControllerApi,
-    ScannerControllerApi,
-    SeasonControllerApi,
-    ShowControllerApi,
-    TranscoderControllerApi
-} from "@/generated-sources/openapi";
+import {Configuration, FileControllerApi, HTTPHeaders, ScannerControllerApi,} from "@/generated-sources/openapi";
 import AuthService from "./auth.service";
 import {User} from "oidc-client-ts";
 
@@ -43,32 +33,11 @@ export default class ApiService {
         return this.configuration;
     }
 
-
-    async getShowControllerApi() {
-        return new ShowControllerApi(await this.getConfiguration());
-    }
-
-    async getSeasonControllerApi() {
-        return new SeasonControllerApi(await this.getConfiguration());
-    }
-
-    async getEpisodeControllerApi() {
-        return new EpisodeControllerApi(await this.getConfiguration());
-    }
-
-    async getImageControllerApi() {
-        return new ImageControllerApi(await this.getConfiguration());
+    async getFileControllerApi() {
+        return new FileControllerApi(await this.getConfiguration());
     }
 
     async getScannerControllerApi() {
         return new ScannerControllerApi(await this.getConfiguration());
-    }
-
-    async getTranscoderControllerApi() {
-        return new TranscoderControllerApi(await this.getConfiguration());
-    }
-
-    async getPlayQueueControllerApi() {
-        return new PlayQueueControllerApi(await this.getConfiguration());
     }
 }
