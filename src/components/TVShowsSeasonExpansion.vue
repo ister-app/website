@@ -17,8 +17,7 @@
 
 <script lang="ts" setup>
 
-import {Ref, watch} from 'vue'
-import {ref} from 'vue'
+import {Ref, ref, watch} from 'vue'
 import {useQuery} from "@urql/vue";
 import {graphql} from "@/generated-sources/gql";
 import {ShowByIdSeasonsQuery} from "@/generated-sources/gql/graphql";
@@ -29,7 +28,7 @@ const props = defineProps<{
     selectedSeasonId?: string
 }>()
 
-const selected: Ref<String | undefined> = ref();
+const selected: Ref<string | undefined> = ref();
 
 const fetching: Ref<boolean | undefined> = ref(true);
 const error: Ref<any | undefined> = ref();
@@ -46,7 +45,7 @@ watch(props, () => {
 })
 
 useQuery({
-    variables: { id },
+    variables: {id},
     query: graphql(`
         query showByIdSeasons($id: ID!) {
           showById(id: $id) {

@@ -20,7 +20,7 @@ export default class AuthService {
         return this.userManager.getUser();
     }
 
-    async getToken(): Promise<String | undefined> {
+    async getToken(): Promise<string | undefined> {
         const user = await this.getUser();
         return user?.access_token;
     }

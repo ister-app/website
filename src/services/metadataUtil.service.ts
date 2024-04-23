@@ -1,17 +1,12 @@
-import {EpisodeEntity, SeasonEntity, ShowEntity} from "@/generated-sources/openapi";
-
-
-export interface Metadata {
-    language?: string | null | undefined;
-    title?: string | null | undefined;
-}
+import {Maybe} from "graphql/jsutils/Maybe";
+import {Metadata} from "@/generated-sources/gql/graphql";
 
 /**
  * This util helps with getting the correct value for the given language.
  * If the given language doesn't exist return english then the not set language.
  */
 export default class MetadataUtilService {
-    public static getMetadataFieldForLanguage(field: string, metadataEntities: Metadata[] | null | undefined, preferredLanguage: String | undefined): string | undefined | Date | ShowEntity | SeasonEntity | EpisodeEntity {
+    public static getMetadataFieldForLanguage(field: string, metadataEntities: Maybe<Array<Metadata>> | undefined, preferredLanguage: string | undefined): string | Date | undefined {
         if (metadataEntities === undefined || metadataEntities === null) {
             return "";
         } else {

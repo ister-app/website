@@ -6,7 +6,7 @@
 
 <script lang="ts" setup>
 import MetadataUtilService from "@/services/metadataUtil.service";
-import {Episode, Show} from "@/generated-sources/gql/graphql";
+import {Show} from "@/generated-sources/gql/graphql";
 
 defineProps<{
     show: Show | undefined,

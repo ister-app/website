@@ -72,8 +72,8 @@ const state = reactive({
 const apiService = useApiService();
 const root = ref()
 
-const controllsVisable: Ref<Boolean> = ref(true);
-var showControllsTimeout: number | undefined;
+const controllsVisable: Ref<boolean> = ref(true);
+let showControllsTimeout: number | undefined;
 
 const video: Ref<HTMLVideoElement | undefined> = ref();
 const startedPlaying = ref(false);
@@ -214,7 +214,6 @@ function playPause() {
 
 function goToTime() {
     stop();
-    // video.value.currentTime = (progres.value * durationTime.value / 100) - offsetTime.value;
     offsetTime.value = Math.round(progress.value * durationTime.value / 100);
     startPlaying();
 }

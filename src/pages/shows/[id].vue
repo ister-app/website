@@ -41,8 +41,8 @@ import {graphql} from "@/generated-sources/gql";
 
 const route = useRoute("/shows/[id]/");
 
-const selectedEpisodeId: Ref<String | undefined> = ref();
-const selectedSeasonId: Ref<String | undefined> = ref();
+const selectedEpisodeId: Ref<string | undefined> = ref();
+const selectedSeasonId: Ref<string | undefined> = ref();
 
 const id = route.params.id;
 

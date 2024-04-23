@@ -6,13 +6,13 @@
 </template>
 
 <script lang="ts" setup>
-import {computed, Ref, ref, watch} from 'vue'
+import {computed, watch} from 'vue'
 import {useRoute} from 'vue-router/auto';
 import {useQuery} from "@urql/vue";
 import {graphql} from "@/generated-sources/gql";
 
 defineProps<{
-    show: String | undefined,
+    show: string | undefined,
 }>()
 
 const emit = defineEmits<{
@@ -22,7 +22,6 @@ const emit = defineEmits<{
 
 const route = useRoute("/shows/[id]/episodes.[episodeId]");
 
-// const id: Ref<string> = ref(route.params.episodeId);
 const id = computed(() => route.params.episodeId);
 const shouldPause = computed(() => route.params.episodeId == null);
 

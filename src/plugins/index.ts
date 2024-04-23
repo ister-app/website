@@ -20,8 +20,6 @@ import {AuthConfig, authExchange} from "@urql/exchange-auth";
 function initializeAuthState() {
     const tokenJson = sessionStorage.getItem('oidc.user:https://keycloak.droogers.cloud/realms/Thuis:ister');
     const token = tokenJson ? JSON.parse(tokenJson).access_token : undefined;
-    // const refreshToken = localStorage.getItem('refreshToken');
-    console.log(token);
     return { token };
 }
 

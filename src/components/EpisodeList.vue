@@ -57,7 +57,7 @@ watch(props, () => {
 })
 
 const goTo = useGoTo()
-const selected: Ref<Array<String>> = ref([]);
+const selected: Ref<Array<string>> = ref([]);
 
 function getProgressInPercent(watchStatus: { progressInMilliseconds: number }[] | undefined | null, mediaFile: {
     durationInMilliseconds?: number | undefined | null
