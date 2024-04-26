@@ -45,7 +45,7 @@ export type MediaFile = {
   id: Scalars['ID']['output'];
   mediaFileStreams?: Maybe<Array<Maybe<MediaFileStream>>>;
   path: Scalars['String']['output'];
-  size: Scalars['Int']['output'];
+  size: Scalars['Float']['output'];
 };
 
 export type MediaFileStream = {
