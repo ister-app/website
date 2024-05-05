@@ -56,7 +56,8 @@ import {graphql} from "@/generated-sources/gql";
 
 const props = defineProps<{
     mediaFile: MediaFile,
-    startTime: number | undefined
+    startTime: number | undefined,
+    playQueueId: string,
 }>()
 
 const emit = defineEmits<{
@@ -92,13 +93,13 @@ const buffering = ref(false);
 let hls: Hls;
 
 const startTranscodingResult = useMutation(graphql(`
-        mutation startTranscoding($mediaFileId: ID!, $startTimeInSeconds: Int!, $audioId: ID, $subtitleId: ID) {
-            startTranscoding(mediaFileId: $mediaFileId, startTimeInSeconds: $startTimeInSeconds, audioId: $audioId, subtitleId: $subtitleId)
+        mutation startTranscoding($playQueueId: ID!, $mediaFileId: ID!, $startTimeInSeconds: Int!, $audioId: ID, $subtitleId: ID) {
+            startTranscoding(playQueueId: $playQueueId, mediaFileId: $mediaFileId, startTimeInSeconds: $startTimeInSeconds, audioId: $audioId, subtitleId: $subtitleId)
         }`
 ));
 
-function startTranscoding(mediaFileId: string, startTimeInSeconds: number, audioId: string | undefined, subtitleId: string | undefined) {
-    const variables = { mediaFileId, startTimeInSeconds, audioId, subtitleId };
+function startTranscoding(playQueueId: string, mediaFileId: string, startTimeInSeconds: number, audioId: string | undefined, subtitleId: string | undefined) {
+    const variables = { playQueueId, mediaFileId, startTimeInSeconds, audioId, subtitleId };
     startTranscodingResult.executeMutation(variables);
 }
 
@@ -266,7 +267,7 @@ async function startPlaying() {
     console.log("start")
     buffering.value = true;
     durationTime.value = props.mediaFile.durationInMilliseconds ? props.mediaFile.durationInMilliseconds / 1000 : 3600;
-    startTranscoding(props.mediaFile.id, offsetTime.value, selectedAudioStream.value, selectedSubtitleStream.value);
+    startTranscoding(props.playQueueId, props.mediaFile.id, offsetTime.value, selectedAudioStream.value, selectedSubtitleStream.value);
 }
 
 async function stop() {

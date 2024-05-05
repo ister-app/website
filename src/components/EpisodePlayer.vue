@@ -3,7 +3,10 @@
     <v-alert v-if="createPlayQueueError" type="error">{{ createPlayQueueError }}</v-alert>
     <v-alert v-if="updatePlayQueueError" type="error">{{ updatePlayQueueError }}</v-alert>
 
-    <Player v-if="episode.mediaFile?.length !== 0" :mediaFile="episode.mediaFile![0]"
+    <v-skeleton-loader v-if="createPlayQueueFetching" type="ossein" height="750px"></v-skeleton-loader>
+    <Player v-else-if="episode.mediaFile?.length !== 0 && createPlayQueueData?.createPlayQueue?.id !== undefined"
+            :play-queue-id="createPlayQueueData?.createPlayQueue.id"
+            :mediaFile="episode.mediaFile![0]"
             :start-time="startTime" @ended="onPlayerEnded" @progress="onProgress"></Player>
     <template v-if="episode.metadata?.length !== 0">
         <p class="text-h6 mt-4">{{
@@ -36,8 +39,8 @@ const props = defineProps<{
 }>()
 
 const createPlayQueueResult = useMutation(graphql(`
-        mutation createPlayQueue($id: ID!) {
-        createPlayQueue(showId: $id) {
+        mutation createPlayQueue($id: ID!, $episodeId: ID!) {
+        createPlayQueue(showId: $id, episodeId: $episodeId) {
             id
             playQueueItems {
               id
@@ -52,8 +55,8 @@ const createPlayQueueFetching = createPlayQueueResult.fetching;
 const createPlayQueueError = createPlayQueueResult.error;
 const createPlayQueueData = createPlayQueueResult.data;
 
-function createPlayQueue(id: string) {
-    const variables = { id };
+function createPlayQueue(id: string, episodeId: string) {
+    const variables = {id, episodeId};
     createPlayQueueResult.executeMutation(variables).then(value => {
         currentItemId = value.data?.createPlayQueue?.playQueueItems?.find(item => item.itemId === props.episode.id)?.id;
     });
@@ -70,7 +73,7 @@ const updatePlayQueueError = updatePlayQueueResult.error;
 const updatePlayQueueData = updatePlayQueueResult.data;
 
 function updatePlayQueue(id: string, playQueueItemId: string, progressInMilliseconds: number) {
-    const variables = { id, playQueueItemId, progressInMilliseconds };
+    const variables = {id, playQueueItemId, progressInMilliseconds};
     updatePlayQueueResult.executeMutation(variables);
 }
 
@@ -97,7 +100,7 @@ const startTime: ComputedRef<number | undefined> = computed(() => {
 
 async function start() {
     currentProgress = undefined;
-    createPlayQueue(props.episode.show!.id!);
+    createPlayQueue(props.episode.show!.id!, props.episode.id);
 }
 
 function onProgress(progress: number) {
