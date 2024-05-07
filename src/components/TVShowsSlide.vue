@@ -11,7 +11,7 @@
     </v-slide-group>
 
     <!-- Data-->
-    <v-slide-group v-if="data && data.showsRecentAdded">
+    <v-slide-group v-else-if="data && data.showsRecentAdded">
         <v-slide-group-item v-for="show in data.showsRecentAdded" :key="show.id">
             <v-card :to="{ name: '/shows/[id]/', params: { id: show.id } }" class="ma-3" width="200">
                 <Image :imageId="ImageUtilService.getCoverImageId(show.images!)" height="300px"></Image>
@@ -27,7 +27,7 @@
     </v-slide-group>
 
     <!-- No result -->
-    <div v-else>No shows found.</div>
+    <div v-else>{{ $t("index.no_shows_found") }}</div>
 </template>
 
 <script lang="ts" setup>
