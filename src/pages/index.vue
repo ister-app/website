@@ -14,6 +14,12 @@
                 <TVShowsSlide></TVShowsSlide>
             </v-col>
         </v-row>
+        <v-row class="mt-2" no-gutters>
+            <v-col col="12">
+                <strong class="ml-16">{{ $t("index.new_movies") }}:</strong>
+                <RecentMovies></RecentMovies>
+            </v-col>
+        </v-row>
     </v-container>
 </template>
 
