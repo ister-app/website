@@ -4,19 +4,19 @@
     <v-alert v-if="updatePlayQueueError" type="error">{{ updatePlayQueueError }}</v-alert>
 
     <v-skeleton-loader v-if="createPlayQueueFetching" type="ossein" height="750px"></v-skeleton-loader>
-    <Player v-else-if="episode.mediaFile?.length !== 0 && createPlayQueueData?.createPlayQueueForShow?.id !== undefined"
-            :play-queue-id="createPlayQueueData?.createPlayQueueForShow.id"
-            :mediaFile="episode.mediaFile![0]"
+    <Player v-else-if="movie.mediaFile?.length !== 0 && createPlayQueueData?.createPlayQueueForMovie?.id !== undefined"
+            :play-queue-id="createPlayQueueData?.createPlayQueueForMovie.id"
+            :mediaFile="movie.mediaFile![0]"
             :start-time="startTime" @ended="onPlayerEnded" @progress="onProgress"></Player>
-    <template v-if="episode.metadata?.length !== 0">
+    <template v-if="movie.metadata?.length !== 0">
         <p class="text-h6 mt-4">{{
-                MetadataUtilService.getMetadataFieldForLanguage('title', episode.metadata, $t("iso-639-3"))
+                MetadataUtilService.getMetadataFieldForLanguage('title', movie.metadata, $t("iso-639-3"))
             }}</p>
         <p class="text-subtitle-2">{{
-                MetadataUtilService.getMetadataFieldForLanguage('released', episode.metadata, $t("iso-639-3"))
+                MetadataUtilService.getMetadataFieldForLanguage('released', movie.metadata, $t("iso-639-3"))
             }}</p>
         <p class="mt-4 text-body-2">{{
-                MetadataUtilService.getMetadataFieldForLanguage('description', episode.metadata, $t("iso-639-3"))
+                MetadataUtilService.getMetadataFieldForLanguage('description', movie.metadata, $t("iso-639-3"))
             }}</p>
     </template>
 </template>
@@ -25,7 +25,7 @@
 import {computed, ComputedRef, onUnmounted, watch} from 'vue';
 import {useRouter} from "vue-router/auto";
 import MetadataUtilService from "../services/metadataUtil.service";
-import {Episode} from "@/generated-sources/gql/graphql";
+import {Movie} from "@/generated-sources/gql/graphql";
 import {useMutation} from "@urql/vue";
 import {graphql} from "@/generated-sources/gql";
 
@@ -35,12 +35,12 @@ let currentProgress: number | undefined;
 let currentItemId: undefined | string = undefined;
 
 const props = defineProps<{
-    episode: Episode
+    movie: Movie
 }>()
 
 const createPlayQueueResult = useMutation(graphql(`
-        mutation createPlayQueueForShow($id: ID!, $episodeId: ID!) {
-        createPlayQueueForShow(showId: $id, episodeId: $episodeId) {
+        mutation createPlayQueueForMovie($movieId: ID!) {
+        createPlayQueueForMovie(movieId: $movieId) {
             id
             playQueueItems {
               id
@@ -55,10 +55,10 @@ const createPlayQueueFetching = createPlayQueueResult.fetching;
 const createPlayQueueError = createPlayQueueResult.error;
 const createPlayQueueData = createPlayQueueResult.data;
 
-function createPlayQueue(id: string, episodeId: string) {
-    const variables = {id, episodeId};
+function createPlayQueue(movieId: string) {
+    const variables = {movieId};
     createPlayQueueResult.executeMutation(variables).then(value => {
-        currentItemId = value.data?.createPlayQueueForShow?.playQueueItems?.find(item => item.itemId === props.episode.id)?.id;
+        currentItemId = value.data?.createPlayQueueForMovie?.playQueueItems?.find(item => item.itemId === props.movie.id)?.id;
     });
 }
 
@@ -78,9 +78,9 @@ function updatePlayQueue(id: string, playQueueItemId: string, progressInMillisec
 }
 
 watch(props, () => {
-    if (props.episode.id) {
-        console.log("Item changed to: " + props.episode.id);
-        currentItemId = createPlayQueueData.value?.createPlayQueueForShow?.playQueueItems?.find(item => item.itemId === props.episode.id)?.id;
+    if (props.movie.id) {
+        console.log("Item changed to: " + props.movie.id);
+        currentItemId = createPlayQueueData.value?.createPlayQueueForMovie?.playQueueItems?.find(item => item.itemId === props.movie.id)?.id;
     }
 })
 
@@ -91,8 +91,8 @@ onUnmounted(() => {
 start();
 
 const startTime: ComputedRef<number | undefined> = computed(() => {
-    if (props.episode.watchStatus && props.episode.watchStatus.length !== 0) {
-        return props.episode.watchStatus[0].watched ? 0 : props.episode.watchStatus[0].progressInMilliseconds;
+    if (props.movie.watchStatus && props.movie.watchStatus.length !== 0) {
+        return props.movie.watchStatus[0].watched ? 0 : props.movie.watchStatus[0].progressInMilliseconds;
     } else {
         return 0;
     }
@@ -100,7 +100,7 @@ const startTime: ComputedRef<number | undefined> = computed(() => {
 
 async function start() {
     currentProgress = undefined;
-    createPlayQueue(props.episode.show!.id!, props.episode.id);
+    createPlayQueue(props.movie.id);
 }
 
 function onProgress(progress: number) {
@@ -113,22 +113,22 @@ function onProgress(progress: number) {
 
 function onPlayerEnded() {
     updateProgress()
-    if (createPlayQueueData.value?.createPlayQueueForShow?.playQueueItems) {
-        const currentIndex = createPlayQueueData.value?.createPlayQueueForShow?.playQueueItems.findIndex(item => item.id === currentItemId);
-        if (currentIndex !== -1 && createPlayQueueData.value?.createPlayQueueForShow?.playQueueItems.length > currentIndex + 1) {
-            const nextItem = createPlayQueueData.value?.createPlayQueueForShow?.playQueueItems[currentIndex + 1];
+    if (createPlayQueueData.value?.createPlayQueueForMovie?.playQueueItems) {
+        const currentIndex = createPlayQueueData.value?.createPlayQueueForMovie?.playQueueItems.findIndex(item => item.id === currentItemId);
+        if (currentIndex !== -1 && createPlayQueueData.value?.createPlayQueueForMovie?.playQueueItems.length > currentIndex + 1) {
+            const nextItem = createPlayQueueData.value?.createPlayQueueForMovie?.playQueueItems[currentIndex + 1];
             console.log("Go to next item: " + nextItem.itemId);
             router.push({
-                name: "/shows/[id]/episodes.[episodeId]",
-                params: {id: props.episode.show!.id!, episodeId: nextItem?.itemId!}
+                name: "/movies/[id]",
+                params: {id: props.movie.id!}
             });
         }
     }
 }
 
 function updateProgress() {
-    if (currentProgress && props.episode && props.episode.id && createPlayQueueData.value?.createPlayQueueForShow && createPlayQueueData.value.createPlayQueueForShow.id && currentItemId) {
-        updatePlayQueue(createPlayQueueData.value?.createPlayQueueForShow.id, currentItemId, Math.round(currentProgress))
+    if (currentProgress && props.movie && props.movie.id && createPlayQueueData.value?.createPlayQueueForMovie && createPlayQueueData.value.createPlayQueueForMovie.id && currentItemId) {
+        updatePlayQueue(createPlayQueueData.value?.createPlayQueueForMovie.id, currentItemId, Math.round(currentProgress))
     }
 }
 </script>

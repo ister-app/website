@@ -12,15 +12,15 @@
 
     <!-- Data-->
     <v-slide-group v-else-if="data && data.moviesRecentAdded">
-        <v-slide-group-item v-for="show in data.moviesRecentAdded" :key="show.id">
-            <v-card :disabled="true" class="ma-3" width="200">
-                <Image :imageId="ImageUtilService.getCoverImageId(show.images!)" height="300px"></Image>
+        <v-slide-group-item v-for="movies in data.moviesRecentAdded" :key="movies.id">
+            <v-card :to="{ name: '/movies/[id]', params: { id: movies.id } }" class="ma-3" width="200">
+                <Image :imageId="ImageUtilService.getCoverImageId(movies.images!)" height="300px"></Image>
                 <v-card-title>{{
-                        MetadataUtilService.getMetadataFieldForLanguage('title', show.metadata, $t("iso-639-3"))
+                        MetadataUtilService.getMetadataFieldForLanguage('title', movies.metadata, $t("iso-639-3"))
                     }}
                 </v-card-title>
                 <v-card-subtitle>
-                    {{ show.releaseYear }}
+                    {{ movies.releaseYear }}
                 </v-card-subtitle>
             </v-card>
         </v-slide-group-item>

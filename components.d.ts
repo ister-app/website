@@ -11,6 +11,7 @@ declare module 'vue' {
     EpisodePlayer: typeof import('./src/components/EpisodePlayer.vue')['default']
     Image: typeof import('./src/components/Image.vue')['default']
     MediaFileStreamsSelector: typeof import('./src/components/MediaFileStreamsSelector.vue')['default']
+    MoviePlayer: typeof import('./src/components/MoviePlayer.vue')['default']
     Player: typeof import('./src/components/Player.vue')['default']
     Recentcarousel: typeof import('./src/components/Recentcarousel.vue')['default']
     RecentMovies: typeof import('./src/components/RecentMovies.vue')['default']
