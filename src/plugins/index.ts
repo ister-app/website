@@ -18,7 +18,7 @@ import type {App} from 'vue'
 import {AuthConfig, authExchange} from "@urql/exchange-auth";
 
 function initializeAuthState() {
-    const tokenJson = sessionStorage.getItem('oidc.user:https://keycloak.droogers.cloud/realms/Thuis:ister');
+    const tokenJson = sessionStorage.getItem('oidc.user:https://keycloak.droogers.cloud/realms/auth:ister');
     const token = tokenJson ? JSON.parse(tokenJson).access_token : undefined;
     return { token };
 }
@@ -38,6 +38,7 @@ export function registerPlugins(app: App) {
                     const result: AuthConfig =  ({
                         // eslint-disable-next-line @typescript-eslint/no-unused-vars
                         didAuthError(error, _operation) {
+                            console.log(error);
                             return false;
                         },
                         async refreshAuth() {
